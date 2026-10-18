@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scarlet1987 — GitHub redesign prototype</title>
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg-subtle:#f6f8fa;
+    --border:#d0d7de;
+    --text:#24292f;
+    --text-muted:#57606a;
+    --accent:#2DD4BF;
+    --accent-dark:#0E7A6D;
+    --accent-soft:#e6faf7;
+    --danger:#cf222e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    font-size:14px;line-height:1.5;color:var(--text);background:var(--bg);
+  }
+  a{color:var(--accent-dark);text-decoration:none}
+  a:hover{text-decoration:underline}
+  button{font:inherit;cursor:pointer}
+
+  /* ---------- slim top bar ---------- */
+  .topbar{
+    display:flex;align-items:center;gap:16px;
+    padding:12px 24px;border-bottom:1px solid var(--border);background:var(--bg);
+    position:sticky;top:0;z-index:10;
+  }
+  .topbar .mark{
+    width:32px;height:32px;border-radius:50%;background:var(--text);
+    color:#fff;display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:18px;flex:none;
+  }
+  .topbar .wordmark{font-weight:600;font-size:16px;letter-spacing:-.2px}
+  .topbar .wordmark .proto{
+    font-size:11px;font-weight:600;color:var(--accent-dark);background:var(--accent-soft);
+    border:1px solid var(--accent);border-radius:999px;padding:2px 8px;margin-left:8px;
+    vertical-align:middle;white-space:nowrap;
+  }
+  .topbar .spacer{flex:1}
+  .topbar .avatar{
+    width:32px;height:32px;border-radius:50%;background:var(--accent);
+    color:#06332d;font-weight:700;display:flex;align-items:center;justify-content:center;
+  }
+
+  /* ---------- profile header: pic, name, bio. nothing else. ---------- */
+  .profile{
+    max-width:1012px;margin:0 auto;padding:32px 24px 0;
+    display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;
+  }
+  .profile .big-avatar{
+    width:120px;height:120px;border-radius:50%;background:var(--accent);
+    color:#06332d;font-size:52px;font-weight:700;flex:none;
+    display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--border);
+  }
+  .profile .who{min-width:260px;flex:1}
+  .profile h1{font-size:26px;font-weight:600;letter-spacing:-.3px}
+  .profile .handle{color:var(--text-muted);font-size:16px;font-weight:300;margin-bottom:8px}
+  .profile .bio{font-size:15px;max-width:640px}
+  .profile .meta{margin-top:10px;color:var(--text-muted);font-size:13px;display:flex;gap:16px;flex-wrap:wrap}
+
+  /* ---------- credits box: unmissable, always visible ---------- */
+  .credits{
+    flex:0 1 320px;min-width:260px;
+    border:2px solid var(--accent);border-radius:8px;background:var(--accent-soft);
+    padding:16px 18px;
+  }
+  .credits .kicker{
+    font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
+    color:var(--accent-dark);margin-bottom:6px;
+  }
+  .credits .who-built{font-size:16px;font-weight:600}
+  .credits .role{font-size:13px;color:var(--text-muted);margin-top:2px}
+  .credits .scope{font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.6}
+
+  /* ---------- the tab bar ---------- */
+  .tabs-wrap{max-width:1012px;margin:24px auto 0;padding:0 24px}
+  .tabs{
+    display:flex;gap:4px;border-bottom:1px solid var(--border);
+    overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{
+    background:none;border:0;padding:10px 16px;font-size:14px;font-weight:500;color:var(--text-muted);
+    border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;flex:none;
+  }
+  .tab:hover{color:var(--text)}
+  .tab[aria-selected="true"]{color:var(--text);font-weight:600;border-bottom-color:var(--accent)}
+  .tab .count{
+    background:var(--bg-subtle);border:1px solid var(--border);border-radius:999px;
+    font-size:12px;padding:1px 8px;margin-left:6px;color:var(--text-muted);font-weight:500;
+  }
+  .tab[aria-selected="true"] .count{color:var(--text)}
+
+  .why-toggle{
+    margin-left:auto;background:none;border:1px solid var(--border);border-radius:6px;
+    padding:6px 12px;font-size:13px;color:var(--text-muted);align-self:center;
+  }
+  .why-toggle:hover{color:var(--accent-dark);border-color:var(--accent)}
+  .why-toggle[aria-expanded="true"]{color:var(--accent-dark);border-color:var(--accent);background:var(--accent-soft)}
+
+  /* ---------- why panel ---------- */
+  .why{
+    max-width:1012px;margin:0 auto;padding:0 24px;overflow:hidden;
+    max-height:0;transition:max-height .25s ease;
+  }
+  .why.open{max-height:900px}
+  .why-inner{
+    margin:16px 0;border:1px solid var(--accent);border-radius:8px;background:var(--accent-soft);
+    padding:20px 24px;
+  }
+  .why-inner h2{font-size:16px;margin-bottom:4px}
+  .why-inner p.lede{color:var(--text-muted);margin-bottom:16px;font-size:14px}
+  .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:700px){.why-grid{grid-template-columns:1fr}}
+  .why-card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px 16px}
+  .why-card .gone{font-weight:600;margin-bottom:4px}
+  .why-card .gone .x{
+    display:inline-block;width:18px;height:18px;border-radius:50%;background:#ffebe9;color:var(--danger);
+    font-size:12px;line-height:18px;text-align:center;margin-right:6px;font-weight:700;
+  }
+  .why-card p{font-size:13px;color:var(--text-muted)}
+  .why-rule{
+    margin-top:16px;padding-top:16px;border-top:1px solid var(--border);
+    font-style:italic;color:var(--text-muted);font-size:14px;
+  }
+  .why-rule strong{color:var(--text);font-style:normal}
+
+  main{max-width:1012px;margin:0 auto;padding:24px}
+
+  /* ---------- master project cards ---------- */
+  .featured{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.featured{grid-template-columns:1fr}}
+  .fcard{
+    border:1px solid var(--border);border-radius:8px;padding:20px;
+    display:flex;flex-direction:column;gap:10px;background:#fff;
+  }
+  .fcard:hover{border-color:var(--accent)}
+  .fcard .badge{
+    align-self:flex-start;font-size:11px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;
+    color:var(--accent-dark);background:var(--accent-soft);border:1px solid var(--accent);
+    border-radius:999px;padding:3px 10px;
+  }
+  .fcard h3{font-size:20px;font-weight:600;letter-spacing:-.2px}
+  .fcard h3 a{color:var(--text)}
+  .fcard h3 a:hover{color:var(--accent-dark);text-decoration:none}
+  .fcard .desc{color:var(--text-muted);font-size:14px;flex:1}
+  .fcard .row{display:flex;align-items:center;gap:16px;color:var(--text-muted);font-size:12px;flex-wrap:wrap}
+  .lang{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:12px;height:12px;border-radius:50%;display:inline-block}
+  .dot.dart{background:#00B4AB}.dot.python{background:#3572A5}.dot.shell{background:#89e051}
+  .fcard .cta{margin-top:4px}
+  .dl{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+  .dl-btn{display:inline-flex;align-items:center;gap:8px}
+  .install{
+    display:block;margin-top:10px;background:var(--bg-subtle);border:1px solid var(--border);
+    border-radius:6px;padding:8px 12px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:12px;color:var(--text);overflow-x:auto;white-space:nowrap;
+  }
+  .ver{font-weight:600;color:var(--text)}
+  .btn{
+    display:inline-block;background:var(--accent);color:#06332d;font-weight:600;
+    border:1px solid var(--accent-dark);border-radius:6px;padding:8px 16px;font-size:14px;
+  }
+  .btn:hover{background:var(--accent-dark);color:#fff;text-decoration:none}
+  .btn.ghost{background:#fff;color:var(--text);border:1px solid var(--border)}
+  .btn.ghost:hover{border-color:var(--accent);color:var(--accent-dark);text-decoration:none}
+
+  /* ---------- repo list ---------- */
+  .searchbar{margin-bottom:16px}
+  .searchbar input{
+    width:100%;max-width:480px;padding:8px 12px;font-size:14px;font:inherit;
+    border:1px solid var(--border);border-radius:6px;background:var(--bg-subtle);
+  }
+  .searchbar input:focus{outline:2px solid var(--accent);outline-offset:-1px;background:#fff;border-color:var(--accent)}
+  .repolist{border-top:1px solid var(--border)}
+  .repo{
+    display:block;padding:16px 4px;border-bottom:1px solid var(--border);color:inherit;
+  }
+  .repo:hover{text-decoration:none;background:var(--bg-subtle)}
+  .repo .nm{font-size:16px;font-weight:600;color:var(--accent-dark);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .repo .vis{
+    font-size:11px;font-weight:500;color:var(--text-muted);border:1px solid var(--border);
+    border-radius:999px;padding:1px 8px;
+  }
+  .repo .ds{color:var(--text-muted);font-size:13px;margin-top:4px;max-width:720px}
+  .repo .mt{display:flex;gap:16px;margin-top:8px;color:var(--text-muted);font-size:12px;flex-wrap:wrap;align-items:center}
+  .empty{padding:40px 0;text-align:center;color:var(--text-muted)}
+
+  /* ---------- fork history ---------- */
+  .forklede{color:var(--text-muted);font-size:14px;margin-bottom:16px;max-width:640px}
+  .forkchains{display:flex;flex-direction:column;gap:16px}
+  .forkcard{border:1px solid var(--border);border-radius:8px;padding:20px;background:#fff}
+  .forkcard:hover{border-color:var(--accent)}
+  .forkcard h3{font-size:18px;font-weight:600;margin-bottom:12px}
+  .forkcard h3 a{color:var(--text)}
+  .forkcard h3 a:hover{color:var(--accent-dark);text-decoration:none}
+  .chain{list-style:none;display:flex;flex-direction:column}
+  .chain > li{position:relative;padding:12px 0 12px 30px}
+  .chain > li::before{
+    content:"";position:absolute;left:9px;top:0;bottom:0;width:2px;background:var(--border);
+  }
+  .chain > li:first-child::before{top:24px}
+  .chain > li:last-child::before{bottom:auto;height:24px}
+  .chain > li:only-child::before{display:none}
+  .chain > li::after{
+    content:"";position:absolute;left:3px;top:18px;width:14px;height:14px;border-radius:50%;
+    background:var(--accent);border:2px solid #fff;box-shadow:0 0 0 1px var(--accent);
+  }
+  .chain > li:only-child::after{box-shadow:0 0 0 1px var(--border)}
+  .chain .who{font-weight:600;font-size:15px}
+  .tag{
+    font-size:11px;font-weight:600;color:var(--text-muted);border:1px solid var(--border);
+    border-radius:999px;padding:1px 9px;margin-left:8px;vertical-align:1px;white-space:nowrap;
+  }
+  .tag-accent{color:var(--accent-dark);border-color:var(--accent);background:var(--accent-soft)}
+  .chain .what{color:var(--text-muted);font-size:13px;margin-top:4px;max-width:640px}
+  .branchchips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .bchip{
+    font-size:12px;color:var(--text);background:var(--bg-subtle);border:1px solid var(--border);
+    border-radius:999px;padding:3px 12px;
+  }
+  .timeline-section{margin-top:28px}
+  .timeline-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:8px}
+  .timeline-head h4{font-size:16px;font-weight:600}
+  .filterbtns{display:flex;gap:8px}
+  .fbtn{
+    font-size:13px;font-weight:600;padding:6px 14px;border-radius:999px;cursor:pointer;
+    border:1px solid var(--border);background:#fff;color:var(--text-muted);
+  }
+  .fbtn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+  .timeline{list-style:none;display:flex;flex-direction:column}
+  .timeline > li{position:relative;padding:14px 0 14px 32px;border-bottom:1px solid var(--border)}
+  .timeline > li:last-child{border-bottom:none}
+  .timeline > li::before{content:"";position:absolute;left:10px;top:0;bottom:0;width:2px;background:var(--border)}
+  .timeline > li:first-child::before{top:28px}
+  .timeline > li:last-child::before{bottom:auto;height:28px}
+  .timeline > li:only-child::before{display:none}
+  .timeline > li::after{
+    content:"";position:absolute;left:4px;top:20px;width:14px;height:14px;border-radius:50%;
+    background:#9aa0a6;border:2px solid #fff;box-shadow:0 0 0 1px #9aa0a6;
+  }
+  .timeline > li.mine::after{background:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+  .timeline .ver{font-weight:700;font-size:15px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .timeline .vdate{font-size:12px;color:var(--text-muted);margin-left:10px;white-space:nowrap}
+  .timeline .vdesc{font-size:13px;color:var(--text-muted);margin-top:4px;max-width:640px}
+  .timeline .vdl{display:inline-block;margin-top:8px;font-size:13px;font-weight:600}
+  .timeline .vsep{color:var(--border);margin:0 6px}
+  .timeline > li[hidden]{display:none}
+  .bchip strong{font-weight:600}
+
+  footer{
+    max-width:1012px;margin:40px auto 0;padding:24px;border-top:1px solid var(--border);
+    color:var(--text-muted);font-size:12px;
+  }
+  .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+  /* ---------- mobile: tabs scroll, content stacks, nothing overflows ---------- */
+  @media(max-width:700px){
+    .topbar{padding:12px 16px}
+    .profile{padding:24px 16px 0;gap:16px}
+    .profile .big-avatar{width:88px;height:88px;font-size:38px}
+    .profile h1{font-size:22px}
+    .credits{flex:1 1 100%;min-width:0}
+    .tabs-wrap{padding:0 16px}
+    .tabs-wrap > div{flex-wrap:wrap;row-gap:10px}
+    .tabs{max-width:100%}
+    .why-toggle{margin-left:0}
+    main{padding:16px}
+    footer{padding:16px}
+    .fcard{padding:16px}
+    .forkcard{padding:16px}
+    .dl .btn,.dl .btn.ghost{flex:1 1 auto;text-align:center;justify-content:center}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="mark" aria-hidden="true">⌂</div>
+  <div class="wordmark">github<span class="proto">redesign prototype</span></div>
+  <div class="spacer"></div>
+  <div class="avatar" title="Scarlet1987">S</div>
+</header>
+
+<section class="profile" aria-label="Profile">
+  <div class="big-avatar" aria-hidden="true">S</div>
+  <div class="who">
+    <h1>Scarlet1987</h1>
+    <div class="handle">Elaina</div>
+    <p class="bio">Building local-first AI tools — character chat, text-to-3D CAD, and the machines that build the machines. No cloud required, no subscriptions, nothing rented.</p>
+    <div class="meta">
+      <span>5 public repositories</span>
+      <span>Pop!_OS · 8GB VRAM and proud of it</span>
+    </div>
+  </div>
+  <aside class="credits" aria-label="Credits">
+    <div class="kicker">Built by</div>
+    <div class="who-built">Scarlet1987</div>
+    <div class="role">Alice edition design lead</div>
+    <p class="scope">Engine overhaul · interface redesign · Dead Dove negotiated-limits model · Main Character board · Kardashev system. The review the original never got.</p>
+  </aside>
+</section>
+
+<div class="tabs-wrap">
+  <div style="display:flex;align-items:flex-end">
+    <div class="tabs" role="tablist" aria-label="Profile sections">
+      <button class="tab" role="tab" id="tab-master" aria-selected="true" aria-controls="panel-master">Master Projects <span class="count">2</span></button>
+      <button class="tab" role="tab" id="tab-repos" aria-selected="false" aria-controls="panel-repos" tabindex="-1">Repositories <span class="count">5</span></button>
+      <button class="tab" role="tab" id="tab-exec" aria-selected="false" aria-controls="panel-exec" tabindex="-1">Executables <span class="count">2</span></button>
+      <button class="tab" role="tab" id="tab-forks" aria-selected="false" aria-controls="panel-forks" tabindex="-1">Fork History <span class="count">2</span></button>
+    </div>
+    <button class="why-toggle" id="whyToggle" aria-expanded="false" aria-controls="whyPanel">Why this redesign?</button>
+  </div>
+</div>
+
+<div class="why" id="whyPanel">
+  <div class="why-inner">
+    <h2>What got removed — and why</h2>
+    <p class="lede">The homepage was chaos when all I wanted was to navigate and work. So the chaos goes.</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="gone"><span class="x">✕</span>Activity feed</div>
+        <p>"X starred Y", "Z pushed to…" — I'm here to work, not watch a social timeline. If I want updates, I'll open the repo.</p>
+      </div>
+      <div class="why-card">
+        <div class="gone"><span class="x">✕</span>"Explore repositories"</div>
+        <p>Guessing what I might like is noise. I know my own projects — I don't need a recommendation engine on my own page.</p>
+      </div>
+      <div class="why-card">
+        <div class="gone"><span class="x">✕</span>Trending sidebar</div>
+        <p>Trending is someone else's priorities sitting on my page. My page should be about my work.</p>
+      </div>
+      <div class="why-card">
+        <div class="gone"><span class="x">✕</span>Eight-tab clutter</div>
+        <p>Overview, Projects, Packages, Stars, Sponsors… Four tabs that earn it: the projects that matter, everything else, one-click downloads, and fork history. Navigation I have to learn is work I'm not doing.</p>
+      </div>
+      <div class="why-card" style="border-color:var(--accent)">
+        <div class="gone"><span class="x" style="background:var(--accent-soft);color:var(--accent-dark)">+</span>Executables tab</div>
+        <p>Downloads shouldn't be a scavenger hunt through Releases. One tab, one button per platform, done.</p>
+      </div>
+      <div class="why-card" style="border-color:var(--accent)">
+        <div class="gone"><span class="x" style="background:var(--accent-soft);color:var(--accent-dark)">+</span>Fork history kept</div>
+        <p>The one bright spot in the old UI — knowing where a project came from. Kept as its own tab: who forked from whom, what's different, no graph spaghetti.</p>
+      </div>
+    </div>
+    <p class="why-rule"><strong>The rule:</strong> "If it doesn't make sense to the user the user will either complain or ignore it." — every element on this page earned its place.</p>
+  </div>
+</div>
+
+<main>
+  <!-- ============ MASTER PROJECTS ============ -->
+  <div id="panel-master" role="tabpanel" aria-labelledby="tab-master">
+    <div class="featured">
+      <article class="fcard">
+        <span class="badge">★ Master project</span>
+        <h3><a href="https://github.com/Scarlet1987/front-porch-AI">front-porch-AI</a></h3>
+        <p class="desc"><strong>Rabbit Hole</strong> — the Alice edition. Local-first AI character chat, re-engineered: lightning-fast engine, a redesigned interface, negotiated-limits content model. One Flatpak, every distro. Forked from linux4life1, rebuilt from the review it never got.</p>
+        <div class="row">
+          <span class="lang"><span class="dot dart"></span>Dart</span>
+          <span>☆ 0</span>
+          <span>Updated today</span>
+          <span>AGPL-3.0</span>
+        </div>
+        <div class="cta">
+          <a class="btn" href="https://github.com/Scarlet1987/front-porch-AI/releases">Get Rabbit Hole</a>
+          <a class="btn ghost" href="https://github.com/Scarlet1987/front-porch-AI/tree/Alice" style="margin-left:8px">Alice branch</a>
+        </div>
+      </article>
+      <article class="fcard">
+        <span class="badge">★ Master project</span>
+        <h3><a href="https://github.com/Scarlet1987/text-to-3d-modeler">text-to-3d-modeler</a></h3>
+        <p class="desc"><strong>JARVIS on 8GB VRAM.</strong> An AI agent that designs real 3D parts through actual CAD software — grounding every dimension in manufacturer data instead of guessing. The machine that builds the machine.</p>
+        <div class="row">
+          <span class="lang"><span class="dot python"></span>Python</span>
+          <span>☆ 0</span>
+          <span>Updated today</span>
+        </div>
+        <div class="cta">
+          <a class="btn" href="https://github.com/Scarlet1987/text-to-3d-modeler">Open project</a>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- ============ REPOSITORIES ============ -->
+  <div id="panel-repos" role="tabpanel" aria-labelledby="tab-repos" hidden>
+    <div class="searchbar">
+      <label class="visually-hidden" for="repoSearch">Filter repositories</label>
+      <input id="repoSearch" type="search" placeholder="Find a repository…" autocomplete="off">
+    </div>
+    <div class="repolist" id="repoList">
+      <a class="repo" href="https://github.com/Scarlet1987/front-porch-AI" data-name="front-porch-ai">
+        <span class="nm">front-porch-AI <span class="vis">Public · fork</span></span>
+        <p class="ds">Local-first AI character chat &amp; roleplay — Alice edition (Rabbit Hole): re-engineered engine, redesigned interface. Fully offline, open-source (AGPL-3.0).</p>
+        <div class="mt"><span class="lang"><span class="dot dart"></span>Dart</span><span>☆ 0</span><span>Updated today</span></div>
+      </a>
+      <a class="repo" href="https://github.com/Scarlet1987/text-to-3d-modeler" data-name="text-to-3d-modeler">
+        <span class="nm">text-to-3d-modeler <span class="vis">Public</span></span>
+        <p class="ds">Text-to-3D modeler: JARVIS on 8GB VRAM, an AI agent that designs 3D models through real CAD software via scripting APIs.</p>
+        <div class="mt"><span class="lang"><span class="dot python"></span>Python</span><span>☆ 0</span><span>Updated today</span></div>
+      </a>
+      <a class="repo" href="https://github.com/Scarlet1987/memory-bench-test-and-optimization-" data-name="memory-bench-test-and-optimization-">
+        <span class="nm">memory-bench-test-and-optimization- <span class="vis">Public</span></span>
+        <p class="ds">this repo is to optimize linux sytem ram</p>
+        <div class="mt"><span class="lang"><span class="dot shell"></span>Shell</span><span>Updated last month</span></div>
+      </a>
+      <a class="repo" href="https://github.com/Scarlet1987/attempted-fixes-for-linux-updates-and-upgrades-" data-name="attempted-fixes-for-linux-updates-and-upgrades-">
+        <span class="nm">attempted-fixes-for-linux-updates-and-upgrades- <span class="vis">Public</span></span>
+        <p class="ds">something i am working on for tv and monitor combinations</p>
+        <div class="mt"><span class="lang"><span class="dot shell"></span>Shell</span><span>Updated last month</span></div>
+      </a>
+      <a class="repo" href="https://github.com/Scarlet1987/emerald-fox" data-name="emerald-fox">
+        <span class="nm">emerald-fox <span class="vis">Public</span></span>
+        <p class="ds">Active Compute Node: gemma3:12b custom orchestration tool</p>
+        <div class="mt"><span>☆ 0</span><span>Updated in May</span></div>
+      </a>
+    </div>
+    <div class="empty" id="noResults" hidden>No repositories match that filter.</div>
+  </div>
+
+  <!-- ============ EXECUTABLES ============ -->
+  <div id="panel-exec" role="tabpanel" aria-labelledby="tab-exec" hidden>
+    <p style="color:var(--text-muted);font-size:14px;margin-bottom:16px;max-width:640px">You want the app, here's the button. No hunting through Releases, no guessing which file is yours.</p>
+    <div class="featured">
+      <article class="fcard">
+        <span class="badge">★ Master project</span>
+        <h3>Rabbit Hole</h3>
+        <p class="desc">The Alice edition of Front Porch AI. One-click install, every distro.</p>
+        <div class="row">
+          <span class="ver">v1.5.0-alice5</span>
+          <span>Flatpak · 38 MB</span>
+          <span>.deb · 38 MB</span>
+        </div>
+        <div class="dl">
+          <a class="btn dl-btn" href="https://github.com/Scarlet1987/front-porch-AI/releases/download/v1.5.0-alice5/RabbitHole.flatpak" download>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 12l-4-4h2.5V2h3v6H12L8 12zm-5 2h10v2H3v-2z"/></svg>
+            Download Flatpak
+          </a>
+          <a class="btn ghost dl-btn" href="https://github.com/Scarlet1987/front-porch-AI/releases/download/v1.5.0-alice5/front-porch-ai_1.5.0-alice5_amd64.deb" download>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 12l-4-4h2.5V2h3v6H12L8 12zm-5 2h10v2H3v-2z"/></svg>
+            Download .deb
+          </a>
+        </div>
+        <code class="install">flatpak install --user RabbitHole.flatpak</code>
+      </article>
+      <article class="fcard">
+        <span class="badge">★ Master project</span>
+        <h3>text-to-3d-modeler</h3>
+        <p class="desc">JARVIS on 8GB VRAM. Still in the workshop — no packaged release yet.</p>
+        <div class="row">
+          <span class="ver">unreleased</span>
+        </div>
+        <div class="dl">
+          <a class="btn ghost dl-btn" href="https://github.com/Scarlet1987/text-to-3d-modeler">Clone the source</a>
+        </div>
+        <code class="install">git clone https://github.com/Scarlet1987/text-to-3d-modeler.git</code>
+      </article>
+    </div>
+  </div>
+  <!-- ============ FORK HISTORY ============ -->
+  <div id="panel-forks" role="tabpanel" aria-labelledby="tab-forks" hidden>
+    <p class="forklede">Who forked from whom, and what's different. The one bright spot worth keeping — no graph spaghetti.</p>
+    <div class="forkchains">
+      <article class="forkcard">
+        <h3><a href="https://github.com/Scarlet1987/front-porch-AI">front-porch-AI</a></h3>
+        <ol class="chain">
+          <li>
+            <span class="who">linux4life1/front-porch-AI</span><span class="tag">upstream</span>
+            <p class="what">The original — local-first AI character chat &amp; roleplay.</p>
+          </li>
+          <li>
+            <span class="who">Scarlet1987/front-porch-AI</span><span class="tag tag-accent">my fork</span>
+            <p class="what">Alice edition — engine overhaul, redesigned interface, negotiated-limits content model. The review the original never got.</p>
+            <div class="branchchips">
+              <span class="bchip"><strong>Alice</strong> · shipped v1.5.0-alice5</span>
+              <span class="bchip"><strong>Wonderland</strong> · server edition</span>
+            </div>
+          </li>
+        </ol>
+      </article>
+      <article class="forkcard">
+        <h3><a href="https://github.com/Scarlet1987/text-to-3d-modeler">text-to-3d-modeler</a></h3>
+        <ol class="chain">
+          <li>
+            <span class="who">Scarlet1987/text-to-3d-modeler</span><span class="tag tag-accent">original</span>
+            <p class="what">Born here — no upstream. JARVIS on 8GB VRAM.</p>
+          </li>
+        </ol>
+      </article>
+    </div>
+    <div class="timeline-section">
+      <div class="timeline-head">
+        <h4>Release timeline</h4>
+        <div class="filterbtns" role="group" aria-label="Filter releases">
+          <button class="fbtn" data-filter="all" aria-pressed="true">All</button>
+          <button class="fbtn" data-filter="upstream" aria-pressed="false">Upstream</button>
+          <button class="fbtn" data-filter="mine" aria-pressed="false">My forks</button>
+        </div>
+      </div>
+      <ol class="timeline" id="release-timeline">
+        <li class="mine" data-kind="mine">
+          <span class="ver">v1.5.0-alice5</span><span class="tag tag-accent">my fork</span><span class="vdate">Oct 18, 2026</span>
+          <p class="vdesc">Snapshot fix — corrected AOT build mode so the app actually launches. Current release.</p>
+          <a class="vdl" href="https://github.com/Scarlet1987/front-porch-AI/releases/download/v1.5.0-alice5/front-porch-ai_1.5.0-alice5_amd64.deb">Download .deb</a><span class="vsep">·</span><a class="vdl" href="https://github.com/Scarlet1987/front-porch-AI/releases/download/v1.5.0-alice5/RabbitHole.flatpak">Download Flatpak</a>
+        </li>
+        <li class="mine" data-kind="mine">
+          <span class="ver">v1.5.0-alice4</span><span class="tag tag-accent">my fork</span><span class="vdate">Oct 18, 2026</span>
+          <p class="vdesc">The real Alice frontend — Home, Chat, Character Creator, Worlds, Settings built from the finalized preview.</p>
+          <a class="vdl" href="https://github.com/Scarlet1987/front-porch-AI/releases/tag/v1.5.0-alice4">Release page</a>
+        </li>
+        <li class="mine" data-kind="mine">
+          <span class="ver">v1.5.0-alice3</span><span class="tag tag-accent">my fork</span><span class="vdate">Oct 18, 2026</span>
+          <p class="vdesc">Reskin attempt — recolor of the old layout. Rejected: two skins on top of each other.</p>
+          <a class="vdl" href="https://github.com/Scarlet1987/front-porch-AI/releases/tag/v1.5.0-alice3">Release page</a>
+        </li>
+        <li class="mine" data-kind="mine">
+          <span class="ver">v1.5.0-alice2</span><span class="tag tag-accent">my fork</span><span class="vdate">Oct 18, 2026</span>
+          <p class="vdesc">Packaging fixes — file permissions, missing libapp.so, launcher wrapper.</p>
+        </li>
+        <li class="mine" data-kind="mine">
+          <span class="ver">v1.5.0-alice1</span><span class="tag tag-accent">my fork</span><span class="vdate">Oct 17, 2026</span>
+          <p class="vdesc">Engine overhaul release — FIFO image queue, VRAM arbitration, dual-engine. Lightning fast.</p>
+        </li>
+        <li data-kind="upstream">
+          <span class="ver">v1.5.0</span><span class="tag">upstream</span><span class="vdate">before Oct 2026</span>
+          <p class="vdesc">The base release she forked from. Well designed, poorly executed, heavy.</p>
+        </li>
+        <li data-kind="upstream">
+          <span class="ver">v1.3.0</span><span class="tag">upstream</span><span class="vdate">earlier</span>
+          <p class="vdesc">Earlier upstream release — was installed on her machine before the Alice work.</p>
+        </li>
+      </ol>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Redesign prototype — a working proposal for a calmer GitHub homepage. Teal accent stands in for GitHub green. Not affiliated with GitHub, Inc.
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  // ---- tabs ----
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  var panels = {
+    "tab-master": document.getElementById("panel-master"),
+    "tab-repos": document.getElementById("panel-repos"),
+    "tab-exec": document.getElementById("panel-exec"),
+    "tab-forks": document.getElementById("panel-forks")
+  };
+  function selectTab(tab, focus){
+    tabs.forEach(function(t){
+      var on = (t === tab);
+      t.setAttribute("aria-selected", on ? "true" : "false");
+      t.tabIndex = on ? 0 : -1;
+      var panel = panels[t.id];
+      if (panel) panel.hidden = !on;
+    });
+    if (focus) tab.focus();
+  }
+  tabs.forEach(function(t){
+    t.addEventListener("click", function(){ selectTab(t, false); });
+    t.addEventListener("keydown", function(e){
+      var i = tabs.indexOf(t), n = null;
+      if (e.key === "ArrowRight") n = tabs[(i+1) % tabs.length];
+      else if (e.key === "ArrowLeft") n = tabs[(i-1+tabs.length) % tabs.length];
+      else if (e.key === "Home") n = tabs[0];
+      else if (e.key === "End") n = tabs[tabs.length-1];
+      if (n){ e.preventDefault(); selectTab(n, true); }
+    });
+  });
+
+  // ---- why toggle ----
+  var whyToggle = document.getElementById("whyToggle");
+  var whyPanel = document.getElementById("whyPanel");
+  whyToggle.addEventListener("click", function(){
+    var open = whyPanel.classList.toggle("open");
+    whyToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+
+  // ---- repo search filter ----
+  var search = document.getElementById("repoSearch");
+  var repos = Array.prototype.slice.call(document.querySelectorAll("#repoList .repo"));
+  var noResults = document.getElementById("noResults");
+  search.addEventListener("input", function(){
+    var q = search.value.trim().toLowerCase();
+    var shown = 0;
+    repos.forEach(function(r){
+      var hit = !q || r.getAttribute("data-name").indexOf(q) !== -1 ||
+                (r.querySelector(".ds") && r.querySelector(".ds").textContent.toLowerCase().indexOf(q) !== -1);
+      r.style.display = hit ? "" : "none";
+      if (hit) shown++;
+    });
+    noResults.hidden = shown !== 0;
+  });
+  // ---- release timeline filter ----
+  var fbtns = Array.prototype.slice.call(document.querySelectorAll(".fbtn"));
+  var tlItems = Array.prototype.slice.call(document.querySelectorAll("#release-timeline > li"));
+  fbtns.forEach(function(btn){
+    btn.addEventListener("click", function(){
+      fbtns.forEach(function(b){ b.setAttribute("aria-pressed", "false"); });
+      btn.setAttribute("aria-pressed", "true");
+      var f = btn.getAttribute("data-filter");
+      tlItems.forEach(function(li){
+        li.hidden = !(f === "all" || li.getAttribute("data-kind") === f);
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
