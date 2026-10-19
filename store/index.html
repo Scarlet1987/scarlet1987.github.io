@@ -33,6 +33,10 @@
 
   /* ---------- hero ---------- */
   .hero{padding:96px 0 64px;text-align:center}
+  .hero .hero-logo{
+    width:180px;height:180px;border-radius:50%;object-fit:cover;
+    margin-bottom:28px;border:2px solid var(--border);
+  }
   .hero .wordmark{
     font-size:13px;font-weight:700;letter-spacing:6px;color:var(--accent);
     text-transform:uppercase;margin-bottom:24px;
@@ -164,8 +168,9 @@
 
 <header class="hero">
   <div class="wrap">
-    <div class="wordmark">Rabbit Hole</div>
-    <h1>Follow the <span class="em">white rabbit.</span></h1>
+    <img class="hero-logo" src="rabbit-hole-logo-v1.webp" alt="Rabbit Hole logo — a white rabbit diving into the hole">
+    <div class="wordmark">Follow the white rabbit.</div>
+    <h1>Rabbit <span class="em">Hole</span></h1>
     <p class="slogan">Down here, the software is yours.</p>
     <p class="tagline">Local AI that runs on the GPU you already own. <strong>No subscription. No cloud.</strong> Buy it once, it's yours.</p>
     <div class="cta-row">
