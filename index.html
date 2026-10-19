@@ -86,6 +86,26 @@
   .credits .role{font-size:13px;color:var(--text-muted);margin-top:2px}
   .credits .scope{font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.6}
 
+  /* ---------- mission statement: the bible pipeline ---------- */
+  .mission{
+    max-width:1012px;margin:28px auto 0;padding:0 24px;
+  }
+  .mission-inner{
+    border-left:4px solid var(--accent);border-radius:0 8px 8px 0;
+    background:var(--card);padding:20px 24px;
+  }
+  .mission .kicker{
+    font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+    color:var(--accent);margin-bottom:8px;
+  }
+  .mission .law{
+    font-size:18px;font-weight:600;letter-spacing:-.2px;margin-bottom:8px;
+  }
+  .mission .law .arrow{color:var(--accent)}
+  .mission p{
+    font-size:13.5px;color:var(--text-muted);max-width:640px;line-height:1.6;
+  }
+
   /* ---------- the tab bar ---------- */
   .tabs-wrap{max-width:1012px;margin:24px auto 0;padding:0 24px}
   .tabs{
@@ -279,6 +299,8 @@
     .tabs-wrap > div{flex-wrap:wrap;row-gap:10px}
     .tabs{max-width:100%}
     .why-toggle{margin-left:0}
+    .mission{padding:0 16px;margin-top:20px}
+    .mission .law{font-size:16px}
     main{padding:16px}
     footer{padding:16px}
     .fcard{padding:16px}
@@ -314,6 +336,14 @@
     <p class="scope">Engine overhaul · interface redesign · Dead Dove negotiated-limits model · Main Character board · Kardashev system. The review the original never got.</p>
   </aside>
 </section>
+
+<div class="mission">
+  <div class="mission-inner">
+    <div class="kicker">The mission</div>
+    <div class="law">Preview <span class="arrow">→</span> GitHub <span class="arrow">→</span> Stable <span class="arrow">→</span> Build.</div>
+    <p>Every build follows the same law: nothing gets packaged until it's been clicked through in the browser and called stable. The harness runs light in RAM and dies clean — no disk litter, no surprises at install time.</p>
+  </div>
+</div>
 
 <div class="tabs-wrap">
   <div style="display:flex;align-items:flex-end">
