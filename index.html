@@ -90,21 +90,6 @@
   .profile .pfp img{width:100%;height:100%;object-fit:cover;display:block}
   .profile .pfp img + span{display:none}
 
-  /* ---------- hot links: structured quick nav above the mission ---------- */
-  .hotlinks{
-    max-width:1012px;margin:22px auto 0;padding:0 24px;
-    display:flex;gap:10px;flex-wrap:wrap;
-  }
-  .hotlink{
-    display:inline-flex;align-items:center;gap:7px;
-    border:1px solid var(--accent);border-radius:999px;
-    padding:7px 16px;font-size:13.5px;font-weight:600;color:var(--accent);
-    background:var(--accent-soft);white-space:nowrap;
-  }
-  .hotlink:hover{background:rgba(45,212,191,.16);text-decoration:none;color:var(--text)}
-  .hotlink .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none}
-  .hotlink:hover .dot{background:var(--text)}
-
   /* ---------- credits box: unmissable, always visible ---------- */
   .credits{
     flex:0 1 320px;min-width:260px;
@@ -328,8 +313,6 @@
     .profile{padding:0 16px;gap:16px;margin-top:-48px}
     .profile .pfp{width:96px;height:96px;font-size:38px}
     .profile h1{font-size:22px}
-    .hotlinks{padding:0 16px;margin-top:16px}
-    .hotlink{padding:6px 13px;font-size:12.5px}
     .credits{flex:1 1 100%;min-width:0}
     .tabs-wrap{padding:0 16px}
     .tabs-wrap > div{flex-wrap:wrap;row-gap:10px}
@@ -379,14 +362,6 @@
     <p class="scope">Engine overhaul · interface redesign · Dead Dove negotiated-limits model · Main Character board · Kardashev system. The review the original never got.</p>
   </aside>
 </section>
-
-<nav class="hotlinks" aria-label="Quick links">
-  <!-- Rabbit Hole store: points at the storefront once it is live on GitHub Pages -->
-  <a class="hotlink" href="rabbit-hole/"><span class="dot" aria-hidden="true"></span>Rabbit Hole Store</a>
-  <a class="hotlink" href="https://github.com/Scarlet1987/front-porch-AI/releases"><span class="dot" aria-hidden="true"></span>Alice</a>
-  <a class="hotlink" href="https://github.com/Scarlet1987"><span class="dot" aria-hidden="true"></span>GitHub Profile</a>
-  <a class="hotlink" href="https://github.com/Scarlet1987/text-to-3d-modeler"><span class="dot" aria-hidden="true"></span>Text-to-3D Modeler</a>
-</nav>
 
 <div class="mission">
   <div class="mission-inner">
