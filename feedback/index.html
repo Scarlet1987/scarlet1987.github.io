@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scarlet1987 — Guide &amp; Feedback</title>
+<style>
+  :root{--ground:#04231f;--card:#08302a;--line:#123f37;--txt:#f2faf8;--muted:rgba(242,250,248,.74);--faint:rgba(242,250,248,.48);--acc:#2dd4bf;--gold:#e8b84b}
+  *{box-sizing:border-box} body{margin:0;background:var(--ground);color:var(--txt);font:16px/1.5 system-ui,Segoe UI,Roboto,sans-serif}
+  .wrap{max-width:900px;margin:0 auto;padding:22px 18px 48px}
+  .tabbar{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:22px;flex-wrap:wrap}
+  .tab{padding:8px 14px;color:var(--muted);font-weight:600}
+  .tab.on{color:var(--acc);border-bottom:2px solid var(--acc)}
+  h1{font-size:28px;margin:0 0 4px} .sub{color:var(--muted);margin:0 0 20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:0 0 14px}
+  .card h2{margin:0 0 8px;font-size:17px;color:var(--acc)}
+  .card p{margin:0;color:var(--muted)} .card b{color:var(--txt)}
+  .card ul{margin:0;padding-left:18px;color:var(--muted)} .card li{margin:3px 0}
+  .door{border:1px solid var(--line);border-radius:10px;padding:10px 16px;margin:0 0 14px;color:var(--muted)}
+  a{color:var(--acc)}
+  .dayone{border-color:#8a6d1f} .dayone h2{color:var(--gold)}
+  .q{display:flex;gap:10px;padding:5px 0} .qn{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:rgba(232,184,75,.16);color:var(--gold);font-weight:800;text-align:center;line-height:22px;font-size:13px}
+  .q p{margin:1px 0 0;font-size:15px}
+  .ex{margin-top:10px;padding-top:10px;border-top:1px dashed #8a6d1f;color:var(--muted);font-size:14.5px}
+  .ex b{color:var(--gold)}
+  .row{display:flex;gap:12px;align-items:baseline;padding:9px 0;border-top:1px solid var(--line)}
+  .row:first-of-type{border-top:none}
+  .tag{flex:0 0 auto;background:rgba(45,212,191,.12);color:var(--acc);border-radius:999px;padding:2px 11px;font-size:12.5px;font-weight:700}
+  .row p{margin:0;font-size:15px}
+  .nevers{display:flex;gap:18px;flex-wrap:wrap;padding:9px 0;border-top:1px solid var(--line);color:var(--muted);font-size:14.5px}
+  .nevers .tag{background:rgba(232,184,75,.13);color:var(--gold)}
+  .topnevers{display:flex;gap:18px;flex-wrap:wrap;align-items:baseline;border:1px solid #8a6d1f;border-radius:10px;padding:11px 16px;margin:0 0 14px;color:var(--muted);font-size:15px;background:rgba(232,184,75,.05)}
+  .topnevers .tag{background:rgba(232,184,75,.16);color:var(--gold)}
+  .foot{color:var(--faint);font-size:13.5px;margin-top:10px}
+</style></head><body><div class="wrap">
+
+  <p style="margin:0 0 18px"><a href="../">← Scarlet1987 — home</a></p>
+
+  <h1>The new front end: where everything is</h1>
+  <p class="sub">Text first — the video tour comes later.</p>
+
+  <div class="topnevers"><span class="tag">THE NEVERS</span><span><b>ACCOUNT?</b> never.</span><span><b>RENTED</b> never — pay once.</span><span><b>NAGS</b> never — no ads, no telemetry.</span></div>
+
+  <div class="card"><h2>Where things are</h2>
+    <ul>
+      <li><b>Home</b> — your worlds and character cards. Empty until you make them; nothing pre-made ships.</li>
+      <li><b>Chat · Creator · Worlds</b> — talk, build characters (NPCs from six anchors), build the ladder: Stage → Universe → Galaxy → Planet → Continent → City → Village.</li>
+      <li><b>Image Studio</b> — characters measured like a tailor takes them.</li>
+      <li><b>Settings</b> — where things live, engines (managed for you), engine resources live, content zone.</li>
+    </ul>
+  </div>
+
+  <p class="door"><b>File it here:</b> <a href="https://github.com/Scarlet1987/front-porch-AI/issues">the GitHub repo</a> — everything sorts into bugs / liked / didn't like, and the ten highest comments get actioned weekly. Reacting to a comment is the vote.</p>
+
+  <div class="card dayone"><h2>№ 1 — DAY ONE</h2>
+    <p>"Did it arrive broken — or did the first patch become the real launch?" The № 1 gripe at any big launch gets the first panel. Alice doesn't ship until it's stable, and every update reports here, four questions, in order:</p>
+    <div class="q"><span class="qn">1</span><p><b>What size was the patch?</b> Size is the first honesty.</p></div>
+    <div class="q"><span class="qn">2</span><p><b>What did it fix?</b> Named the way the report came in.</p></div>
+    <div class="q"><span class="qn">3</span><p><b>What did it make worse?</b> "Nothing" has to be looked for, not assumed — regressions get the same size type as fixes.</p></div>
+    <div class="q"><span class="qn">4</span><p><b>How does the rest of the software function?</b> What changed underneath; what stayed exactly where you left it.</p></div>
+    <p class="ex"><b>EXAMPLE — the format, from a real fix:</b> 1 · ~37 MB, the whole package (Alice ships full installers, not deltas). 2 · The "unknown VRAM" card on AMD — it now reads what the startup audit found. 3 · Nothing worse; the VRAM bar says "unavailable" instead of spinning forever, on purpose. 4 · Nothing else moved.</p>
+  </div>
+
+  <div class="card"><h2>The scale</h2>
+    <p>Base program today: <b>~37 MB</b>. Warning line: <b>500 MB</b> — crossing it gets reported here, with what's driving the growth. Hard cap: <b>2 GB, never</b>. Models and your data never count; they're yours and live separately. Checked weekly.</p>
+  </div>
+
+  <div class="card"><h2>The big gripes — pre-labeled</h2>
+    <div class="row"><span class="tag">HUNTING</span><p><b>"I can't find it."</b> Nothing hides here — if you hunted, it's a bug. Tell us what you were looking for.</p></div>
+    <div class="row"><span class="tag">EMPTY</span><p><b>"There's nothing here."</b> By design: the vessel ships empty, create buttons at the starting line.</p></div>
+    <div class="row"><span class="tag">IMAGES</span><p><b>"Image generation doesn't work."</b> True, and labeled in the app: the engine is in development. No fake buttons.</p></div>
+    <div class="row"><span class="tag">SLOW</span><p><b>"It runs slow."</b> Baseline is an RX 580 / 8GB. Engine resources shows your machine live — report GPU, RAM, where it dragged.</p></div>
+    <div class="row"><span class="tag">SETUP</span><p><b>"Do I have to set it up first?"</b> Open it and start. The wizard asks hardware + downloads only.</p></div>
+    <p class="foot">Tap a label to file under it — three prompts, <b>200 words</b>, counter running. Label states as of Oct 2026, re-dated when they change. A gripe with no label yet? Say it plainly — three like it and it earns one.</p>
+  </div>
+
+</div></body></html>
