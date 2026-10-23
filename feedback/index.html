@@ -30,6 +30,30 @@
   .topnevers{display:flex;gap:18px;flex-wrap:wrap;align-items:baseline;border:1px solid #8a6d1f;border-radius:10px;padding:11px 16px;margin:0 0 14px;color:var(--muted);font-size:15px;background:rgba(232,184,75,.05)}
   .topnevers .tag{background:rgba(232,184,75,.16);color:var(--gold)}
   .foot{color:var(--faint);font-size:13.5px;margin-top:10px}
+  /* Feedback intake */
+  .filecard{border-color:#1d554b}
+  .step{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:16px 0 6px}
+  .labelset{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 2px}
+  .pill{background:rgba(45,212,191,.10);color:var(--acc);border:1px solid transparent;border-radius:999px;padding:6px 13px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+  .pill:hover{background:rgba(45,212,191,.18)}
+  .pill[aria-pressed="true"]{background:var(--acc);color:#032520}
+  .pill:focus-visible,.tagbtn:focus-visible,.btn:focus-visible,.btnghost:focus-visible,textarea:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+  .field{margin:0 0 10px}
+  .field label{display:block;font-size:13.5px;font-weight:700;color:var(--txt);margin:0 0 4px}
+  .field .hint{font-size:12.5px;color:var(--faint);font-weight:400}
+  textarea{width:100%;min-height:72px;resize:vertical;background:rgba(0,0,0,.22);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit;font-size:14.5px;line-height:1.45}
+  textarea::placeholder{color:var(--faint)}
+  .meta{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap;margin:2px 0 12px;font-size:12.5px;color:var(--faint)}
+  .count{font-variant-numeric:tabular-nums;font-weight:800}
+  .count.over{color:#fca5a5}
+  .actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .btn{background:var(--acc);color:#032520;border:0;border-radius:8px;padding:10px 18px;font:inherit;font-weight:800;font-size:14px;cursor:pointer}
+  .btn[disabled]{opacity:.4;cursor:not-allowed}
+  .btnghost{background:transparent;color:var(--acc);border:1px solid var(--acc);border-radius:8px;padding:9px 14px;font:inherit;font-weight:700;font-size:13px;cursor:pointer}
+  .status{font-size:13.5px;color:var(--muted);margin:10px 0 0;min-height:1.2em}
+  .status a{color:var(--acc)}
+  .tagbtn{border:0;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;background:rgba(45,212,191,.12);color:var(--acc);border-radius:999px;padding:2px 11px}
+  .tagbtn:hover{background:rgba(45,212,191,.22)}
 </style></head><body><div class="wrap">
 
   <p style="margin:0 0 18px"><a href="../">← Scarlet1987 — home</a></p>
@@ -48,7 +72,49 @@
     </ul>
   </div>
 
-  <p class="door"><b>File it here:</b> <a href="https://github.com/Scarlet1987/front-porch-AI/issues">the GitHub repo</a> — everything sorts into bugs / liked / didn't like, and the ten highest comments get actioned weekly. Reacting to a comment is the vote.</p>
+  <p class="door"><b>File it here:</b> <a href="https://github.com/Scarlet1987/front-porch-AI/issues">the GitHub repo</a> — everything sorts into bugs / liked / didn't like, and the ten highest comments get actioned weekly. Reacting to a comment is the vote. Or use the form below.</p>
+
+  <div class="card filecard" id="file">
+    <h2>Three prompts, 200 words</h2>
+    <p>Label it, answer, and the prefilled issue opens on GitHub — the tracker stays the record.</p>
+    <p class="step">1 · What kind</p>
+    <div class="labelset" role="group" aria-label="Feedback kind">
+      <button class="pill" type="button" data-kind="BUG" aria-pressed="true">BUG</button>
+      <button class="pill" type="button" data-kind="LIKED" aria-pressed="false">LIKED</button>
+      <button class="pill" type="button" data-kind="DIDN'T LIKE" aria-pressed="false">DIDN'T LIKE</button>
+    </div>
+    <p class="step">2 · Label</p>
+    <div class="labelset" role="group" aria-label="Feedback label">
+      <button class="pill" type="button" data-gripe="HUNTING" aria-pressed="false">HUNTING</button>
+      <button class="pill" type="button" data-gripe="EMPTY" aria-pressed="false">EMPTY</button>
+      <button class="pill" type="button" data-gripe="IMAGES" aria-pressed="false">IMAGES</button>
+      <button class="pill" type="button" data-gripe="SLOW" aria-pressed="false">SLOW</button>
+      <button class="pill" type="button" data-gripe="SETUP" aria-pressed="false">SETUP</button>
+      <button class="pill" type="button" data-gripe="NO LABEL YET" aria-pressed="false">NO LABEL YET</button>
+    </div>
+    <p class="step">3 · Three prompts</p>
+    <div class="field">
+      <label for="q1">What were you doing? <span class="hint">The screen, the button, the hunt.</span></label>
+      <textarea id="q1" maxlength="1400" placeholder="I was trying to…"></textarea>
+    </div>
+    <div class="field">
+      <label for="q2">What happened? <span class="hint">Plainly — what you saw.</span></label>
+      <textarea id="q2" maxlength="1400" placeholder="Then…"></textarea>
+    </div>
+    <div class="field">
+      <label for="q3">What would have made it better? <span class="hint">Optional, but the most useful line.</span></label>
+      <textarea id="q3" maxlength="1400" placeholder="It would be obvious if…"></textarea>
+    </div>
+    <div class="meta">
+      <span class="count" id="counter" aria-live="polite">0 / 200 words</span>
+      <span id="need">Pick a label and answer the first two prompts.</span>
+    </div>
+    <div class="actions">
+      <button class="btn" id="submit" type="button" disabled>Open GitHub issue</button>
+      <button class="btnghost" id="copy" type="button">Copy report</button>
+    </div>
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+  </div>
 
   <div class="card dayone"><h2>№ 1 — DAY ONE</h2>
     <p>"Did it arrive broken — or did the first patch become the real launch?" The № 1 gripe at any big launch gets the first panel. Alice doesn't ship until it's stable, and every update reports here, four questions, in order:</p>
@@ -64,12 +130,154 @@
   </div>
 
   <div class="card"><h2>The big gripes — pre-labeled</h2>
-    <div class="row"><span class="tag">HUNTING</span><p><b>"I can't find it."</b> Nothing hides here — if you hunted, it's a bug. Tell us what you were looking for.</p></div>
-    <div class="row"><span class="tag">EMPTY</span><p><b>"There's nothing here."</b> By design: the vessel ships empty, create buttons at the starting line.</p></div>
-    <div class="row"><span class="tag">IMAGES</span><p><b>"Image generation doesn't work."</b> True, and labeled in the app: the engine is in development. No fake buttons.</p></div>
-    <div class="row"><span class="tag">SLOW</span><p><b>"It runs slow."</b> Baseline is an RX 580 / 8GB. Engine resources shows your machine live — report GPU, RAM, where it dragged.</p></div>
-    <div class="row"><span class="tag">SETUP</span><p><b>"Do I have to set it up first?"</b> Open it and start. The wizard asks hardware + downloads only.</p></div>
+    <div class="row"><button class="tag tagbtn" type="button" data-gripe="HUNTING">HUNTING</button><p><b>"I can't find it."</b> Nothing hides here — if you hunted, it's a bug. Tell us what you were looking for.</p></div>
+    <div class="row"><button class="tag tagbtn" type="button" data-gripe="EMPTY">EMPTY</button><p><b>"There's nothing here."</b> By design: the vessel ships empty, create buttons at the starting line.</p></div>
+    <div class="row"><button class="tag tagbtn" type="button" data-gripe="IMAGES">IMAGES</button><p><b>"Image generation doesn't work."</b> True, and labeled in the app: the engine is in development. No fake buttons.</p></div>
+    <div class="row"><button class="tag tagbtn" type="button" data-gripe="SLOW">SLOW</button><p><b>"It runs slow."</b> Baseline is an RX 580 / 8GB. Engine resources shows your machine live — report GPU, RAM, where it dragged.</p></div>
+    <div class="row"><button class="tag tagbtn" type="button" data-gripe="SETUP">SETUP</button><p><b>"Do I have to set it up first?"</b> Open it and start. The wizard asks hardware + downloads only.</p></div>
     <p class="foot">Tap a label to file under it — three prompts, <b>200 words</b>, counter running. Label states as of Oct 2026, re-dated when they change. A gripe with no label yet? Say it plainly — three like it and it earns one.</p>
   </div>
 
-</div></body></html>
+</div>
+<script>
+(function () {
+  var ISSUE = 'https://github.com/Scarlet1987/front-porch-AI/issues/new';
+  var KEY = 'alice-feedback-v1';
+  var kind = 'BUG';
+  var gripe = '';
+  var q1 = document.getElementById('q1');
+  var q2 = document.getElementById('q2');
+  var q3 = document.getElementById('q3');
+  var counter = document.getElementById('counter');
+  var need = document.getElementById('need');
+  var submit = document.getElementById('submit');
+  var copy = document.getElementById('copy');
+  var status = document.getElementById('status');
+  var kinds = [].slice.call(document.querySelectorAll('[data-kind]'));
+  var gripes = [].slice.call(document.querySelectorAll('[data-gripe]'));
+
+  function words() {
+    var text = [q1.value, q2.value, q3.value].join(' ').trim();
+    return text ? text.split(/\s+/).filter(Boolean).length : 0;
+  }
+
+  function missing() {
+    if (!gripe) return 'Pick a label.';
+    if (!q1.value.trim() || !q2.value.trim()) return 'Answer the first two prompts.';
+    if (words() > 200) return 'Trim ' + (words() - 200) + ' words.';
+    return '';
+  }
+
+  function report() {
+    return [
+      'Kind: ' + kind,
+      'Label: ' + (gripe || 'NO LABEL YET'),
+      '',
+      '1 \u00b7 What were you doing?',
+      q1.value.trim() || '(not answered)',
+      '',
+      '2 \u00b7 What happened?',
+      q2.value.trim() || '(not answered)',
+      '',
+      '3 \u00b7 What would have made it better?',
+      q3.value.trim() || '(not answered)',
+      '',
+      '---',
+      'Filed from the guide page.'
+    ].join('\n');
+  }
+
+  function issueUrl() {
+    var head = (q2.value.trim() || q1.value.trim()).replace(/\s+/g, ' ').slice(0, 70);
+    var title = '[' + (gripe || kind) + '] ' + head;
+    return ISSUE + '?title=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(report());
+  }
+
+  function render() {
+    kinds.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-kind') === kind)); });
+    gripes.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-gripe') === gripe)); });
+    var n = words();
+    counter.textContent = n + ' / 200 words';
+    counter.classList.toggle('over', n > 200);
+    need.textContent = missing();
+    submit.disabled = missing() !== '';
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify({ kind: kind, gripe: gripe, q1: q1.value, q2: q2.value, q3: q3.value }));
+    } catch (e) {}
+  }
+
+  function load() {
+    try {
+      var d = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (!d) return;
+      kind = d.kind || kind;
+      gripe = d.gripe || '';
+      q1.value = d.q1 || '';
+      q2.value = d.q2 || '';
+      q3.value = d.q3 || '';
+    } catch (e) {}
+  }
+
+  kinds.forEach(function (b) {
+    b.addEventListener('click', function () {
+      kind = b.getAttribute('data-kind');
+      render(); save();
+    });
+  });
+
+  gripes.forEach(function (b) {
+    b.addEventListener('click', function () {
+      gripe = b.getAttribute('data-gripe');
+      render(); save();
+      if (!document.getElementById('file').contains(b)) {
+        document.getElementById('file').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        q1.focus({ preventScroll: true });
+      }
+    });
+  });
+
+  [q1, q2, q3].forEach(function (t) {
+    t.addEventListener('input', function () { render(); save(); });
+  });
+
+  submit.addEventListener('click', function () {
+    if (submit.disabled) return;
+    var url = issueUrl();
+    var opened = window.open(url, '_blank', 'noopener');
+    var link = '<a href="' + url.replace(/"/g, '&quot;') + '" target="_blank" rel="noopener">Open it again</a>';
+    status.innerHTML = (opened
+      ? 'Prefilled issue opened in a new tab \u2014 press <b>Submit new issue</b> there. '
+      : 'Your browser blocked the tab. ') + link + '.';
+  });
+
+  copy.addEventListener('click', function () {
+    var text = report();
+    function fallback() {
+      var t = document.createElement('textarea');
+      t.value = text;
+      t.style.position = 'fixed';
+      t.style.opacity = '0';
+      document.body.appendChild(t);
+      t.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(t);
+    }
+    function done() {
+      status.textContent = 'Report copied \u2014 paste it into a new issue or a comment.';
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { fallback(); done(); });
+    } else {
+      fallback();
+      done();
+    }
+  });
+
+  load();
+  render();
+})();
+</script>
+</body></html>
