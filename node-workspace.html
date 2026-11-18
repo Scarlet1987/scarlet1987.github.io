@@ -139,12 +139,12 @@ body.ws-focus .canvas.tall{height:calc(100dvh - 210px)!important}
 .metal h2{font-family:Georgia,serif;font-size:32px;line-height:1;margin:0}
 .metal h2 em{color:var(--mint);font-style:normal}
 .metal p.lead{color:#c8e6d2;max-width:760px;margin:10px 0 0}
-.metal-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
-@media(max-width:860px){.metal-steps{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.metal-steps{grid-template-columns:1fr}}
-.metal-step{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:13px}
-.metal-step b{font-size:13px}.metal-step span{font-family:ui-monospace,monospace;font-size:11px;color:var(--mint);text-transform:uppercase;letter-spacing:.06em}
-.metal-step p{margin:6px 0 0;font-size:13px;color:#d6e8da;line-height:1.45}
+.metal-steps{display:flex;flex-direction:column;gap:4px;margin-top:14px}
+.metal-step{display:flex;align-items:baseline;gap:9px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:8px;padding:7px 11px;font-size:13px;line-height:1.4;color:#d6e8da}
+.metal-step .n{flex:0 0 auto;font-family:ui-monospace,monospace;font-size:11px;font-weight:700;color:var(--accent-dark);background:var(--mint);border-radius:999px;min-width:20px;height:20px;display:inline-grid;place-items:center;align-self:center}
+.metal-step b{color:#fff;white-space:nowrap}
+.metal-step .sep{color:var(--mint);flex:0 0 auto}
+@media(max-width:560px){.metal-step{flex-wrap:wrap;gap:4px 7px}.metal-step b{white-space:normal}}
 .metal-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .metal-actions button{border-radius:999px;padding:11px 16px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
 .metal-actions .dl{background:var(--mint);color:var(--accent-dark);border-color:var(--mint)}
@@ -313,14 +313,14 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     <h2>3 — Put it on metal. <em>Make the software real.</em></h2>
     <p class="lead"><strong>Read-back:</strong> The graph above isn’t just a drawing — it’s the build list. When Run is green, this is the order it lands on a real machine: Tiny Core underneath, Rust in the middle, HTML face on top. USB first, install second — backup before either.</p>
     <div class="sandwich"><span>TOP · HTML Face — this page, word for word</span><span>↕ local HTTP</span><span>MIDDLE · Rust Orchestrator + Rust Engine</span><span>↕</span><span>BOTTOM · Tiny Core Linux</span><span>→ YOUR HARDWARE</span></div>
-    <div class="metal-steps">
-      <article class="metal-step"><span>Step 0 · First</span><br><b>Back up</b><p>Real choice on first run: back up, or skip — skipping locks the Windows-wipe door. Nothing gets wiped without this step.</p></article>
-      <article class="metal-step"><span>Step 1 · Build</span><br><b>Run the graph green</b><p>Press Run above. Every node in your graph has to pass. A red node is the break — fix it here, not after it’s on metal.</p></article>
-      <article class="metal-step"><span>Step 2 · Export</span><br><b>Download the build manifest</b><p>One file listing every node, wire, and layer in order. That’s the recipe the USB / installer follows — nothing hidden, nothing extra.</p></article>
-      <article class="metal-step"><span>Step 3 · USB first</span><br><b>Make a bootable USB</b><p>The installer writes the image to a plugged-in stick. Boot from USB and live-test it. The live run is held to the install bar, not a demo bar.</p></article>
-      <article class="metal-step"><span>Step 4 · Benchmark</span><br><b>First-run check on that PC</b><p>8-step first run: drivers are chosen, not shipped blind. Benchmark proves this hardware can do the work before anything installs.</p></article>
-      <article class="metal-step"><span>Step 5 · Land it</span><br><b>Choose how it lands</b><p>Keep the USB, install directly to metal, or — only if you backed up — wipe Windows. One tap at a time, your choice at the end.</p></article>
-    </div>
+    <ol class="metal-steps" style="list-style:none;padding:0">
+      <li class="metal-step"><span class="n">0</span><b>Back up</b><span class="sep">—</span><span>Real choice: back up or skip — skipping locks the Windows-wipe door; nothing is wiped without it.</span></li>
+      <li class="metal-step"><span class="n">1</span><b>Run the graph green</b><span class="sep">—</span><span>Every node must pass; a red node is the break — fix it here, not after it’s on metal.</span></li>
+      <li class="metal-step"><span class="n">2</span><b>Build manifest</b><span class="sep">—</span><span>One file listing every node, wire, and layer in order — the recipe the installer follows.</span></li>
+      <li class="metal-step"><span class="n">3</span><b>Bootable USB</b><span class="sep">—</span><span>Installer writes the image to a plugged-in stick; boot and live-test it — held to the install bar, not a demo bar.</span></li>
+      <li class="metal-step"><span class="n">4</span><b>First-run check</b><span class="sep">—</span><span>The 8-step first run: drivers chosen, not shipped blind; benchmark proves this hardware before anything installs.</span></li>
+      <li class="metal-step"><span class="n">5</span><b>Choose how it lands</b><span class="sep">—</span><span>Keep the USB, install directly to metal, or — only if you backed up — wipe Windows.</span></li>
+    </ol>
     <div class="metal-actions">
       <button class="dl" id="manifestBtn">⬇ Download build manifest (.md)</button>
       <button class="ghost" id="metalRunBtn">▶ Re-run graph before building</button>
