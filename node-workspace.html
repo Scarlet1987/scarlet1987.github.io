@@ -178,12 +178,29 @@ body.ws-focus .toolbar{position:relative;z-index:95}
 .hint{font-size:12px;color:var(--muted);margin-top:10px}
 .log{margin-top:14px;background:var(--accent-dark);color:#d9ffe9;border-radius:16px;padding:14px 16px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;min-height:118px}
 .log b{color:var(--mint)} .log div{padding:2px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+/* BOARD MODE — this page opened as the popped-out breadboard (#breadboard):
+   board only, tools stay in the main window. */
+.board-bar{display:none}
+html.board-mode .board-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--accent-dark);color:#eafff3;border-radius:14px;padding:10px 12px;margin-bottom:12px}
+.board-bar b{font-size:16px}
+.board-bar .bsub{opacity:.8;font-size:13px}
+.board-bar .bhint{flex-basis:100%;font-size:12px;opacity:.75}
+.board-bar button{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:8px 13px;cursor:pointer;font-weight:600;min-height:38px}
+.board-bar button.run{background:var(--accent);color:#fff;border-color:var(--accent)}
+.board-bar button.danger{background:#fff1f0;color:var(--red);border-color:#f0c9c5}
+.board-bar .sp{margin-left:auto}
+html.board-mode .faq-wrap,html.board-mode .face-grid,html.board-mode .metal,html.board-mode .map,html.board-mode footer,html.board-mode .creator,html.board-mode .palette,html.board-mode .toolbar,html.board-mode .inspector,html.board-mode .ws-head,html.board-mode .resize-handle{display:none!important}
+html.board-mode .wrap{max-width:none;padding:10px 12px 20px}
+html.board-mode .workspace{margin-top:0}
+html.board-mode .layout{grid-template-columns:minmax(0,1fr);margin-top:0}
+html.board-mode .canvas{height:calc(100dvh - 240px)!important;min-height:320px}
 .map{margin-top:22px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 @media(max-width:860px){.map{grid-template-columns:1fr}}
 .map article{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
 .map h3{margin:0;font-size:14px}.map p{margin:6px 0 0;color:var(--muted);font-size:13px}
 footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:14px}
 </style>
+<script>if(window.location.hash==='#breadboard'){document.documentElement.classList.add('board-mode');}</script>
 </head>
 <body>
 <div class="wrap">
@@ -255,6 +272,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   <!-- NODE WORKSPACE -->
   <section class="workspace" id="workspace">
     <div class="ws-head"><div><h2>2 — Node Workspace — pop out, zoom, resize</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="pill" id="spacePill">Canvas · 760px tall</span><span class="pill" id="countPill">6 nodes · 6 wires</span></div></div>
+    <div class="board-bar" id="boardBar"><b>Node Workspace — breadboard</b><span class="bsub">Just the board — tools stay in the main window.</span><button class="run" id="boardRunBtn" type="button">▶ Run graph</button><button id="boardFitBtn" type="button">Fit graph</button><span class="sp"></span><button id="boardWipeBtn" type="button">⌫ Wipe selection</button><button class="danger" id="boardClearBtn" type="button">✕ Clear board</button><span class="bhint">Drag nodes to arrange · Click an output dot, then an input dot, to wire · Drag empty board to pan · Ctrl + scroll to zoom · Click a node to select it, then press Delete · Wipe selection clears the selected node or wire, Clear board wipes the whole board</span></div>
     <div class="toolbar">
       <button class="run" id="runBtn">▶ Run graph</button>
       <button id="stepBtn">Step once</button>
@@ -373,7 +391,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   function zoomCenter(factor){ var r=canvas.getBoundingClientRect(); zoomAt(r.left+r.width/2, r.top+r.height/2, factor); }
   function fitView(){ if(!nodes.length) return; var minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9; nodes.forEach(function(n){ minX=Math.min(minX,n.x); minY=Math.min(minY,n.y); maxX=Math.max(maxX,n.x+176); maxY=Math.max(maxY,n.y+100); }); var cw=canvas.clientWidth, ch=canvas.clientHeight; zoom=Math.max(.2,Math.min(1.6,Math.min(cw/(maxX-minX+90), ch/(maxY-minY+90)))); panX=(cw-(maxX-minX)*zoom)/2-minX*zoom; panY=(ch-(maxY-minY)*zoom)/2-minY*zoom; applyTransform(); }
   var KIND={face:{label:'Face panel',cls:'kind-face'},orch:{label:'Orchestrator',cls:'kind-orch'},engine:{label:'Rust engine',cls:'kind-engine'},data:{label:'Data table',cls:'kind-data'},check:{label:'Benchmark / check',cls:'kind-check'}};
-  function log(who,msg){ var d=document.createElement('div'); d.innerHTML='<b>'+escapeHtml(who)+'.</b> '+escapeHtml(msg); logEl.prepend(d); while(logEl.children.length>200) logEl.removeChild(logEl.lastChild); popLog(who,msg); }
+  function log(who,msg){ var d=document.createElement('div'); d.innerHTML='<b>'+escapeHtml(who)+'.</b> '+escapeHtml(msg); logEl.prepend(d); while(logEl.children.length>200) logEl.removeChild(logEl.lastChild); }
   function makeNode(kind,x,y,title,notes){ seq++; return {id:'n'+seq,kind:kind,x:x,y:y,title:title||KIND[kind].label,notes:notes||'',status:'idle'}; }
   function loadExample(){ var narrow = canvas.clientWidth>0 && canvas.clientWidth<640; if(narrow){ nodes=[ makeNode('face',16,20,'Login face','The HTML login people tap. Pick user, enter PIN.'), makeNode('orch',170,120,'Orchestrator','Rust. Holds the shape, routes face ↔ engine, contains failures.'), makeNode('engine',16,230,'Rust engine','Does the work on local hardware. No internet.'), makeNode('data',170,320,'Session table','Lookup table: who is logged in, what survives a restart. Compute once, save the map.'), makeNode('check',16,380,'Benchmark','First-run check. If this fails, you see it here — not after install.'), makeNode('face',170,440,'HUD face','The panels the person lives in after login.') ]; } else { nodes=[ makeNode('face',24,40,'Login face','The HTML login people tap. Pick user, enter PIN.'), makeNode('orch',268,150,'Orchestrator','Rust. Holds the shape, routes face ↔ engine, contains failures.'), makeNode('engine',512,40,'Rust engine','Does the work on local hardware. No internet.'), makeNode('data',512,250,'Session table','Lookup table: who is logged in, what survives a restart. Compute once, save the map.'), makeNode('check',268,330,'Benchmark','First-run check. If this fails, you see it here — not after install.'), makeNode('face',740,150,'HUD face','The panels the person lives in after login.') ]; } edges=[{from:nodes[0].id,to:nodes[1].id},{from:nodes[1].id,to:nodes[2].id},{from:nodes[1].id,to:nodes[3].id},{from:nodes[4].id,to:nodes[1].id},{from:nodes[2].id,to:nodes[5].id},{from:nodes[3].id,to:nodes[5].id}]; selectedId=null; armed=null; render(); }
   function nodeById(id){ return nodes.find(function(n){return n.id===id}); }
@@ -388,7 +406,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   function render(){
     world.querySelectorAll('.node').forEach(function(e){e.remove()});
     nodes.forEach(function(n){ world.appendChild(buildNodeEl(n)); });
-    drawWires(); syncInspector(); renderPopAll();
+    drawWires(); syncInspector(); broadcastSoon();
     var cp=document.getElementById('countPill'); if(cp) cp.textContent=nodes.length+' nodes · '+edges.length+' wires';
   }
   function updateNode(n){
@@ -397,7 +415,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     n._titleEl.textContent=n.title; n._kindEl.textContent=KIND[n.kind].label;
     n._statusEl.textContent=n.status; n._statusEl.className='status st-'+n.status;
     if(selectedId===n.id){ var st=document.getElementById('inspStatus'); st.textContent=n.status; st.className='status st-'+n.status; }
-    syncPopNode(n);
+    broadcastSoon();
   }
   function updateSelection(){
     nodes.forEach(function(n){ if(n._el) n._el.classList.toggle('selected', n.id===selectedId); });
@@ -408,7 +426,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     var cp2=document.getElementById('countPill'); if(cp2) cp2.textContent=nodes.length+' nodes · '+edges.length+' wires';
     svg.setAttribute('viewBox','0 0 '+WORLD_W+' '+WORLD_H); svg.innerHTML='';
     edges.forEach(function(e,i){ var a=nodeById(e.from),b=nodeById(e.to); if(!a||!b) return; var x1=a.x+176,y1=a.y+42,x2=b.x,y2=b.y+42,c=Math.max(40,Math.abs(x2-x1)/2); var path=document.createElementNS('http://www.w3.org/2000/svg','path'); path.setAttribute('d','M'+x1+' '+y1+' C '+(x1+c)+' '+y1+', '+(x2-c)+' '+y2+', '+x2+' '+y2); path.setAttribute('fill','none'); path.setAttribute('stroke', selectedEdge===i?'#b42318':'#00914f'); path.setAttribute('stroke-width', selectedEdge===i?'3.5':'2.5'); path.style.pointerEvents='stroke'; path.addEventListener('click',function(ev){ ev.stopPropagation(); selectedEdge=i; selectedId=null; updateSelection(); log('Wire','Selected wire '+nodeById(e.from).title+' → '+nodeById(e.to).title+'. Press Delete to remove it.'); }); svg.appendChild(path); });
-    drawPopWires();
+    broadcastSoon();
   }
   function startDrag(ev,el,n){
     var start=toWorld(ev.clientX,ev.clientY); var offX=start.x-n.x, offY=start.y-n.y;
@@ -442,7 +460,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     document.getElementById('inspName').value=n.title; document.getElementById('inspKind').value=n.kind; document.getElementById('inspNotes').value=n.notes;
     var st=document.getElementById('inspStatus'); st.textContent=n.status; st.className='status st-'+n.status;
   }
-  document.getElementById('inspName').addEventListener('input',function(e){ var n=nodeById(selectedId); if(n){ n.title=e.target.value||KIND[n.kind].label; if(n._titleEl) n._titleEl.textContent=n.title; document.getElementById('inspTitle').textContent=n.title; syncPopNode(n); } });
+  document.getElementById('inspName').addEventListener('input',function(e){ var n=nodeById(selectedId); if(n){ n.title=e.target.value||KIND[n.kind].label; if(n._titleEl) n._titleEl.textContent=n.title; document.getElementById('inspTitle').textContent=n.title; broadcastSoon(); } });
   document.getElementById('inspNotes').addEventListener('input',function(e){ var n=nodeById(selectedId); if(n) n.notes=e.target.value; });
   document.getElementById('inspKind').addEventListener('change',function(e){ var n=nodeById(selectedId); if(n){ n.kind=e.target.value; updateNode(n); } });
   function refreshCounts(){ var cp=document.getElementById('countPill'); if(cp) cp.textContent=nodes.length+' nodes · '+edges.length+' wires'; }
@@ -484,175 +502,127 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   // FOCUS — workspace fills the screen
   document.getElementById('focusBtn').addEventListener('click',function(){ var on=document.body.classList.toggle('ws-focus'); this.textContent=on?'⛶ Exit focus (Esc)':'⛶ Focus — fill screen'; drawWires(); log('Space', on?'Focus on — the workspace fills the screen. Esc brings the page back.':'Focus off.'); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape' && document.body.classList.contains('ws-focus')){ document.body.classList.remove('ws-focus'); document.getElementById('focusBtn').textContent='⛶ Focus — fill screen'; drawWires(); } });
-  // POP OUT — the breadboard. A clean, live board in its own window: nodes,
-  // wires, drag, pan, zoom and Run status — and nothing else. The tools
-  // (Node Creator, inspector, palettes) stay in this main window. The board
-  // is built and driven from here with DOM calls — there is deliberately no
-  // script inside the popped-out document — so the graph always lands, and
-  // edits on either side show up on both. Fast iteration: Wipe selection
-  // clears one section (selected nodes + their wires), Clear board wipes
-  // the whole board in one tap; the tools here are never touched.
-  var popWin=null, popDoc=null, popSel={}, popArmed=null, popZoom=1, popPanX=0, popPanY=0, popWatch=null;
-  function popAlive(){ return !!(popWin && !popWin.closed && popDoc); }
-  function popLog(who,msg){ if(!popAlive()) return; var lg=popDoc.getElementById('lg'); if(!lg) return; var d=popDoc.createElement('div'); d.innerHTML='<b>'+escapeHtml(who)+'.</b> '+escapeHtml(msg); lg.prepend(d); while(lg.children.length>200) lg.removeChild(lg.lastChild); }
-  function popSkeleton(){
-    var css='*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#eef0e9;color:#12211a}header{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;background:#062e1d;color:#eafff3}header b{font-size:16px}header .sub{opacity:.8;font-size:13px}header .hint{flex-basis:100%;font-size:12px;opacity:.75}button{border:1px solid #c8d2c6;background:#fff;color:#12211a;border-radius:999px;padding:8px 13px;cursor:pointer;font-weight:600;min-height:38px}button.run{background:#00914f;color:#fff;border-color:#00914f}button.danger{background:#fff1f0;color:#b42318;border-color:#f0c9c5}button.sp{margin-left:auto}#cv{position:relative;height:calc(100vh - 150px);overflow:hidden;background:#f7f8f3;touch-action:none}#wd{position:absolute;left:0;top:0;width:3600px;height:2400px;transform-origin:0 0;background-image:radial-gradient(#d4ddd0 1.2px,transparent 1.2px);background-size:22px 22px}svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.nd{position:absolute;width:176px;background:#fff;border:1.5px solid #c8d2c6;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.1);user-select:none}.nd.sel{border-color:#00914f;box-shadow:0 0 0 3px rgba(0,145,79,.28),0 6px 18px rgba(0,0,0,.1)}.hd{padding:9px 11px;border-radius:12px 12px 0 0;color:#fff;font-weight:700;font-size:13px;cursor:grab}.face .hd{background:#00914f}.engine .hd{background:#062e1d}.orch .hd{background:#7a5a12}.data .hd{background:#33566b}.check .hd{background:#6b3a2a}.bd{padding:9px 11px;font-size:12px;color:#5a6b60}.st{font-family:ui-monospace,monospace;font-size:11px;text-transform:uppercase}.st-idle{color:#5a6b60}.st-running{color:#b7791f}.st-done{color:#00914f}.st-fail{color:#b42318}.pt{position:absolute;top:50%;width:18px;height:18px;border-radius:50%;background:#fff;border:2.5px solid #00914f;transform:translateY(-50%);cursor:pointer;z-index:3}.pt.in{left:-9px}.pt.out{right:-9px}.pt.armed{background:#00914f;box-shadow:0 0 0 6px rgba(0,145,79,.2)}#mq{position:absolute;border:1.5px dashed #00914f;background:rgba(0,145,79,.10);display:none;z-index:5;pointer-events:none}#lg{background:#062e1d;color:#d9ffe9;font-family:ui-monospace,monospace;font-size:12.5px;padding:10px 14px;height:64px;overflow:auto}#lg b{color:#bfeeda}#lg div{padding:1px 0}';
-    return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Node Workspace — Breadboard</title><style>'+css+'</style></head><body>'
-      +'<header><b>Node Workspace — breadboard</b><span class="sub">Just the board — tools stay in the main window.</span><button class="run" id="run">▶ Run graph</button><button id="zo" aria-label="Zoom out">−</button><button id="zp">100%</button><button id="zi" aria-label="Zoom in">+</button><button id="ft">Fit graph</button><button class="sp" id="wipe">⌫ Wipe selection</button><button class="danger" id="clear">✕ Clear board</button><span class="hint">Drag nodes to arrange · Click an output dot, then an input dot, to wire · Drag empty board to pan · Ctrl + scroll to zoom · Click a node to select it, Shift+click adds, Shift+drag boxes a section · Delete wipes the selection</span></header>'
-      +'<div id="cv"><div id="wd"><svg id="wires"></svg><div id="mq"></div></div></div><div id="lg"></div>'
-      +'</body></html>';
+  // POP OUT — the breadboard in its own window. The old build opened a
+  // blank window and painted a second, hand-styled copy of the board into
+  // it from here (document.write + cross-window DOM calls). In the app
+  // shell's second window that copy landed unstyled, fitted at 20% zoom,
+  // with the nodes lost off-view — the canvas never really came out.
+  // Now Pop out opens THIS page again in the new window with #breadboard
+  // on the address: the board window runs the real page — same styles,
+  // same board code — in board-only mode (board bar + canvas + log; the
+  // tools stay hidden there and live here). The two windows keep each
+  // other live by passing the graph state back and forth (postMessage to
+  // the other window + a BroadcastChannel), so edits, wiring and Run
+  // status made on either side show up on both.
+  var isBoardMode = (window.location.hash === '#breadboard');
+  var instanceId = 'i' + Math.random().toString(36).slice(2, 10);
+  var applyingRemote = false, lastSig = '', gotRemoteState = false;
+  var popWinRef = null, popWatch = null, bcTimer = null;
+  var syncChan = null;
+  try { syncChan = new BroadcastChannel('rq-node-workspace'); } catch (err) { syncChan = null; }
+  function serializeState(){
+    return {
+      nodes: nodes.map(function(n){ return { id:n.id, kind:n.kind, x:n.x, y:n.y, title:n.title, notes:n.notes, status:n.status }; }),
+      edges: edges.map(function(e){ return { from:e.from, to:e.to }; }),
+      seq: seq
+    };
   }
-  function popApply(){ if(!popAlive()) return; var wd=popDoc.getElementById('wd'); if(wd) wd.style.transform='translate('+popPanX+'px,'+popPanY+'px) scale('+popZoom+')'; var zp=popDoc.getElementById('zp'); if(zp) zp.textContent=Math.round(popZoom*100)+'%'; }
-  function popFit(){ if(!popAlive()) return; if(!nodes.length){ popApply(); return; } var cv=popDoc.getElementById('cv'); var minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9; nodes.forEach(function(n){ minX=Math.min(minX,n.x); minY=Math.min(minY,n.y); maxX=Math.max(maxX,n.x+176); maxY=Math.max(maxY,n.y+100); }); popZoom=Math.max(.2,Math.min(1.6,Math.min(cv.clientWidth/(maxX-minX+90), cv.clientHeight/(maxY-minY+90)))); popPanX=(cv.clientWidth-(maxX-minX)*popZoom)/2-minX*popZoom; popPanY=(cv.clientHeight-(maxY-minY)*popZoom)/2-minY*popZoom; popApply(); }
-  function popToWorld(cx,cy){ var r=popDoc.getElementById('cv').getBoundingClientRect(); return { x:(cx-r.left-popPanX)/popZoom, y:(cy-r.top-popPanY)/popZoom }; }
-  function popZoomAt(cx,cy,factor){ if(!popAlive()) return; var r=popDoc.getElementById('cv').getBoundingClientRect(); var mx=cx-r.left, my=cy-r.top; var wx=(mx-popPanX)/popZoom, wy=(my-popPanY)/popZoom; popZoom=Math.max(.2,Math.min(2.5,popZoom*factor)); popPanX=mx-wx*popZoom; popPanY=my-wy*popZoom; popApply(); }
-  function popZoomCenter(factor){ if(!popAlive()) return; var r=popDoc.getElementById('cv').getBoundingClientRect(); popZoomAt(r.left+r.width/2, r.top+r.height/2, factor); }
-  function drawPopWires(){
-    if(!popAlive()) return;
-    try{
-      var svgP=popDoc.getElementById('wires'); if(!svgP) return;
-      nodes.forEach(function(n){ if(n._popEl){ n._popEl.style.left=n.x+'px'; n._popEl.style.top=n.y+'px'; } });
-      svgP.setAttribute('viewBox','0 0 '+WORLD_W+' '+WORLD_H); svgP.innerHTML='';
-      edges.forEach(function(e){ var a=nodeById(e.from), b=nodeById(e.to); if(!a||!b) return; var x1=a.x+176,y1=a.y+42,x2=b.x,y2=b.y+42,c=Math.max(40,Math.abs(x2-x1)/2); var p=popDoc.createElementNS('http://www.w3.org/2000/svg','path'); p.setAttribute('d','M'+x1+' '+y1+' C '+(x1+c)+' '+y1+', '+(x2-c)+' '+y2+', '+x2+' '+y2); p.setAttribute('fill','none'); p.setAttribute('stroke','#00914f'); p.setAttribute('stroke-width','2.5'); svgP.appendChild(p); });
-    }catch(err){ popWin=null; popDoc=null; }
+  function sendState(){
+    var s = serializeState();
+    lastSig = JSON.stringify(s);
+    var msg = { type:'rq-state', from:instanceId, state:s };
+    if (syncChan){ try { syncChan.postMessage(msg); } catch (err) {} }
+    var targets = [];
+    if (popWinRef && !popWinRef.closed) targets.push(popWinRef);
+    if (isBoardMode && window.opener && window.opener !== window) targets.push(window.opener);
+    targets.forEach(function(t){ try { t.postMessage(msg, '*'); } catch (err) {} });
   }
-  function renderPopAll(){
-    if(!popAlive()) return;
-    try{
-      var wd=popDoc.getElementById('wd'); if(!wd) return;
-      wd.querySelectorAll('.nd').forEach(function(e){ e.remove(); });
-      Object.keys(popSel).forEach(function(id){ if(!nodeById(id)) delete popSel[id]; });
-      nodes.forEach(function(n){ wd.appendChild(buildPopNode(n)); });
-      drawPopWires();
-    }catch(err){ popWin=null; popDoc=null; }
+  function broadcastSoon(){
+    if (applyingRemote || bcTimer) return;
+    bcTimer = setTimeout(function(){ bcTimer = null; sendState(); }, 100);
   }
-  function syncPopNode(n){
-    if(!popAlive() || !n._popEl) return;
-    try{
-      n._popEl.className='nd '+n.kind+(popSel[n.id]?' sel':'');
-      if(n._popTitle) n._popTitle.textContent=n.title;
-      if(n._popKind) n._popKind.textContent=KIND[n.kind].label;
-      if(n._popStatus){ n._popStatus.textContent='● '+n.status; n._popStatus.className='st st-'+n.status; }
-    }catch(err){ popWin=null; popDoc=null; }
+  function sendStateRequest(){
+    var msg = { type:'rq-request', from:instanceId };
+    if (syncChan){ try { syncChan.postMessage(msg); } catch (err) {} }
+    if (window.opener && window.opener !== window){ try { window.opener.postMessage(msg, '*'); } catch (err) {} }
   }
-  function popRefreshSel(){ if(!popAlive()) return; nodes.forEach(function(n){ if(n._popEl) n._popEl.classList.toggle('sel', !!popSel[n.id]); }); }
-  function buildPopNode(n){
-    var el=popDoc.createElement('div');
-    el.className='nd '+n.kind+(popSel[n.id]?' sel':'');
-    el.style.left=n.x+'px'; el.style.top=n.y+'px'; el.dataset.id=n.id;
-    el.innerHTML='<div class="pt in" data-port="in" title="Input"></div><div class="hd"><span class="ttl"></span></div><div class="bd"><span class="kl"></span><br><span class="st st-'+n.status+'">● '+n.status+'</span></div><div class="pt out" data-port="out" title="Output"></div>';
-    el.querySelector('.ttl').textContent=n.title;
-    el.querySelector('.kl').textContent=KIND[n.kind].label;
-    n._popEl=el; n._popTitle=el.querySelector('.ttl'); n._popKind=el.querySelector('.kl'); n._popStatus=el.querySelector('.st');
-    el.addEventListener('pointerdown',function(ev){
-      if(ev.target.classList.contains('pt')) return;
-      ev.stopPropagation();
-      if(ev.shiftKey){ if(popSel[n.id]) delete popSel[n.id]; else popSel[n.id]=1; popRefreshSel(); return; }
-      if(!popSel[n.id]){ popSel={}; popSel[n.id]=1; popRefreshSel(); }
-      startPopDrag(ev,n);
-    });
-    el.querySelectorAll('.pt').forEach(function(p){ p.addEventListener('click',function(ev){ ev.stopPropagation(); handlePopPort(n.id,p.dataset.port,p); }); });
-    return el;
-  }
-  function startPopDrag(ev,node){
-    var start=popToWorld(ev.clientX,ev.clientY);
-    var starts={}; Object.keys(popSel).forEach(function(id){ var m=nodeById(id); if(m) starts[id]={x:m.x,y:m.y}; });
-    if(!starts[node.id]) starts[node.id]={x:node.x,y:node.y};
-    var pending=null, rafId=0;
-    function apply(){
-      rafId=0; if(!popWin||!popDoc) return; if(!pending) return; var e=pending; pending=null;
-      var p=popToWorld(e.clientX,e.clientY); var dx=p.x-start.x, dy=p.y-start.y;
-      Object.keys(starts).forEach(function(id){ var m=nodeById(id); if(!m) return; m.x=Math.max(4,Math.min(WORLD_W-180, starts[id].x+dx)); m.y=Math.max(4,Math.min(WORLD_H-100, starts[id].y+dy)); if(m._popEl){ m._popEl.style.left=m.x+'px'; m._popEl.style.top=m.y+'px'; } if(m._el){ m._el.style.left=m.x+'px'; m._el.style.top=m.y+'px'; } });
-      drawWires();
-    }
-    function mv(e){ pending=e; if(!rafId) rafId=popWin.requestAnimationFrame(apply); }
-    function up(){ if(!popWin||!popDoc) return; popWin.removeEventListener('pointermove',mv); popWin.removeEventListener('pointerup',up); popWin.removeEventListener('pointercancel',up); popWin.removeEventListener('blur',up); if(rafId){ popWin.cancelAnimationFrame(rafId); rafId=0; } if(pending) apply(); }
-    popWin.addEventListener('pointermove',mv); popWin.addEventListener('pointerup',up); popWin.addEventListener('pointercancel',up); popWin.addEventListener('blur',up);
-  }
-  function handlePopPort(id,dir,el){
-    if(popArmed && !nodeById(popArmed.from)){ popArmed=null; return; }
-    if(dir==='out'){ popArmed={from:id}; popDoc.querySelectorAll('.pt').forEach(function(p){ p.classList.remove('armed'); }); el.classList.add('armed'); log('Wire','Output armed from “'+nodeById(id).title+'” — now click an input dot on the board.'); return; }
-    if(dir==='in' && popArmed){
-      if(popArmed.from===id){ log('Wire','A node cannot wire to itself.'); return; }
-      if(edges.some(function(e){ return e.from===popArmed.from&&e.to===id; })){ log('Wire','That wire already exists.'); }
-      else { edges.push({from:popArmed.from,to:id}); log('Wire', nodeById(popArmed.from).title+' → '+nodeById(id).title+' connected — wired on the breadboard.'); }
-      popArmed=null; popDoc.querySelectorAll('.pt').forEach(function(p){ p.classList.remove('armed'); });
-      drawWires();
-    }
-  }
-  function wipePopSelection(){
-    var ids=Object.keys(popSel).filter(function(id){ return !!nodeById(id); });
-    if(!ids.length){ log('Wipe','Nothing selected on the board. Click a node, Shift+click to add more, or Shift+drag to box a section — then wipe.'); return; }
-    var idSet={}; ids.forEach(function(id){ idSet[id]=1; });
-    var wireCount=edges.filter(function(e){ return idSet[e.from]||idSet[e.to]; }).length;
-    edges=edges.filter(function(e){ return !idSet[e.from]&&!idSet[e.to]; });
-    nodes=nodes.filter(function(n){ return !idSet[n.id]; });
-    if(idSet[selectedId]) selectedId=null;
-    popSel={}; popArmed=null;
+  function applyRemoteState(s){
+    if (!s || !s.nodes) return;
+    var sig = JSON.stringify(s);
+    if (sig === lastSig) return;
+    lastSig = sig; gotRemoteState = true; applyingRemote = true;
+    nodes = s.nodes.map(function(n){ return { id:n.id, kind:n.kind, x:n.x, y:n.y, title:n.title, notes:n.notes || '', status:n.status || 'idle' }; });
+    edges = (s.edges || []).map(function(e){ return { from:e.from, to:e.to }; });
+    if (typeof s.seq === 'number') seq = s.seq;
+    nodes.forEach(function(n){ var m = /^n(\d+)$/.exec(n.id); if (m) seq = Math.max(seq, parseInt(m[1], 10)); });
+    if (selectedId && !nodeById(selectedId)) selectedId = null;
+    selectedEdge = null; armed = null; stepQueue = [];
     render();
-    log('Wipe','Cleared '+ids.length+' node'+(ids.length>1?'s':'')+' and '+wireCount+' wire'+(wireCount===1?'':'s')+' from the board — that section only. The rest of the layout stayed put.');
+    applyingRemote = false;
   }
+  function onSyncMsg(msg){
+    if (!msg || msg.from === instanceId) return;
+    if (msg.type === 'rq-state') applyRemoteState(msg.state);
+    else if (msg.type === 'rq-request') sendState();
+  }
+  window.addEventListener('message', function(e){ onSyncMsg(e.data); });
+  if (syncChan) syncChan.onmessage = function(e){ onSyncMsg(e.data); };
   function clearBoard(){
-    if(!nodes.length){ log('Clear','The board is already empty.'); return; }
-    var n=nodes.length, wcount=edges.length;
-    nodes=[]; edges=[]; selectedId=null; selectedEdge=null; armed=null; popSel={}; popArmed=null; stepQueue=[];
+    if (!nodes.length){ log('Clear','The board is already empty.'); return; }
+    var n = nodes.length, wcount = edges.length;
+    nodes = []; edges = []; selectedId = null; selectedEdge = null; armed = null; stepQueue = [];
     render();
-    log('Clear','Board wiped — '+n+' nodes and '+wcount+' wires gone, one tap. The tools here (Creator, inspector, palettes) are untouched. Load the example or create nodes to start again.');
+    log('Clear','Board wiped — ' + n + ' nodes and ' + wcount + ' wires gone, one tap. The tools in the main window (Creator, inspector, palettes) are untouched. Load the example or create nodes to start again.');
   }
-  function wirePop(){
-    var d=popDoc;
-    d.getElementById('run').addEventListener('click',function(){ runGraph(); });
-    d.getElementById('zo').addEventListener('click',function(){ popZoomCenter(0.8); });
-    d.getElementById('zi').addEventListener('click',function(){ popZoomCenter(1.25); });
-    d.getElementById('zp').addEventListener('click',function(){ popZoom=1; popPanX=0; popPanY=0; popApply(); });
-    d.getElementById('ft').addEventListener('click',function(){ popFit(); });
-    d.getElementById('wipe').addEventListener('click',function(){ wipePopSelection(); });
-    d.getElementById('clear').addEventListener('click',function(){ clearBoard(); });
-    var cv=d.getElementById('cv'), wd=d.getElementById('wd'), mq=d.getElementById('mq'), svgP=d.getElementById('wires');
-    cv.addEventListener('pointerdown',function(e){
-      if(e.target!==cv && e.target!==wd && e.target!==svgP) return;
-      if(e.shiftKey){
-        var startW=popToWorld(e.clientX,e.clientY);
-        mq.style.display='block'; mq._rect=null;
-        function mv(ev){ var p=popToWorld(ev.clientX,ev.clientY); var x=Math.min(startW.x,p.x), y=Math.min(startW.y,p.y), wdt=Math.abs(p.x-startW.x), h=Math.abs(p.y-startW.y); mq.style.left=x+'px'; mq.style.top=y+'px'; mq.style.width=wdt+'px'; mq.style.height=h+'px'; mq._rect={x:x,y:y,w:wdt,h:h}; }
-        function up(){ popWin.removeEventListener('pointermove',mv); popWin.removeEventListener('pointerup',up); popWin.removeEventListener('pointercancel',up); mq.style.display='none'; var r=mq._rect; if(r && r.w>6 && r.h>6){ var count=0; nodes.forEach(function(n){ if(n.x+176>r.x && n.x<r.x+r.w && n.y+100>r.y && n.y<r.y+r.h){ popSel[n.id]=1; count++; } }); popRefreshSel(); if(count) log('Select', count+' node'+(count>1?'s':'')+' boxed on the breadboard. Wipe selection clears just that section — or keep arranging.'); } }
-        popWin.addEventListener('pointermove',mv); popWin.addEventListener('pointerup',up); popWin.addEventListener('pointercancel',up);
-        return;
-      }
-      popSel={}; popRefreshSel(); popArmed=null; popDoc.querySelectorAll('.pt').forEach(function(p){ p.classList.remove('armed'); });
-      var sx=e.clientX-popPanX, sy=e.clientY-popPanY;
-      function mv2(ev){ popPanX=ev.clientX-sx; popPanY=ev.clientY-sy; popApply(); }
-      function up2(){ popWin.removeEventListener('pointermove',mv2); popWin.removeEventListener('pointerup',up2); popWin.removeEventListener('pointercancel',up2); }
-      popWin.addEventListener('pointermove',mv2); popWin.addEventListener('pointerup',up2); popWin.addEventListener('pointercancel',up2);
-    });
-    cv.addEventListener('wheel',function(e){ if(e.ctrlKey||e.metaKey){ e.preventDefault(); popZoomAt(e.clientX,e.clientY, e.deltaY<0?1.12:0.89); } },{passive:false});
-    d.addEventListener('keydown',function(e){
-      if((e.key==='Delete'||e.key==='Backspace') && Object.keys(popSel).length){ e.preventDefault(); wipePopSelection(); }
-      if(e.key==='Escape'){ popSel={}; popRefreshSel(); }
-    });
+  function wipeSelection(){
+    if (selectedEdge !== null && edges[selectedEdge]){
+      var e = edges[selectedEdge]; edges.splice(selectedEdge, 1); selectedEdge = null;
+      render(); log('Wipe','Wire ' + nodeById(e.from).title + ' → ' + nodeById(e.to).title + ' removed — that piece only.'); return;
+    }
+    if (selectedId && nodeById(selectedId)){
+      var t = nodeById(selectedId).title, id = selectedId;
+      var wc = edges.filter(function(x){ return x.from === id || x.to === id; }).length;
+      edges = edges.filter(function(x){ return x.from !== id && x.to !== id; });
+      nodes = nodes.filter(function(n){ return n.id !== id; });
+      selectedId = null; if (armed && armed.from === id) armed = null;
+      render(); log('Wipe','Cleared “' + t + '” and its ' + wc + ' wire' + (wc === 1 ? '' : 's') + ' from the board — that section only. The rest of the layout stayed put.'); return;
+    }
+    log('Wipe','Nothing selected on the board. Click a node (or a wire) to select it first — then wipe clears just that piece.');
   }
   function popFallback(why){
-    document.body.classList.add('ws-focus'); document.getElementById('focusBtn').textContent='⛶ Exit focus (Esc)';
-    log('Pop out', why+', so Focus mode is on instead — the workspace fills this screen. Allow pop-ups for this page and Pop out will open the breadboard in its own window.');
+    document.body.classList.add('ws-focus'); document.getElementById('focusBtn').textContent = '⛶ Exit focus (Esc)';
+    log('Pop out', why + ', so Focus mode is on instead — the workspace fills this screen. Allow pop-ups for this page and Pop out will open the breadboard in its own window.');
   }
   function openPopout(){
-    if(popAlive()){ popWin.focus(); renderPopAll(); return; }
-    var w=null;
-    try{ w=window.open('','_blank','width=1440,height=920,menubar=no,toolbar=no,location=no'); }catch(err){ w=null; }
-    if(!w){ popFallback('The browser blocked the new window'); return; }
-    popWin=w; popDoc=null;
-    try{
-      w.document.open(); w.document.write(popSkeleton()); w.document.close();
-      popDoc=w.document;
-    }catch(err){ popWin=null; popDoc=null; popFallback('The browser would not let this page draw in the new window'); return; }
-    if(!popDoc.getElementById('cv')){ popWin=null; popDoc=null; popFallback('The new window opened empty'); return; }
-    popSel={}; popArmed=null; popZoom=1; popPanX=0; popPanY=0;
-    wirePop(); renderPopAll(); popFit();
-    log('Pop out','Breadboard opened in its own window — '+nodes.length+' nodes, '+edges.length+' wires, live. Drag that window onto your second monitor. Tools stay here; over there it is just the board: arrange, wire, run, wipe a section, or clear it all and start over.');
-    if(popWatch) clearInterval(popWatch);
-    popWatch=setInterval(function(){ if(popWin && popWin.closed){ popWin=null; popDoc=null; clearInterval(popWatch); popWatch=null; } },800);
+    if (popWinRef && !popWinRef.closed){ try { popWinRef.focus(); } catch (err) {} sendState(); return; }
+    var w = null;
+    try { w = window.open(window.location.href.split('#')[0] + '#breadboard', 'rq-breadboard', 'width=1440,height=920,menubar=no,toolbar=no,location=no'); } catch (err) { w = null; }
+    if (!w){ popFallback('The browser blocked the new window'); return; }
+    popWinRef = w;
+    log('Pop out','Breadboard opening in its own window — the same page in board-only mode, kept live from here. Drag that window onto your second monitor. Tools stay here; over there it is just the board: arrange, wire, run, wipe a section, or clear it all and start over.');
+    [600, 1600, 3200].forEach(function(ms){ setTimeout(function(){ if (popWinRef && !popWinRef.closed) sendState(); }, ms); });
+    if (popWatch) clearInterval(popWatch);
+    popWatch = setInterval(function(){ if (popWinRef && popWinRef.closed){ popWinRef = null; clearInterval(popWatch); popWatch = null; } }, 800);
   }
-  document.getElementById('popBtn').addEventListener('click',openPopout);
+  document.getElementById('popBtn').addEventListener('click', openPopout);
+  // BOARD MODE — this window IS the popped-out breadboard: board only,
+  // no tools, and ask the main window for the live graph.
+  if (isBoardMode){
+    document.body.classList.add('board-mode');
+    document.title = 'Node Workspace — Breadboard';
+    var bRun = document.getElementById('boardRunBtn');
+    if (bRun) bRun.addEventListener('click', function(){ runGraph(); });
+    var bFit = document.getElementById('boardFitBtn');
+    if (bFit) bFit.addEventListener('click', function(){ fitView(); });
+    var bWipe = document.getElementById('boardWipeBtn');
+    if (bWipe) bWipe.addEventListener('click', function(){ wipeSelection(); });
+    var bClear = document.getElementById('boardClearBtn');
+    if (bClear) bClear.addEventListener('click', function(){ clearBoard(); });
+    sendStateRequest();
+    setTimeout(sendStateRequest, 700);
+    setTimeout(function(){ if (!gotRemoteState) sendStateRequest(); }, 2200);
+    log('Board', (window.opener ? 'Breadboard window — live-linked to the main window. Arrange, wire and run here; the tools stay over there.' : 'Breadboard window — no main window linked, so this board runs on its own. Arrange, wire and run here.'));
+  }
 
   // PUT IT ON METAL — manifest download from the live graph
   document.getElementById('manifestBtn').addEventListener('click',function(){
