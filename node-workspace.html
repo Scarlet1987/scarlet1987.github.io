@@ -56,7 +56,7 @@ a{color:var(--accent)}
 @media(max-width:560px){.faq-big{padding:16px;gap:12px}.faq-q{width:44px;height:44px;font-size:26px}.faq-big-chevron{width:38px;height:38px}.faq-panel{padding:18px 16px}}
 
 /* FACE */
-.face-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;margin-top:22px}
+.face-grid{display:grid;gap:18px;margin-top:22px}
 .face-grid.single{grid-template-columns:1fr}
 @media(max-width:860px){.face-grid{grid-template-columns:1fr}}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
@@ -75,6 +75,7 @@ a{color:var(--accent)}
 .pinrow{display:flex;gap:8px;margin-top:18px}
 .pinrow input{width:52px;height:52px;text-align:center;font-size:22px;border-radius:12px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.25);color:white}
 .unlock{margin-top:12px;width:100%;background:var(--accent);color:white;border:0;border-radius:12px;font-weight:700;cursor:pointer;padding:12px}
+.unlock:disabled{opacity:.45;cursor:not-allowed}
 .login small{opacity:.7;margin-top:10px}
 .hud{display:none;padding:18px;background:linear-gradient(180deg,var(--panel2),var(--panel));min-height:430px}
 .hud.open{display:block}.login.hidden{display:none}
@@ -122,6 +123,7 @@ a{color:var(--accent)}
 body.ws-focus .layout{position:fixed;inset:0;z-index:90;background:var(--bg);padding:12px;margin:0;overflow:auto;align-items:start}
 body.ws-focus .canvas{height:calc(100dvh - 210px)!important}
 body.ws-focus .canvas.tall{height:calc(100dvh - 210px)!important}
+body.ws-focus .toolbar{position:relative;z-index:95}
 .creator{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:16px}
 .creator-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
 .creator-head h3{margin:0;font-size:18px}
@@ -233,7 +235,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
         </div>
         <label style="margin-top:18px;font-size:13px;opacity:.85">PIN for <b id="pinName">Elaina</b> — demo: any 4 digits work</label>
         <div class="pinrow"><input inputmode="numeric" maxlength="1" aria-label="PIN digit 1"><input inputmode="numeric" maxlength="1" aria-label="PIN digit 2"><input inputmode="numeric" maxlength="1" aria-label="PIN digit 3"><input inputmode="numeric" maxlength="1" aria-label="PIN digit 4"></div>
-        <button class="unlock" id="unlockBtn">Unlock → open the face</button>
+        <button class="unlock" id="unlockBtn" disabled>Unlock → open the face</button>
         <small>Engine check happens before unlock: Tiny Core ✓ · Rust engine ✓ · Model: your choice, on your disk ✓</small>
       </div>
       <div class="hud" id="hudView">
@@ -263,6 +265,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
       <button id="tallBtn">↕ Taller canvas</button>
       <button id="popBtn" class="primary">⧉ Pop out — own window</button>
       <button id="focusBtn">⛶ Focus — fill screen</button>
+      <!-- Zoom has two UIs on purpose (2026-11-18): this toolbar row and the floating zoombar on the canvas — both stay. -->
       <button id="zoomOutBtn" aria-label="Zoom out">− Zoom</button>
       <button id="zoomResetBtn">100%</button>
       <button id="zoomInBtn" aria-label="Zoom in">+ Zoom</button>
@@ -353,7 +356,10 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   var selectedUser='Elaina';
   document.querySelectorAll('.user').forEach(function(b){ b.addEventListener('click',function(){ document.querySelectorAll('.user').forEach(function(x){x.setAttribute('aria-pressed','false')}); b.setAttribute('aria-pressed','true'); selectedUser=b.dataset.user; document.getElementById('pinName').textContent=selectedUser; }); });
   var pins=[].slice.call(document.querySelectorAll('.pinrow input'));
-  pins.forEach(function(inp,i){ inp.addEventListener('input',function(){ inp.value=inp.value.replace(/\D/g,'').slice(0,1); if(inp.value && i<3) pins[i+1].focus(); }); });
+  var unlockBtnEl=document.getElementById('unlockBtn');
+  function syncUnlock(){ unlockBtnEl.disabled=pins.some(function(p){ return !p.value; }); }
+  pins.forEach(function(inp,i){ inp.addEventListener('input',function(){ inp.value=inp.value.replace(/\D/g,'').slice(0,1); if(inp.value && i<3) pins[i+1].focus(); syncUnlock(); }); });
+  syncUnlock();
   document.getElementById('unlockBtn').addEventListener('click',function(){ document.getElementById('loginView').classList.add('hidden'); document.getElementById('hudView').classList.add('open'); document.getElementById('hudName').textContent='Welcome back, '+selectedUser; document.getElementById('hudAvatar').textContent=selectedUser.charAt(0).toUpperCase(); log('Face','Unlocked locally for '+selectedUser+' — no server was contacted.'); });
   document.getElementById('lockBtn').addEventListener('click',function(){ document.getElementById('loginView').classList.remove('hidden'); document.getElementById('hudView').classList.remove('open'); });
 
@@ -367,9 +373,9 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   function zoomCenter(factor){ var r=canvas.getBoundingClientRect(); zoomAt(r.left+r.width/2, r.top+r.height/2, factor); }
   function fitView(){ if(!nodes.length) return; var minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9; nodes.forEach(function(n){ minX=Math.min(minX,n.x); minY=Math.min(minY,n.y); maxX=Math.max(maxX,n.x+176); maxY=Math.max(maxY,n.y+100); }); var cw=canvas.clientWidth, ch=canvas.clientHeight; zoom=Math.max(.2,Math.min(1.6,Math.min(cw/(maxX-minX+90), ch/(maxY-minY+90)))); panX=(cw-(maxX-minX)*zoom)/2-minX*zoom; panY=(ch-(maxY-minY)*zoom)/2-minY*zoom; applyTransform(); }
   var KIND={face:{label:'Face panel',cls:'kind-face'},orch:{label:'Orchestrator',cls:'kind-orch'},engine:{label:'Rust engine',cls:'kind-engine'},data:{label:'Data table',cls:'kind-data'},check:{label:'Benchmark / check',cls:'kind-check'}};
-  function log(who,msg){ var d=document.createElement('div'); d.innerHTML='<b>'+who+'.</b> '+msg; logEl.prepend(d); popLog(who,msg); }
+  function log(who,msg){ var d=document.createElement('div'); d.innerHTML='<b>'+escapeHtml(who)+'.</b> '+escapeHtml(msg); logEl.prepend(d); while(logEl.children.length>200) logEl.removeChild(logEl.lastChild); popLog(who,msg); }
   function makeNode(kind,x,y,title,notes){ seq++; return {id:'n'+seq,kind:kind,x:x,y:y,title:title||KIND[kind].label,notes:notes||'',status:'idle'}; }
-  function loadExample(){ var narrow = canvas.clientWidth>0 && canvas.clientWidth<640; if(narrow){ nodes=[ makeNode('face',16,20,'Login face','The HTML login people tap. Pick user, enter PIN.'), makeNode('orch',170,120,'Orchestrator','Rust. Holds the shape, routes face ↔ engine, contains failures.'), makeNode('engine',16,230,'Rust engine','Does the work on local hardware. No internet.'), makeNode('data',170,320,'Session table','Lookup table: who is logged in, what survives a restart. Compute once, save the map.'), makeNode('check',16,380,'Benchmark','First-run check. If this fails, you see it here — not after install.'), makeNode('face',170,440,'HUD face','The panels the person lives in after login.') ]; } else { nodes=[ makeNode('face',24,40,'Login face','The HTML login people tap. Pick user, enter PIN.'), makeNode('orch',268,150,'Orchestrator','Rust. Holds the shape, routes face ↔ engine, contains failures.'), makeNode('engine',512,40,'Rust engine','Does the work on local hardware. No internet.'), makeNode('data',512,250,'Session table','Lookup table: who is logged in, what survives a restart. Compute once, save the map.'), makeNode('check',268,330,'Benchmark','First-run check. If this fails, you see it here — not after install.'), makeNode('face',740,150,'HUD face','The panels the person lives in after login.') ]; } edges=[{from:nodes[0].id,to:nodes[1].id},{from:nodes[1].id,to:nodes[2].id},{from:nodes[1].id,to:nodes[3].id},{from:nodes[4].id,to:nodes[1].id},{from:nodes[2].id,to:nodes[5].id},{from:nodes[3].id,to:nodes[5].id}]; selectedId=null; render(); }
+  function loadExample(){ var narrow = canvas.clientWidth>0 && canvas.clientWidth<640; if(narrow){ nodes=[ makeNode('face',16,20,'Login face','The HTML login people tap. Pick user, enter PIN.'), makeNode('orch',170,120,'Orchestrator','Rust. Holds the shape, routes face ↔ engine, contains failures.'), makeNode('engine',16,230,'Rust engine','Does the work on local hardware. No internet.'), makeNode('data',170,320,'Session table','Lookup table: who is logged in, what survives a restart. Compute once, save the map.'), makeNode('check',16,380,'Benchmark','First-run check. If this fails, you see it here — not after install.'), makeNode('face',170,440,'HUD face','The panels the person lives in after login.') ]; } else { nodes=[ makeNode('face',24,40,'Login face','The HTML login people tap. Pick user, enter PIN.'), makeNode('orch',268,150,'Orchestrator','Rust. Holds the shape, routes face ↔ engine, contains failures.'), makeNode('engine',512,40,'Rust engine','Does the work on local hardware. No internet.'), makeNode('data',512,250,'Session table','Lookup table: who is logged in, what survives a restart. Compute once, save the map.'), makeNode('check',268,330,'Benchmark','First-run check. If this fails, you see it here — not after install.'), makeNode('face',740,150,'HUD face','The panels the person lives in after login.') ]; } edges=[{from:nodes[0].id,to:nodes[1].id},{from:nodes[1].id,to:nodes[2].id},{from:nodes[1].id,to:nodes[3].id},{from:nodes[4].id,to:nodes[1].id},{from:nodes[2].id,to:nodes[5].id},{from:nodes[3].id,to:nodes[5].id}]; selectedId=null; armed=null; render(); }
   function nodeById(id){ return nodes.find(function(n){return n.id===id}); }
   function buildNodeEl(n){
     var el=document.createElement('div'); el.className='node '+KIND[n.kind].cls+(n.id===selectedId?' selected':''); el.style.left=n.x+'px'; el.style.top=n.y+'px'; el.dataset.id=n.id;
@@ -409,10 +415,11 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     var pending=null, rafId=0; el.classList.add('dragging');
     function apply(){ rafId=0; if(!pending) return; var e=pending; pending=null; var p=toWorld(e.clientX,e.clientY); n.x=Math.max(4,Math.min(WORLD_W-180, p.x-offX)); n.y=Math.max(4,Math.min(WORLD_H-100, p.y-offY)); el.style.left=n.x+'px'; el.style.top=n.y+'px'; drawWires(); }
     function mv(e){ pending=e; if(!rafId) rafId=requestAnimationFrame(apply); }
-    function up(){ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); if(rafId){ cancelAnimationFrame(rafId); rafId=0; } if(pending) apply(); el.classList.remove('dragging'); }
-    window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up);
+    function up(){ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); window.removeEventListener('pointercancel',up); window.removeEventListener('blur',up); if(rafId){ cancelAnimationFrame(rafId); rafId=0; } if(pending) apply(); el.classList.remove('dragging'); }
+    window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up); window.addEventListener('blur',up);
   }
   function handlePort(id,dir,el){
+    if(armed && !nodeById(armed.from)){ armed=null; return; }
     if(dir==='out'){ armed={from:id}; document.querySelectorAll('.port').forEach(function(p){p.classList.remove('armed')}); el.classList.add('armed'); document.getElementById('wireHint').textContent='Output armed from “'+nodeById(id).title+'”. Now click an input dot on the next node.'; return; }
     if(dir==='in' && armed){ if(armed.from===id){ log('Wire','A node cannot wire to itself.'); return; } if(edges.some(function(e){return e.from===armed.from&&e.to===id})){ log('Wire','That wire already exists.'); } else { edges.push({from:armed.from,to:id}); log('Wire', nodeById(armed.from).title+' → '+nodeById(id).title+' connected.'); } armed=null; document.querySelectorAll('.port').forEach(function(p){p.classList.remove('armed')}); drawWires(); }
   }
@@ -422,8 +429,8 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
       selectedId=null; selectedEdge=null; updateSelection();
       var sx=e.clientX-panX, sy=e.clientY-panY; world.classList.add('panning');
       function mv(ev){ panX=ev.clientX-sx; panY=ev.clientY-sy; applyTransform(); }
-      function up(){ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); world.classList.remove('panning'); }
-      window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up);
+      function up(){ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); window.removeEventListener('pointercancel',up); world.classList.remove('panning'); }
+      window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up);
     }
   });
   canvas.addEventListener('wheel',function(e){ if(e.ctrlKey||e.metaKey){ e.preventDefault(); zoomAt(e.clientX,e.clientY, e.deltaY<0?1.12:0.89); } },{passive:false});
@@ -455,7 +462,8 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   var layoutEl=document.querySelector('.layout');
   document.getElementById('wideBtn').addEventListener('click',function(){ var wide=layoutEl.classList.toggle('wide'); this.textContent=wide?'↔ Show inspector again':'↔ Wide view — hide inspector'; drawWires(); log('Space', wide?'Wide view on — inspector hidden, canvas gets the full width.':'Inspector back.'); });
   document.getElementById('tallBtn').addEventListener('click',function(){ var tall=canvas.classList.toggle('tall'); canvas.style.height=''; this.textContent=tall?'↕ Shorter canvas':'↕ Taller canvas'; var sp=document.getElementById('spacePill'); if(sp) sp.textContent='Canvas · '+(tall?'980':'760')+'px tall'; drawWires(); log('Space', tall?'Taller canvas on — 980px to spread out downwards.':'Back to 760px canvas.'); });
-  // ZOOM CONTROLS
+  // ZOOM CONTROLS — two UIs for one job, both intentional (noted 2026-11-18):
+  // the toolbar row and the floating zoombar on the canvas. Keep both.
   function bindZoom(idIn,idOut,idPct,idFit){
     var bi=document.getElementById(idIn), bo=document.getElementById(idOut), bp=document.getElementById(idPct), bf=document.getElementById(idFit);
     if(bi) bi.addEventListener('click',function(){ zoomCenter(1.25); });
@@ -470,8 +478,8 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   if(rh) rh.addEventListener('pointerdown',function(e){
     e.preventDefault(); var startY=e.clientY, startH=canvas.offsetHeight;
     function mv(ev){ var h=Math.max(420,Math.min(1600,startH+(ev.clientY-startY))); canvas.classList.remove('tall'); canvas.style.height=h+'px'; var sp=document.getElementById('spacePill'); if(sp) sp.textContent='Canvas · '+h+'px tall'; }
-    function up(){ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); log('Space','Canvas resized to '+canvas.offsetHeight+'px tall.'); }
-    window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up);
+    function up(){ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); window.removeEventListener('pointercancel',up); log('Space','Canvas resized to '+canvas.offsetHeight+'px tall.'); }
+    window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up);
   });
   // FOCUS — workspace fills the screen
   document.getElementById('focusBtn').addEventListener('click',function(){ var on=document.body.classList.toggle('ws-focus'); this.textContent=on?'⛶ Exit focus (Esc)':'⛶ Focus — fill screen'; drawWires(); log('Space', on?'Focus on — the workspace fills the screen. Esc brings the page back.':'Focus off.'); });
@@ -486,7 +494,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   // the whole board in one tap; the tools here are never touched.
   var popWin=null, popDoc=null, popSel={}, popArmed=null, popZoom=1, popPanX=0, popPanY=0, popWatch=null;
   function popAlive(){ return !!(popWin && !popWin.closed && popDoc); }
-  function popLog(who,msg){ if(!popAlive()) return; var lg=popDoc.getElementById('lg'); if(!lg) return; var d=popDoc.createElement('div'); d.innerHTML='<b>'+who+'.</b> '+msg; lg.prepend(d); }
+  function popLog(who,msg){ if(!popAlive()) return; var lg=popDoc.getElementById('lg'); if(!lg) return; var d=popDoc.createElement('div'); d.innerHTML='<b>'+escapeHtml(who)+'.</b> '+escapeHtml(msg); lg.prepend(d); while(lg.children.length>200) lg.removeChild(lg.lastChild); }
   function popSkeleton(){
     var css='*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#eef0e9;color:#12211a}header{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;background:#062e1d;color:#eafff3}header b{font-size:16px}header .sub{opacity:.8;font-size:13px}header .hint{flex-basis:100%;font-size:12px;opacity:.75}button{border:1px solid #c8d2c6;background:#fff;color:#12211a;border-radius:999px;padding:8px 13px;cursor:pointer;font-weight:600;min-height:38px}button.run{background:#00914f;color:#fff;border-color:#00914f}button.danger{background:#fff1f0;color:#b42318;border-color:#f0c9c5}button.sp{margin-left:auto}#cv{position:relative;height:calc(100vh - 150px);overflow:hidden;background:#f7f8f3;touch-action:none}#wd{position:absolute;left:0;top:0;width:3600px;height:2400px;transform-origin:0 0;background-image:radial-gradient(#d4ddd0 1.2px,transparent 1.2px);background-size:22px 22px}svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.nd{position:absolute;width:176px;background:#fff;border:1.5px solid #c8d2c6;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.1);user-select:none}.nd.sel{border-color:#00914f;box-shadow:0 0 0 3px rgba(0,145,79,.28),0 6px 18px rgba(0,0,0,.1)}.hd{padding:9px 11px;border-radius:12px 12px 0 0;color:#fff;font-weight:700;font-size:13px;cursor:grab}.face .hd{background:#00914f}.engine .hd{background:#062e1d}.orch .hd{background:#7a5a12}.data .hd{background:#33566b}.check .hd{background:#6b3a2a}.bd{padding:9px 11px;font-size:12px;color:#5a6b60}.st{font-family:ui-monospace,monospace;font-size:11px;text-transform:uppercase}.st-idle{color:#5a6b60}.st-running{color:#b7791f}.st-done{color:#00914f}.st-fail{color:#b42318}.pt{position:absolute;top:50%;width:18px;height:18px;border-radius:50%;background:#fff;border:2.5px solid #00914f;transform:translateY(-50%);cursor:pointer;z-index:3}.pt.in{left:-9px}.pt.out{right:-9px}.pt.armed{background:#00914f;box-shadow:0 0 0 6px rgba(0,145,79,.2)}#mq{position:absolute;border:1.5px dashed #00914f;background:rgba(0,145,79,.10);display:none;z-index:5;pointer-events:none}#lg{background:#062e1d;color:#d9ffe9;font-family:ui-monospace,monospace;font-size:12.5px;padding:10px 14px;height:64px;overflow:auto}#lg b{color:#bfeeda}#lg div{padding:1px 0}';
     return '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Node Workspace — Breadboard</title><style>'+css+'</style></head><body>'
@@ -552,16 +560,17 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     if(!starts[node.id]) starts[node.id]={x:node.x,y:node.y};
     var pending=null, rafId=0;
     function apply(){
-      rafId=0; if(!pending) return; var e=pending; pending=null;
+      rafId=0; if(!popWin||!popDoc) return; if(!pending) return; var e=pending; pending=null;
       var p=popToWorld(e.clientX,e.clientY); var dx=p.x-start.x, dy=p.y-start.y;
       Object.keys(starts).forEach(function(id){ var m=nodeById(id); if(!m) return; m.x=Math.max(4,Math.min(WORLD_W-180, starts[id].x+dx)); m.y=Math.max(4,Math.min(WORLD_H-100, starts[id].y+dy)); if(m._popEl){ m._popEl.style.left=m.x+'px'; m._popEl.style.top=m.y+'px'; } if(m._el){ m._el.style.left=m.x+'px'; m._el.style.top=m.y+'px'; } });
       drawWires();
     }
     function mv(e){ pending=e; if(!rafId) rafId=popWin.requestAnimationFrame(apply); }
-    function up(){ popWin.removeEventListener('pointermove',mv); popWin.removeEventListener('pointerup',up); if(rafId){ popWin.cancelAnimationFrame(rafId); rafId=0; } if(pending) apply(); }
-    popWin.addEventListener('pointermove',mv); popWin.addEventListener('pointerup',up);
+    function up(){ if(!popWin||!popDoc) return; popWin.removeEventListener('pointermove',mv); popWin.removeEventListener('pointerup',up); popWin.removeEventListener('pointercancel',up); popWin.removeEventListener('blur',up); if(rafId){ popWin.cancelAnimationFrame(rafId); rafId=0; } if(pending) apply(); }
+    popWin.addEventListener('pointermove',mv); popWin.addEventListener('pointerup',up); popWin.addEventListener('pointercancel',up); popWin.addEventListener('blur',up);
   }
   function handlePopPort(id,dir,el){
+    if(popArmed && !nodeById(popArmed.from)){ popArmed=null; return; }
     if(dir==='out'){ popArmed={from:id}; popDoc.querySelectorAll('.pt').forEach(function(p){ p.classList.remove('armed'); }); el.classList.add('armed'); log('Wire','Output armed from “'+nodeById(id).title+'” — now click an input dot on the board.'); return; }
     if(dir==='in' && popArmed){
       if(popArmed.from===id){ log('Wire','A node cannot wire to itself.'); return; }
@@ -586,7 +595,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   function clearBoard(){
     if(!nodes.length){ log('Clear','The board is already empty.'); return; }
     var n=nodes.length, wcount=edges.length;
-    nodes=[]; edges=[]; selectedId=null; selectedEdge=null; popSel={}; popArmed=null; stepQueue=[];
+    nodes=[]; edges=[]; selectedId=null; selectedEdge=null; armed=null; popSel={}; popArmed=null; stepQueue=[];
     render();
     log('Clear','Board wiped — '+n+' nodes and '+wcount+' wires gone, one tap. The tools here (Creator, inspector, palettes) are untouched. Load the example or create nodes to start again.');
   }
@@ -606,15 +615,15 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
         var startW=popToWorld(e.clientX,e.clientY);
         mq.style.display='block'; mq._rect=null;
         function mv(ev){ var p=popToWorld(ev.clientX,ev.clientY); var x=Math.min(startW.x,p.x), y=Math.min(startW.y,p.y), wdt=Math.abs(p.x-startW.x), h=Math.abs(p.y-startW.y); mq.style.left=x+'px'; mq.style.top=y+'px'; mq.style.width=wdt+'px'; mq.style.height=h+'px'; mq._rect={x:x,y:y,w:wdt,h:h}; }
-        function up(){ popWin.removeEventListener('pointermove',mv); popWin.removeEventListener('pointerup',up); mq.style.display='none'; var r=mq._rect; if(r && r.w>6 && r.h>6){ var count=0; nodes.forEach(function(n){ if(n.x+176>r.x && n.x<r.x+r.w && n.y+100>r.y && n.y<r.y+r.h){ popSel[n.id]=1; count++; } }); popRefreshSel(); if(count) log('Select', count+' node'+(count>1?'s':'')+' boxed on the breadboard. Wipe selection clears just that section — or keep arranging.'); } }
-        popWin.addEventListener('pointermove',mv); popWin.addEventListener('pointerup',up);
+        function up(){ popWin.removeEventListener('pointermove',mv); popWin.removeEventListener('pointerup',up); popWin.removeEventListener('pointercancel',up); mq.style.display='none'; var r=mq._rect; if(r && r.w>6 && r.h>6){ var count=0; nodes.forEach(function(n){ if(n.x+176>r.x && n.x<r.x+r.w && n.y+100>r.y && n.y<r.y+r.h){ popSel[n.id]=1; count++; } }); popRefreshSel(); if(count) log('Select', count+' node'+(count>1?'s':'')+' boxed on the breadboard. Wipe selection clears just that section — or keep arranging.'); } }
+        popWin.addEventListener('pointermove',mv); popWin.addEventListener('pointerup',up); popWin.addEventListener('pointercancel',up);
         return;
       }
       popSel={}; popRefreshSel(); popArmed=null; popDoc.querySelectorAll('.pt').forEach(function(p){ p.classList.remove('armed'); });
       var sx=e.clientX-popPanX, sy=e.clientY-popPanY;
       function mv2(ev){ popPanX=ev.clientX-sx; popPanY=ev.clientY-sy; popApply(); }
-      function up2(){ popWin.removeEventListener('pointermove',mv2); popWin.removeEventListener('pointerup',up2); }
-      popWin.addEventListener('pointermove',mv2); popWin.addEventListener('pointerup',up2);
+      function up2(){ popWin.removeEventListener('pointermove',mv2); popWin.removeEventListener('pointerup',up2); popWin.removeEventListener('pointercancel',up2); }
+      popWin.addEventListener('pointermove',mv2); popWin.addEventListener('pointerup',up2); popWin.addEventListener('pointercancel',up2);
     });
     cv.addEventListener('wheel',function(e){ if(e.ctrlKey||e.metaKey){ e.preventDefault(); popZoomAt(e.clientX,e.clientY, e.deltaY<0?1.12:0.89); } },{passive:false});
     d.addEventListener('keydown',function(e){
@@ -659,9 +668,9 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     log('Metal','Build manifest downloaded — '+nodes.length+' nodes, '+edges.length+' wires, in run order. That file is the recipe for the USB / metal build.');
   });
   document.getElementById('metalRunBtn').addEventListener('click',function(){ document.getElementById('workspace').scrollIntoView({behavior:'smooth'}); document.getElementById('runBtn').click(); });
-  document.getElementById('delBtn').addEventListener('click',function(){ if(!selectedId) return; edges=edges.filter(function(e){return e.from!==selectedId&&e.to!==selectedId}); nodes=nodes.filter(function(n){return n.id!==selectedId}); selectedId=null; render(); log('Delete','Node removed, and its wires went with it.'); });
-  document.getElementById('dupBtn').addEventListener('click',function(){ var n=nodeById(selectedId); if(!n) return; var c=makeNode(n.kind, Math.min(n.x+28,700), Math.min(n.y+28,420), n.title+' copy', n.notes); nodes.push(c); selectedId=c.id; render(); });
-  document.addEventListener('keydown',function(e){ if((e.key==='Delete'||e.key==='Backspace') && selectedEdge!==null && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){ edges.splice(selectedEdge,1); selectedEdge=null; updateSelection(); log('Wire','Wire deleted.'); } });
+  document.getElementById('delBtn').addEventListener('click',function(){ if(!selectedId) return; edges=edges.filter(function(e){return e.from!==selectedId&&e.to!==selectedId}); nodes=nodes.filter(function(n){return n.id!==selectedId}); selectedId=null; armed=null; render(); log('Delete','Node removed, and its wires went with it.'); });
+  document.getElementById('dupBtn').addEventListener('click',function(){ var n=nodeById(selectedId); if(!n) return; var c=makeNode(n.kind, Math.min(n.x+28,WORLD_W-180), Math.min(n.y+28,WORLD_H-100), n.title+' copy', n.notes); nodes.push(c); selectedId=c.id; render(); });
+  document.addEventListener('keydown',function(e){ if((e.key==='Delete'||e.key==='Backspace') && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){ if(selectedEdge!==null){ edges.splice(selectedEdge,1); selectedEdge=null; updateSelection(); log('Wire','Wire deleted.'); } else if(selectedId){ var delId=selectedId; edges=edges.filter(function(x){return x.from!==delId&&x.to!==delId}); nodes=nodes.filter(function(n){return n.id!==delId}); selectedId=null; if(armed&&armed.from===delId) armed=null; render(); log('Delete','Node removed, and its wires went with it.'); } } });
   document.getElementById('clearBtn').addEventListener('click',function(){ edges=[]; selectedEdge=null; updateSelection(); log('Clear','All wires removed. Nodes stayed — rewire and run again.'); });
   document.getElementById('resetBtn').addEventListener('click',function(){ nodes.forEach(function(n){n.status='idle'; updateNode(n);}); stepQueue=[]; log('Reset','Every node back to idle.'); });
   document.getElementById('exampleBtn').addEventListener('click',function(){ loadExample(); log('Example','Red Queen example reloaded.'); });
@@ -669,7 +678,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   function runStep(id, done){ var n=nodeById(id); if(!n){ done&&done(); return; } var hasIn=edges.some(function(e){return e.to===id}); var upstreamBad=edges.filter(function(e){return e.to===id}).some(function(e){ return nodeById(e.from).status==='fail'; }); n.status='running'; updateNode(n); log(n.title,'Running…'); setTimeout(function(){ if(upstreamBad){ n.status='fail'; log(n.title,'Skipped — something upstream failed, so this is where the break shows. The orchestrator contains it; the rest of the face stays up.'); } else { n.status='done'; log(n.title, hasIn?'Done ✓ — received its input and passed.':'Done ✓ — start node, needed nothing upstream.'); } updateNode(n); done&&done(); },90); }
   function runGraph(){ if(!nodes.length){ log('Run','Nothing to run — the board is empty. Add nodes first.'); return; } nodes.forEach(function(n){n.status='idle'; updateNode(n);}); var order=topo(); if(order.length<nodes.length){ log('Run','There is a loop in the wires — a graph with a cycle can never finish. Break the loop and run again.'); return; } if(!edges.length){ log('Run','No wires yet. Wire at least one path, then run.'); } log('Run','Executing '+order.length+' nodes in wire order…'); var i=0; function next(){ if(i>=order.length){ var fails=nodes.filter(function(n){return n.status==='fail'}).length; log('Run', fails? 'Finished with '+fails+' failed node(s) — the red ones are your break point.' : 'Finished — whole graph green. That layout would hold together as a face.'); return; } runStep(order[i++], next); } next(); }
   document.getElementById('runBtn').addEventListener('click',runGraph);
-  document.getElementById('stepBtn').addEventListener('click',function(){ if(!stepQueue.length){ stepQueue=topo(); nodes.forEach(function(n){n.status='idle'; updateNode(n);}); log('Step','Stepping through '+stepQueue.length+' nodes, one tap at a time.'); } var id=stepQueue.shift(); if(id) runStep(id,function(){ if(!stepQueue.length) log('Step','Done stepping.'); }); });
+  document.getElementById('stepBtn').addEventListener('click',function(){ if(!stepQueue.length){ stepQueue=topo(); if(stepQueue.length<nodes.length){ log('Run','There is a loop in the wires — a graph with a cycle can never finish. Break the loop and run again.'); } nodes.forEach(function(n){n.status='idle'; updateNode(n);}); log('Step','Stepping through '+stepQueue.length+' nodes, one tap at a time.'); } var id=stepQueue.shift(); if(id) runStep(id,function(){ if(!stepQueue.length) log('Step','Done stepping.'); }); });
   window.addEventListener('resize', drawWires);
   loadExample();
 })();
