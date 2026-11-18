@@ -137,22 +137,46 @@ body.ws-focus .toolbar{position:relative;z-index:95}
 .creator .create-btn{align-self:end;background:var(--accent-dark);color:var(--mint);border:0;border-radius:12px;padding:12px 18px;font-weight:800;cursor:pointer;min-height:46px;white-space:nowrap}
 .templates{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
 .templates button{border:1px solid var(--line);background:var(--sage);border-radius:999px;padding:7px 11px;font-size:12.5px;cursor:pointer}
-.metal{margin-top:28px;background:var(--accent-dark);color:#eafff3;border-radius:20px;padding:22px;box-shadow:var(--shadow)}
-.metal h2{font-family:Georgia,serif;font-size:32px;line-height:1;margin:0}
-.metal h2 em{color:var(--mint);font-style:normal}
-.metal p.lead{color:#c8e6d2;max-width:760px;margin:10px 0 0}
-.metal-steps{display:flex;flex-direction:column;gap:4px;margin-top:14px}
-.metal-step{display:flex;align-items:baseline;gap:9px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:8px;padding:7px 11px;font-size:13px;line-height:1.4;color:#d6e8da}
-.metal-step .n{flex:0 0 auto;font-family:ui-monospace,monospace;font-size:11px;font-weight:700;color:var(--accent-dark);background:var(--mint);border-radius:999px;min-width:20px;height:20px;display:inline-grid;place-items:center;align-self:center}
-.metal-step b{color:#fff;white-space:nowrap}
-.metal-step .sep{color:var(--mint);flex:0 0 auto}
-@media(max-width:560px){.metal-step{flex-wrap:wrap;gap:4px 7px}.metal-step b{white-space:normal}}
+/* STARTER TUTORIAL — replaces the old numbered “steps” look (2026-11-18):
+   one card per job — connect, delete, pop out, add, run, move around. */
+.tutorial{margin-top:28px}
+.tutorial-head{max-width:760px}
+.tutorial-head h2{font-family:Georgia,serif;font-size:32px;line-height:1;margin:0}
+.tutorial-head h2 em{color:var(--accent);font-style:normal}
+.tutorial-head p{color:var(--muted);margin:10px 0 0}
+.tutorial-head p b{color:var(--ink)}
+.tut-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+@media(max-width:860px){.tut-grid{grid-template-columns:1fr}}
+.tut-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:18px;display:flex;flex-direction:column}
+.tut-card.wide{grid-column:1/-1}
+.tut-kicker{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.tut-card h3{font-family:Georgia,serif;font-size:24px;line-height:1.1;margin:6px 0 8px}
+.tut-card p{margin:0;color:var(--muted);font-size:14px}
+.tut-card p b,.tut-card li b{color:var(--ink)}
+.tut-card ol,.tut-card ul{margin:10px 0 0;padding-left:20px;color:var(--muted);font-size:14px}
+.tut-card li{margin:6px 0}
+.tut-demo{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+.tut-demo .chip{background:var(--sage);border:1px solid var(--line);padding:7px 9px;border-radius:8px;color:var(--ink);font-weight:700}
+.tut-demo .chip.out{border-color:var(--accent)}
+.tut-demo .dotdemo{width:16px;height:16px;border-radius:50%;background:var(--panel);border:2.5px solid var(--accent);display:inline-block;vertical-align:-3px}
+.tut-demo .dotdemo.armed{background:var(--accent);box-shadow:0 0 0 5px rgba(0,145,79,.18)}
+.tut-demo i{color:var(--muted);font-style:normal}
+.tut-try{margin-top:auto;padding-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+.tut-try button,.tut-try a{border:1px solid var(--line);background:var(--sage);color:var(--ink);border-radius:999px;padding:9px 14px;cursor:pointer;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;min-height:40px}
+.tut-try button.primary,.tut-try a.primary{background:var(--accent-dark);color:var(--mint);border-color:var(--accent-dark)}
+.tut-note{font-size:12.5px!important;margin-top:10px!important}
+.tut-metal{margin-top:14px;background:var(--accent-dark);color:#eafff3;border-radius:18px;padding:20px 22px;box-shadow:var(--shadow)}
+.tut-metal h3{font-family:Georgia,serif;font-size:24px;line-height:1.1;margin:0}
+.tut-metal h3 em{color:var(--mint);font-style:normal}
+.tut-metal p{color:#c8e6d2;max-width:760px;margin:8px 0 0;font-size:14px}
+.tut-metal p b{color:#fff}
+.sandwich{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;font-family:ui-monospace,monospace;font-size:12px}
+.sandwich span{background:#fff;color:var(--accent-dark);padding:7px 9px;border-radius:8px;font-weight:700}
 .metal-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .metal-actions button{border-radius:999px;padding:11px 16px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.2)}
 .metal-actions .dl{background:var(--mint);color:var(--accent-dark);border-color:var(--mint)}
 .metal-actions .ghost{background:transparent;color:white}
-.sandwich{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;font-family:ui-monospace,monospace;font-size:12px}
-.sandwich span{background:#fff;color:var(--accent-dark);padding:7px 9px;border-radius:8px;font-weight:700}
+.metal-actions a{background:transparent;color:white;border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:11px 16px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center}
 .canvas svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .canvas svg path{pointer-events:stroke;cursor:pointer}
 .node{position:absolute;width:176px;background:var(--panel);border:1.5px solid var(--line);border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.10);user-select:none}
@@ -189,7 +213,7 @@ html.board-mode .board-bar{display:flex;gap:8px;align-items:center;flex-wrap:wra
 .board-bar button.run{background:var(--accent);color:#fff;border-color:var(--accent)}
 .board-bar button.danger{background:#fff1f0;color:var(--red);border-color:#f0c9c5}
 .board-bar .sp{margin-left:auto}
-html.board-mode .faq-wrap,html.board-mode .face-grid,html.board-mode .metal,html.board-mode .map,html.board-mode footer,html.board-mode .creator,html.board-mode .palette,html.board-mode .toolbar,html.board-mode .inspector,html.board-mode .ws-head,html.board-mode .resize-handle{display:none!important}
+html.board-mode .faq-wrap,html.board-mode .face-grid,html.board-mode .tutorial,html.board-mode .map,html.board-mode footer,html.board-mode .creator,html.board-mode .palette,html.board-mode .toolbar,html.board-mode .inspector,html.board-mode .ws-head,html.board-mode .resize-handle{display:none!important}
 html.board-mode .wrap{max-width:none;padding:10px 12px 20px}
 html.board-mode .workspace{margin-top:0}
 html.board-mode .layout{grid-template-columns:minmax(0,1fr);margin-top:0}
@@ -215,7 +239,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
       <header class="top">
         <h1>The face people touch. <em>The graph underneath it.</em></h1>
         <p class="lede"><strong>Read-back:</strong> Red Queen boots to an HTML login, everything runs on the machine, and the Rust engine does the work underneath — no internet needed. Below that is the node workspace we wanted from draw.io: lay out the pieces, wire them, press Run, and watch live status show you exactly where it breaks.</p>
-        <div class="pills"><span class="pill"><b>●</b> Offline by default</span><span class="pill">User first · AI second</span><span class="pill">HTML face → Rust orchestrator → Rust engine</span><span class="pill">Tiny Core underneath</span><span class="pill">Maker · Node Creator</span><span class="pill">Pop-out · Zoom · Resize</span><span class="pill">Put it on metal ↓</span></div>
+        <div class="pills"><span class="pill"><b>●</b> Offline by default</span><span class="pill">User first · AI second</span><span class="pill">HTML face → Rust orchestrator → Rust engine</span><span class="pill">Tiny Core underneath</span><span class="pill">Maker · Node Creator</span><span class="pill">Pop-out · Zoom · Resize</span><span class="pill">Starter tutorial ↓</span></div>
       </header>
       <hr class="faq-divider">
       <section class="spec" aria-label="How the front end is put together">
@@ -233,7 +257,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
       <hr class="faq-divider">
       <section class="faq-ws" aria-label="About the Node Workspace">
         <h3>2 — Node Workspace — pop out, zoom, resize</h3>
-        <p>Same live graph, three ways to get room. <b>Pop out</b> opens the breadboard in its own live window — just nodes and wires, no tools — drag it onto your second monitor. On the board, wipe one section or clear it all and start over in one tap; the tools stay here. <b>Zoom</b> with the − / + buttons, Ctrl + scroll, or Fit. <b>Resize</b> with Wide view, Taller canvas, the drag strip under the canvas, or Focus to fill the screen. Drag empty canvas to pan; drag nodes to lay out the system; press Run and each node reports back.</p>
+        <p>Same live graph, three ways to get room. <b>Pop out</b> opens the breadboard in its own live window — just nodes and wires, no tools — drag it onto your second monitor. On the board, wipe one section or clear it all and start over in one tap; the tools stay here. <b>Zoom</b> with the − / + buttons, Ctrl + scroll, or Fit. <b>Resize</b> with Wide view, Taller canvas, the drag strip under the canvas, or Focus to fill the screen. Drag empty canvas to pan; drag nodes to lay out the system; press Run and each node reports back. New to the board? Section 3 below is the <b>starter tutorial</b> — this is how you connect, this is how you delete, this is how the pop out functions, each with a Try it button.</p>
       </section>
     </div>
   </div>
@@ -329,25 +353,110 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     <div class="log" id="log"><div><b>Ready.</b> Example graph loaded — Face → Orchestrator → Engine, with the session table and benchmark hanging off the orchestrator, the way Red Queen is actually built.</div></div>
   </section>
 
-  <!-- PUT IT ON METAL -->
-  <section class="metal" id="metal" aria-label="Put Red Queen on metal">
-    <h2>3 — Put it on metal. <em>Make the software real.</em></h2>
-    <p class="lead"><strong>Read-back:</strong> The graph above isn’t just a drawing — it’s the build list. When Run is green, this is the order it lands on a real machine: Tiny Core underneath, Rust in the middle, HTML face on top. USB first, install second — backup before either.</p>
-    <div class="sandwich"><span>TOP · HTML Face — this page, word for word</span><span>↕ local HTTP</span><span>MIDDLE · Rust Orchestrator + Rust Engine</span><span>↕</span><span>BOTTOM · Tiny Core Linux</span><span>→ YOUR HARDWARE</span></div>
-    <ol class="metal-steps" style="list-style:none;padding:0">
-      <li class="metal-step"><span class="n">0</span><b>Back up</b><span class="sep">—</span><span>Real choice: back up or skip — skipping locks the Windows-wipe door; nothing is wiped without it.</span></li>
-      <li class="metal-step"><span class="n">1</span><b>Run the graph green</b><span class="sep">—</span><span>Every node must pass; a red node is the break — fix it here, not after it’s on metal.</span></li>
-      <li class="metal-step"><span class="n">2</span><b>Build manifest</b><span class="sep">—</span><span>One file listing every node, wire, and layer in order — the recipe the installer follows.</span></li>
-      <li class="metal-step"><span class="n">3</span><b>Bootable USB</b><span class="sep">—</span><span>Installer writes the image to a plugged-in stick; boot and live-test it — held to the install bar, not a demo bar.</span></li>
-      <li class="metal-step"><span class="n">4</span><b>First-run check</b><span class="sep">—</span><span>The 8-step first run: drivers chosen, not shipped blind; benchmark proves this hardware before anything installs.</span></li>
-      <li class="metal-step"><span class="n">5</span><b>Choose how it lands</b><span class="sep">—</span><span>Keep the USB, install directly to metal, or — only if you backed up — wipe Windows.</span></li>
-    </ol>
-    <div class="metal-actions">
-      <button class="dl" id="manifestBtn">⬇ Download build manifest (.md)</button>
-      <button class="ghost" id="metalRunBtn">▶ Re-run graph before building</button>
-      <a href="#workspace" style="background:transparent;color:white;border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:11px 16px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center">↑ Back to the Maker</a>
+  <!-- STARTER TUTORIAL — replaces the old “Put it on metal” steps look.
+       One card per job, in the words Elaina asked for: this is how you
+       connect, this is how you delete, this is how the pop out functions.
+       The metal info isn’t dropped — it lives in the closing panel below
+       as prose, with the manifest download kept working. -->
+  <section class="tutorial" id="tutorial" aria-label="Starter tutorial">
+    <div class="tutorial-head">
+      <h2>3 — Starter tutorial. <em>Learn the board by doing it.</em></h2>
+      <p><b>Start here if the board is new to you.</b> Each card below is one job, in plain words — how you connect, how you delete, how the pop out functions, and the rest. Every card has a Try it button that takes you straight to the board above, so you can do it while you read it. Work through them in any order; come back any time.</p>
     </div>
-    <p style="font-size:12.5px;color:#a9c6b1;margin:12px 0 0">This page can’t flash a USB or install an OS from inside a browser — no page can, honestly. What it does is give you the exact, checked build list to take to the real Tiny Core sandwich build. When that build runs, this face moves over word for word, line for line.</p>
+
+    <div class="tut-grid">
+      <article class="tut-card" id="tut-connect">
+        <span class="tut-kicker">Wiring</span>
+        <h3>This is how you connect</h3>
+        <p>Every node has two dots: an <b>input dot on its left</b> and an <b>output dot on its right</b>. A wire always goes out of one node and into the next — that direction is the order things run in.</p>
+        <ol>
+          <li>Click the <b>output dot</b> (right side) of the first node. It fills green and glows — that output is now armed.</li>
+          <li>Click the <b>input dot</b> (left side) of the next node. The wire draws itself between them and the log confirms it.</li>
+          <li>That’s the connection. Repeat to chain more: face → orchestrator → engine.</li>
+        </ol>
+        <div class="tut-demo" aria-hidden="true"><span class="chip">Login face</span><span class="dotdemo armed"></span><i>— wire —&gt;</i><span class="dotdemo"></span><span class="chip">Orchestrator</span></div>
+        <p class="tut-note">A node can’t wire to itself, and the same wire can’t be made twice — the board just tells you in the log. Changed your mind mid-wire? Click a different output dot and the armed dot moves there.</p>
+        <div class="tut-try"><a class="primary" href="#workspace">Try it — go to the board ↑</a></div>
+      </article>
+
+      <article class="tut-card" id="tut-delete">
+        <span class="tut-kicker">Removing things</span>
+        <h3>This is how you delete</h3>
+        <p>Deleting is always <b>select first, then delete</b> — so you can see exactly what’s about to go.</p>
+        <ul>
+          <li><b>A node:</b> click the node so it gets the green outline, then press <b>Delete</b> on the keyboard — or use <b>Delete node</b> in the inspector on the right. Its wires go with it.</li>
+          <li><b>One wire only:</b> click the wire itself — it turns red — then press <b>Delete</b>. Both nodes stay.</li>
+          <li><b>Every wire:</b> <b>Clear wires</b> in the toolbar removes all the wiring and keeps the nodes, ready to rewire.</li>
+          <li><b>In the pop-out window:</b> <b>Wipe selection</b> clears just the selected node or wire; <b>Clear board</b> wipes the whole board in one tap.</li>
+        </ul>
+        <p class="tut-note">Deleted something by mistake? Reload the example with <b>Load Red Queen example</b> in the toolbar to get the starter graph back.</p>
+        <div class="tut-try"><a class="primary" href="#workspace">Try it — go to the board ↑</a></div>
+      </article>
+
+      <article class="tut-card wide" id="tut-popout">
+        <span class="tut-kicker">Second window · second monitor</span>
+        <h3>This is how the pop out functions</h3>
+        <p>Pop out gives the board <b>its own window</b>, so you can drag it onto a second monitor and keep the tools in front of you here.</p>
+        <ol>
+          <li>Tap <b>⧉ Pop out — own window</b> in the toolbar above the board.</li>
+          <li>A new window opens showing <b>just the board</b> — nodes, wires, Run, Fit, Wipe selection and Clear board. The Creator, palettes and inspector stay in this main window; that split is on purpose.</li>
+          <li>The two windows are <b>the same live graph</b>: arrange, wire, delete or Run on either side and it shows up on both. Nothing is copied — it’s one board in two places.</li>
+          <li>Close the pop-out window whenever you like. The graph stays safe here in the main window.</li>
+        </ol>
+        <p class="tut-note">If your browser blocks the new window, the board opens in <b>Focus</b> instead — the workspace fills this screen — and the log tells you. Allow pop-ups for this page and Pop out will open its own window next time.</p>
+        <div class="tut-try"><button class="primary" id="tutPopBtn" type="button">⧉ Try it — pop the board out now</button><a href="#workspace">Back to the board ↑</a></div>
+      </article>
+
+      <article class="tut-card" id="tut-add">
+        <span class="tut-kicker">Adding things</span>
+        <h3>This is how you add a node</h3>
+        <p>Two ways, both above the board:</p>
+        <ul>
+          <li><b>Quick add:</b> tap a button in the QUICK ADD row — Face panel, Orchestrator, Rust engine, Data table, Benchmark / check — and the node lands on the board, already selected.</li>
+          <li><b>Node Creator (the Maker):</b> name your own node, pick what kind of piece it is, say in plain words what it does, then <b>+ Create node → canvas</b>. Templates like Mic button and Failure guard fill the form in for you.</li>
+        </ul>
+        <p class="tut-note">Drag a new node by its coloured top bar to move it, then wire it in — output dot to input dot.</p>
+        <div class="tut-try"><a class="primary" href="#maker">Try it — open the Maker ↑</a></div>
+      </article>
+
+      <article class="tut-card" id="tut-run">
+        <span class="tut-kicker">Proving it works</span>
+        <h3>This is how you run it</h3>
+        <p><b>▶ Run graph</b> walks the wires in order and each node reports back underneath its name:</p>
+        <ul>
+          <li><b>IDLE</b> — not run yet. <b>RUNNING</b> — its turn. <b>DONE</b> — passed.</li>
+          <li><b>FAIL</b> — that’s the break. A node whose input failed is skipped and marked, and the log under the board says where it stopped — the rest of the face stays up.</li>
+          <li><b>Step once</b> runs one node per tap, if you want to watch it slowly. <b>Reset status</b> puts every node back to idle.</li>
+        </ul>
+        <p class="tut-note">If the log says there’s a loop in the wires, a wire circles back on itself — delete one wire in the circle and run again.</p>
+        <div class="tut-try"><button class="primary" id="tutRunBtn" type="button">▶ Try it — run the graph now</button></div>
+      </article>
+
+      <article class="tut-card" id="tut-move">
+        <span class="tut-kicker">Getting around</span>
+        <h3>Moving, zooming, resizing</h3>
+        <ul>
+          <li><b>Move a node:</b> drag it by its coloured top bar.</li>
+          <li><b>Move around the board:</b> drag empty board to pan.</li>
+          <li><b>Zoom:</b> the − / + buttons, <b>Ctrl + scroll</b>, or <b>Fit graph</b> to see everything at once.</li>
+          <li><b>More room:</b> <b>Wide view</b> hides the inspector, <b>Taller canvas</b> grows the board downward, the drag strip under the board resizes it by hand, and <b>Focus</b> fills the whole screen (Esc to come back).</li>
+          <li><b>See a node’s details:</b> click it — the inspector on the right shows its name, kind, what it does, and its last run status, all editable.</li>
+        </ul>
+        <div class="tut-try"><a class="primary" href="#workspace">Try it — go to the board ↑</a></div>
+      </article>
+    </div>
+
+    <div class="tut-metal" id="metal">
+      <h3>When you’re ready: <em>put it on metal</em></h3>
+      <p>The graph isn’t just a drawing — it’s the build list. When Run is green, download the <b>build manifest</b>: one file listing every node, wire and layer in run order. That file is the recipe for the real build — <b>back up first</b> (skipping a backup locks the Windows-wipe door), write the Tiny Core sandwich to a <b>bootable USB</b> and live-test it at the install bar, run the <b>first-run check</b> on the target hardware, then choose how it lands: keep the USB, install directly to metal, or — only with a backup — wipe Windows.</p>
+      <div class="sandwich"><span>TOP · HTML Face — this page, word for word</span><span>↕ local HTTP</span><span>MIDDLE · Rust Orchestrator + Rust Engine</span><span>↕</span><span>BOTTOM · Tiny Core Linux</span><span>→ YOUR HARDWARE</span></div>
+      <div class="metal-actions">
+        <button class="dl" id="manifestBtn">⬇ Download build manifest (.md)</button>
+        <button class="ghost" id="metalRunBtn">▶ Re-run graph before building</button>
+        <a href="#workspace">↑ Back to the board</a>
+      </div>
+      <p style="font-size:12.5px;color:#a9c6b1">This page can’t flash a USB or install an OS from inside a browser — no page can. What it gives you is the exact, checked build list to take to the real Tiny Core sandwich build, where this face moves over word for word, line for line.</p>
+    </div>
   </section>
 
   <div class="map">
@@ -355,7 +464,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     <article><h3>The orchestrator holds the shape</h3><p>It decides how pieces talk and what survives a restart. Inner pieces can be swapped or rebuilt; the master shape stays stable — the nesting-doll rule.</p></article>
     <article><h3>Tables, not live simulation</h3><p>Data nodes are lookup tables: compute once, save the map, then move data. That’s why it stays light and fast on ordinary hardware.</p></article>
   </div>
-  <footer>Red Queen Maker — HTML face, Rust engine &amp; orchestrator, Tiny Core underneath, fully offline. Make it in the Maker, prove it with Run, then put it on metal with the manifest. This page is the working face prototype — the metal build follows its manifest.</footer>
+  <footer>Red Queen Maker — HTML face, Rust engine &amp; orchestrator, Tiny Core underneath, fully offline. Learn the board in the starter tutorial, make it in the Maker, prove it with Run, then put it on metal with the manifest. This page is the working face prototype — the metal build follows its manifest.</footer>
 </div>
 
 <script>
@@ -605,6 +714,11 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     popWatch = setInterval(function(){ if (popWinRef && popWinRef.closed){ popWinRef = null; clearInterval(popWatch); popWatch = null; } }, 800);
   }
   document.getElementById('popBtn').addEventListener('click', openPopout);
+  // STARTER TUTORIAL — its Try-it buttons drive the real controls above
+  var tutPopBtn=document.getElementById('tutPopBtn');
+  if(tutPopBtn) tutPopBtn.addEventListener('click', function(){ document.getElementById('workspace').scrollIntoView({behavior:'smooth'}); openPopout(); });
+  var tutRunBtn=document.getElementById('tutRunBtn');
+  if(tutRunBtn) tutRunBtn.addEventListener('click', function(){ document.getElementById('workspace').scrollIntoView({behavior:'smooth'}); runGraph(); });
   // BOARD MODE — this window IS the popped-out breadboard: board only,
   // no tools, and ask the main window for the live graph.
   if (isBoardMode){
