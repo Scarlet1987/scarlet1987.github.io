@@ -34,8 +34,30 @@ a{color:var(--accent)}
 .pill{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--line);background:var(--panel);padding:7px 10px;border-radius:999px}
 .pill b{color:var(--accent)}
 
+/* FAQ — all the words behind one big button */
+.faq-wrap{margin-top:6px}
+.faq-big{width:100%;display:flex;align-items:center;gap:16px;text-align:left;background:var(--accent-dark);color:#eafff3;border:1px solid var(--accent-dark);border-radius:18px;padding:20px 22px;cursor:pointer;box-shadow:var(--shadow);min-height:76px}
+.faq-big:hover{background:#0a3d27}
+.faq-big:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.faq-q{flex:0 0 auto;width:52px;height:52px;border-radius:50%;background:var(--mint);color:var(--accent-dark);display:grid;place-items:center;font-family:Georgia,serif;font-size:30px;font-weight:700;line-height:1}
+.faq-big-text{flex:1 1 auto;min-width:0}
+.faq-big-main{display:block;font-size:clamp(22px,3.2vw,30px);font-weight:800;line-height:1.05;letter-spacing:-.01em}
+.faq-big-sub{display:block;margin-top:5px;font-size:14px;color:#c8e6d2;line-height:1.35}
+.faq-big-chevron{flex:0 0 auto;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.28);display:grid;place-items:center;font-size:26px;line-height:1;color:var(--mint)}
+.faq-panel{margin-top:12px;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:22px 22px 20px}
+.faq-panel .top{padding:0}
+.faq-panel .top h1{font-size:clamp(30px,4.4vw,46px)}
+.faq-divider{border:0;border-top:1px solid var(--line);margin:22px 0}
+.faq-panel .spec{padding:0}
+.faq-panel .spec .card-head{padding:0 0 6px}
+.faq-ws h3{font-family:Georgia,serif;font-size:24px;line-height:1.1;margin:0 0 8px}
+.faq-ws p{margin:0;color:var(--muted);max-width:720px}
+.faq-ws p b{color:var(--ink)}
+@media(max-width:560px){.faq-big{padding:16px;gap:12px}.faq-q{width:44px;height:44px;font-size:26px}.faq-big-chevron{width:38px;height:38px}.faq-panel{padding:18px 16px}}
+
 /* FACE */
 .face-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;margin-top:22px}
+.face-grid.single{grid-template-columns:1fr}
 @media(max-width:860px){.face-grid{grid-template-columns:1fr}}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
 .card-head{padding:14px 16px 10px;display:flex;justify-content:space-between;gap:12px;align-items:baseline;border-bottom:1px solid var(--line)}
@@ -163,14 +185,42 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
 </head>
 <body>
 <div class="wrap">
-  <header class="top">
-    <h1>The face people touch. <em>The graph underneath it.</em></h1>
-    <p class="lede"><strong>Read-back:</strong> Red Queen boots to an HTML login, everything runs on the machine, and the Rust engine does the work underneath — no internet needed. Below that is the node workspace we wanted from draw.io: lay out the pieces, wire them, press Run, and watch live status show you exactly where it breaks.</p>
-    <div class="pills"><span class="pill"><b>●</b> Offline by default</span><span class="pill">User first · AI second</span><span class="pill">HTML face → Rust orchestrator → Rust engine</span><span class="pill">Tiny Core underneath</span><span class="pill">Maker · Node Creator</span><span class="pill">Pop-out · Zoom · Resize</span><span class="pill">Put it on metal ↓</span></div>
-  </header>
+  <!-- FAQ — all the words behind one big button, closed by default -->
+  <div class="faq-wrap">
+    <button class="faq-big" id="faqBtn" type="button" aria-expanded="false" aria-controls="faqPanel">
+      <span class="faq-q" aria-hidden="true">?</span>
+      <span class="faq-big-text"><span class="faq-big-main">FAQ — How this works</span><span class="faq-big-sub">All the words in one place — tap to open, tap again to close</span></span>
+      <span class="faq-big-chevron" id="faqChevron" aria-hidden="true">+</span>
+    </button>
+    <div class="faq-panel" id="faqPanel" hidden>
+      <header class="top">
+        <h1>The face people touch. <em>The graph underneath it.</em></h1>
+        <p class="lede"><strong>Read-back:</strong> Red Queen boots to an HTML login, everything runs on the machine, and the Rust engine does the work underneath — no internet needed. Below that is the node workspace we wanted from draw.io: lay out the pieces, wire them, press Run, and watch live status show you exactly where it breaks.</p>
+        <div class="pills"><span class="pill"><b>●</b> Offline by default</span><span class="pill">User first · AI second</span><span class="pill">HTML face → Rust orchestrator → Rust engine</span><span class="pill">Tiny Core underneath</span><span class="pill">Maker · Node Creator</span><span class="pill">Pop-out · Zoom · Resize</span><span class="pill">Put it on metal ↓</span></div>
+      </header>
+      <hr class="faq-divider">
+      <section class="spec" aria-label="How the front end is put together">
+        <div class="card-head" style="border:0"><h2>How the front end is put together</h2><span>Plain words</span></div>
+        <ul>
+          <li><b>Login is local.</b> Pick a person, enter a PIN. No email, no password reset on a website, no server to be down.</li>
+          <li><b>One face, everywhere.</b> Login, HUD and installer are the same HTML and the same sage / deep-green panels — not three different programs.</li>
+          <li><b>Preview is the face.</b> The webview talks to the Rust engine over local HTTP on the machine itself, so what you preview is what ships.</li>
+          <li><b>First run is separate.</b> The 8-step setup (backup first, USB before install) only runs before the first login exists.</li>
+          <li><b>Less at once.</b> FF13-style HUD, streamlined — show the next thing, not everything.</li>
+        </ul>
+        <div class="flow"><span>Tap / PIN</span><i>→</i><span>HTML Face</span><i>→</i><span>Orchestrator (Rust)</span><i>→</i><span>Engine (Rust)</span><i>→</i><span>Your hardware</span></div>
+        <p style="color:var(--muted);font-size:13px;margin-top:14px">The orchestrator is the rock in the middle: if one piece inside fails, it contains the failure — one broken node never takes the whole face down. That’s exactly what the workspace below lets you see.</p>
+      </section>
+      <hr class="faq-divider">
+      <section class="faq-ws" aria-label="About the Node Workspace">
+        <h3>2 — Node Workspace — pop out, zoom, resize</h3>
+        <p>Same live graph, three ways to get room. <b>Pop out</b> opens the breadboard in its own live window — just nodes and wires, no tools — drag it onto your second monitor. On the board, wipe one section or clear it all and start over in one tap; the tools stay here. <b>Zoom</b> with the − / + buttons, Ctrl + scroll, or Fit. <b>Resize</b> with Wide view, Taller canvas, the drag strip under the canvas, or Focus to fill the screen. Drag empty canvas to pan; drag nodes to lay out the system; press Run and each node reports back.</p>
+      </section>
+    </div>
+  </div>
 
   <!-- FRONT END -->
-  <div class="face-grid">
+  <div class="face-grid single">
     <section class="card" aria-label="Red Queen login prototype">
       <div class="card-head"><h2>1 — Login &amp; the face</h2><span>Try it · tap a user</span></div>
       <div class="login" id="loginView">
@@ -198,24 +248,11 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
         <p style="color:var(--muted);font-size:13px">Streamlined HUD: less on screen at once, panels with depth, one tap at a time. The AI lives inside the OS — it isn’t the OS.</p>
       </div>
     </section>
-
-    <section class="card spec">
-      <div class="card-head" style="border:0;padding:0 0 6px"><h2>How the front end is put together</h2><span>Plain words</span></div>
-      <ul>
-        <li><b>Login is local.</b> Pick a person, enter a PIN. No email, no password reset on a website, no server to be down.</li>
-        <li><b>One face, everywhere.</b> Login, HUD and installer are the same HTML and the same sage / deep-green panels — not three different programs.</li>
-        <li><b>Preview is the face.</b> The webview talks to the Rust engine over local HTTP on the machine itself, so what you preview is what ships.</li>
-        <li><b>First run is separate.</b> The 8-step setup (backup first, USB before install) only runs before the first login exists.</li>
-        <li><b>Less at once.</b> FF13-style HUD, streamlined — show the next thing, not everything.</li>
-      </ul>
-      <div class="flow"><span>Tap / PIN</span><i>→</i><span>HTML Face</span><i>→</i><span>Orchestrator (Rust)</span><i>→</i><span>Engine (Rust)</span><i>→</i><span>Your hardware</span></div>
-      <p style="color:var(--muted);font-size:13px;margin-top:14px">The orchestrator is the rock in the middle: if one piece inside fails, it contains the failure — one broken node never takes the whole face down. That’s exactly what the workspace below lets you see.</p>
-    </section>
   </div>
 
   <!-- NODE WORKSPACE -->
   <section class="workspace" id="workspace">
-    <div class="ws-head"><div><h2>2 — Node Workspace — pop out, zoom, resize</h2><p>Same live graph, three ways to get room. <b>Pop out</b> opens the breadboard in its own live window — just nodes and wires, no tools — drag it onto your second monitor. On the board, wipe one section or clear it all and start over in one tap; the tools stay here. <b>Zoom</b> with the − / + buttons, Ctrl + scroll, or Fit. <b>Resize</b> with Wide view, Taller canvas, the drag strip under the canvas, or Focus to fill the screen. Drag empty canvas to pan; drag nodes to lay out the system; press Run and each node reports back.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="pill" id="spacePill">Canvas · 760px tall</span><span class="pill" id="countPill">6 nodes · 6 wires</span></div></div>
+    <div class="ws-head"><div><h2>2 — Node Workspace — pop out, zoom, resize</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="pill" id="spacePill">Canvas · 760px tall</span><span class="pill" id="countPill">6 nodes · 6 wires</span></div></div>
     <div class="toolbar">
       <button class="run" id="runBtn">▶ Run graph</button>
       <button id="stepBtn">Step once</button>
@@ -302,6 +339,16 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
 
 <script>
 (function(){
+  // FAQ — one big button, closed by default, one tap to open / close
+  var faqBtn=document.getElementById('faqBtn'), faqPanel=document.getElementById('faqPanel'), faqChevron=document.getElementById('faqChevron');
+  if(faqBtn && faqPanel){
+    faqBtn.addEventListener('click',function(){
+      var willOpen=faqPanel.hidden;
+      faqPanel.hidden=!willOpen;
+      faqBtn.setAttribute('aria-expanded', willOpen?'true':'false');
+      if(faqChevron) faqChevron.textContent=willOpen?'−':'+';
+    });
+  }
   // LOGIN
   var selectedUser='Elaina';
   document.querySelectorAll('.user').forEach(function(b){ b.addEventListener('click',function(){ document.querySelectorAll('.user').forEach(function(x){x.setAttribute('aria-pressed','false')}); b.setAttribute('aria-pressed','true'); selectedUser=b.dataset.user; document.getElementById('pinName').textContent=selectedUser; }); });
