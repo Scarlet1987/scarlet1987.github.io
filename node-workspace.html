@@ -260,13 +260,72 @@ html.board-mode .wrap{max-width:none;padding:10px 12px 20px}
 html.board-mode .workspace{margin-top:0}
 html.board-mode .layout{grid-template-columns:minmax(0,1fr);margin-top:0}
 html.board-mode .canvas{height:calc(100dvh - 240px)!important;min-height:320px}
+/* FACE PREVIEW — this page opened as the Run preview window (#preview):
+   the graph laid out as the face, lighting up live from the same run.
+   Hidden everywhere else; Run opens it as its own pop-out window. */
+#facePreview{display:none}
+html.preview-mode #facePreview{display:block}
+html.preview-mode .faq-wrap,html.preview-mode .face-grid,html.preview-mode .tutorial,html.preview-mode .map,html.preview-mode footer,html.preview-mode .creator,html.preview-mode .palette,html.preview-mode .toolbar,html.preview-mode .foldbar,html.preview-mode .board-bar,html.preview-mode .ws-head,html.preview-mode .layout{display:none!important}
+html.preview-mode .wrap{max-width:1080px;padding:10px 12px 20px}
+html.preview-mode .workspace{margin-top:0}
+.preview-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--accent-dark);color:#eafff3;border-radius:14px;padding:10px 12px}
+.preview-bar b{font-size:16px}
+.preview-bar .bsub{opacity:.85;font-size:13px}
+.preview-bar .bhint{flex-basis:100%;font-size:12px;opacity:.75}
+.preview-bar .sp{margin-left:auto}
+.preview-bar button{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:8px 13px;cursor:pointer;font-weight:600;min-height:38px}
+.preview-bar button.run{background:var(--accent);color:#fff;border-color:var(--accent)}
+.preview-bar button.dock{background:var(--mint);color:var(--accent-dark);border-color:var(--mint);font-weight:700}
+.pv-summary{margin-top:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;color:var(--muted)}
+.pv-strip{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+.pv-chip{background:var(--panel);border:1.5px solid var(--line);padding:6px 9px;border-radius:8px;color:var(--ink)}
+.pv-stage{display:grid;gap:14px;margin-top:14px}
+.pv-card{background:var(--panel);border:2px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:18px;transition:border-color .25s,box-shadow .25s}
+.pv-card-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.pv-card-head h3{margin:0;font-family:Georgia,serif;font-size:22px;line-height:1.1}
+.pv-pill{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em;border-radius:999px;padding:5px 10px;border:1px solid var(--line);background:var(--sage);color:var(--muted)}
+.pv-pill-running{color:var(--amber);border-color:var(--amber)}
+.pv-pill-done{color:#fff;background:var(--accent);border-color:var(--accent)}
+.pv-pill-fail{color:#fff;background:var(--red);border-color:var(--red)}
+.pvst-running{border-color:var(--amber)!important;box-shadow:0 0 0 4px rgba(183,121,31,.18),var(--shadow);animation:pvPulse 1s ease-in-out infinite alternate}
+.pvst-done{border-color:var(--accent)!important;box-shadow:0 0 0 4px rgba(0,145,79,.16),var(--shadow)}
+.pvst-fail{border-color:var(--red)!important;box-shadow:0 0 0 4px rgba(180,35,24,.14),var(--shadow)}
+@keyframes pvPulse{from{box-shadow:0 0 0 2px rgba(183,121,31,.12),var(--shadow)}to{box-shadow:0 0 0 7px rgba(183,121,31,.22),var(--shadow)}}
+@media (prefers-reduced-motion: reduce){.pvst-running{animation:none}}
+.pv-login{background:var(--accent-dark);color:#eafff3}
+.pv-login .brand{font-family:Georgia,serif;font-size:32px;line-height:1}
+.pv-login .sub{color:var(--mint);font-style:italic;margin-top:4px}
+.pv-login .pv-pill{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.25);color:#c8e6d2}
+.pv-login .pv-pill-done{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pv-login .pv-pill-running{color:#ffd98a;border-color:var(--amber)}
+.pv-login .pv-pill-fail{background:var(--red);color:#fff;border-color:var(--red)}
+.pv-pindots{display:flex;gap:8px;margin-top:16px}
+.pv-pindots i{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.4);display:block}
+.pv-pindots i.on{background:var(--mint);border-color:var(--mint)}
+.pv-unlock{margin-top:14px;width:100%;background:var(--accent);color:#fff;border:0;border-radius:12px;font-weight:700;padding:12px;font-size:15px}
+.pv-unlock:disabled{opacity:.45}
+.pv-note{color:var(--muted);font-size:13px;margin:10px 0 0}
+.pv-login .pv-note{color:#c8e6d2}
+.pv-panels{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+@media(max-width:640px){.pv-panels{grid-template-columns:1fr}}
+.pv-pocket{background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:12px}
+.pv-pocket b{font-size:14px}
+.pv-pocket .pv-kind{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.pv-pocket p{margin:6px 0 0;font-size:13px;color:var(--muted)}
+.pv-pocket .pv-detail{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--ink)}
+.pv-hud-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+@media(max-width:640px){.pv-hud-grid{grid-template-columns:1fr}}
+.pv-tile{background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:12px}
+.pv-tile b{font-size:13px}
+.pv-tile p{margin:4px 0 0;font-size:13px;color:var(--muted)}
+.pv-tile .pv-detail{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--ink)}
 .map{margin-top:22px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 @media(max-width:860px){.map{grid-template-columns:1fr}}
 .map article{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
 .map h3{margin:0;font-size:14px}.map p{margin:6px 0 0;color:var(--muted);font-size:13px}
 footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:14px}
 </style>
-<script>if(window.location.hash==='#breadboard'){document.documentElement.classList.add('board-mode');}</script>
+<script>if(window.location.hash==='#breadboard'){document.documentElement.classList.add('board-mode');}if(window.location.hash==='#preview'){document.documentElement.classList.add('preview-mode');}</script>
 </head>
 <body>
 <div class="wrap">
@@ -339,10 +398,19 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   <section class="workspace" id="workspace">
     <div class="ws-head"><div><h2>2 — Node Workspace — pop out, zoom, resize</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="pill" id="spacePill">Canvas · 760px tall</span><span class="pill" id="countPill">6 nodes · 6 wires</span><span class="pill" id="orchPill" title="Run asks the real Rust orchestrator on this machine for the engine's health">Orchestrator · 127.0.0.1:7790</span></div></div>
     <div class="board-bar" id="boardBar"><b>Node Workspace — breadboard</b><span class="bsub">Just the board — tools stay in the main window.</span><button class="run" id="boardRunBtn" type="button">▶ Run graph</button><button id="boardFitBtn" type="button">Fit graph</button><button id="boardGroupBtn" type="button">▣ Group selected</button><button id="boardUngroupBtn" type="button">▢ Ungroup</button><span class="sp"></span><button class="dock" id="boardDockBtn" type="button">↩ Put back — return to main window</button><button id="boardWipeBtn" type="button">⌫ Wipe selection</button><button class="danger" id="boardClearBtn" type="button">✕ Clear board</button><span class="bhint">Put back closes this pop-out window and returns you to the main window — the graph stays exactly as it is (the same Put back button also lives in the main window’s Window tools, so you can close this window from either side) · Drag nodes to arrange · Ctrl / Shift + click (or Shift + drag a box) to pick a few nodes, then Group selected · A group holds the data for the unwired pockets inside it — wire into the group and out of it like any node, drag its dark bar to move it as one piece, and on Run it runs its pockets in sequence as one step · Drag a group frame’s bottom-right grip to resize it by hand (double-click it for the snug fit) · A Switch node (add it from the main window) has 8 ins and 1 out — group it with its pockets and it runs the group until the group is all passed; that pass is learned and stored as the group’s sequence, and only then does the out fire an ALL PASS to whatever the group is wired to · Click an output dot, then an input dot, to wire · Drag empty board to pan · Ctrl + scroll to zoom · Click a node to select it, then press Delete · Wipe selection clears the selected node or wire, Clear board wipes the whole board</span></div>
+    <!-- FACE PREVIEW — only visible in the #preview pop-out window, which
+         Run opens: the graph laid out as the face, lighting up live. -->
+    <div id="facePreview" aria-label="Face preview — live from Run">
+      <div class="preview-bar"><b>Face preview</b><span class="bsub">Your graph, laid out as the face — lighting up live from the same Run, with the same real numbers.</span><button class="run" id="pvRunBtn" type="button">▶ Run again</button><span class="sp"></span><button class="dock" id="pvCloseBtn" type="button">✕ Close preview</button><span class="bhint">Login screen on top, the group’s panels in the middle, HUD at the bottom. Amber = running, green = passed, red = the break. Close this window any time — the graph and the run carry on in the main window. The log underneath tells the same run in words.</span></div>
+      <div class="pv-summary" id="pvSummary">Waiting for Run…</div>
+      <div class="pv-strip" id="pvStrip" aria-label="Run order"></div>
+      <div class="pv-stage" id="pvStage"></div>
+    </div>
     <div class="foldbar"><button class="fold-toggle" id="foldRunBtn" type="button" aria-expanded="true" aria-controls="runToolsBody"><span>Run tools</span><span class="fold-sub">Run · Run by node — tap to fold</span><span class="fold-chev" aria-hidden="true">−</span></button></div>
     <div class="toolbar" id="runToolsBody">
       <button class="run" id="runBtn">▶ Run</button>
       <button id="stepBtn">Run by node</button>
+      <button id="closePreviewBtn" type="button">✕ Close face preview</button>
     </div>
     <div class="foldbar"><button class="fold-toggle" id="foldGroupBtn" type="button" aria-expanded="true" aria-controls="groupToolsBody"><span>Group tools</span><span class="fold-sub">Group selected · Ungroup · Clear wires — tap to fold</span><span class="fold-chev" aria-hidden="true">−</span></button></div>
     <div class="toolbar" id="groupToolsBody">
@@ -477,6 +545,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
         <h3>This is how you run it</h3>
         <p><b>▶ Run graph</b> walks the wires in order and each node reports back underneath its name:</p>
         <ul>
+          <li><b>The face preview opens.</b> Tapping Run also opens the <b>face preview</b> in its own pop-out window, like the breadboard: your graph laid out as the face — the <b>login screen</b> on top, <b>Group 1’s panels</b> in the middle, the <b>HUD face</b> at the bottom — <b>lighting up live as the graph runs</b>, same run, same real numbers (the engine panel shows the real health that came back). Amber is running, green is passed, red is the break. Close it from its own <b>Close preview</b> button, or with <b>Close face preview</b> in Run tools here. If your browser blocks the window, the run still happens here and the log says so.</li>
           <li><b>Rust engine does real work.</b> When a Rust engine pocket runs, it asks the real Rust orchestrator on this machine — <b>GET http://127.0.0.1:7790/api/health</b> — for the engine’s real health. A real <b>ok</b> passes the pocket; <b>degraded</b> or <b>engine_failed</b> fails it, and the log shows the real pid, restarts, failures, queue depth and uptime that came back. If the orchestrator isn’t reachable, the log says so plainly and that pocket plays the demo instead, so the board still works with nothing running. The other pockets still run as demo steps for now.</li>
           <li><b>IDLE</b> — not run yet. <b>RUNNING</b> — its turn. <b>DONE</b> — passed.</li>
           <li><b>FAIL</b> — that’s the break. A node whose input failed is skipped and marked, and the log under the board says where it stopped — the rest of the face stays up.</li>
@@ -685,6 +754,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     groups.forEach(function(g){ var ge=buildGroupEl(g); if(ge) world.appendChild(ge); });
     nodes.forEach(function(n){ world.appendChild(buildNodeEl(n)); });
     drawWires(); syncInspector(); broadcastSoon(); refreshCounts();
+    renderPreview();
   }
   function updateGroupFrame(g){ if(!g||!g._el) return; var b=groupBox(g); if(!b) return; g._el.style.left=b.x+'px'; g._el.style.top=b.y+'px'; g._el.style.width=b.w+'px'; g._el.style.height=b.h+'px'; g._el.className='group-frame gst-'+(g.status||'idle')+(g.id===selectedGroupId?' selected':''); if(g._statusEl) g._statusEl.textContent=g.status||'idle'; var t=g._el.querySelector('.gtitle'); if(t) t.textContent=g.title; var c=g._el.querySelector('.gcount'); if(c) c.textContent=g.memberIds.length+' pockets · holds the data · one step'+(g.sequenceStored?' · sequence learned · stored ✓':''); g.memberIds.forEach(function(id){ var mn=nodeById(id); if(mn && isSwitch(mn)) refreshSwitchFace(mn); }); }
   function updateNode(n){
@@ -697,6 +767,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     if(grp) grp.memberIds.forEach(function(id){ var mn=nodeById(id); if(mn && isSwitch(mn) && mn!==n) refreshSwitchFace(mn); });
     if(selectedId===n.id){ var st=document.getElementById('inspStatus'); st.textContent=n.status; st.className='status st-'+n.status; }
     if(grp) updateGroupFrame(grp);
+    renderPreview();
     broadcastSoon();
   }
   function updateSelection(){
@@ -865,15 +936,17 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   // the other window + a BroadcastChannel), so edits, wiring and Run
   // status made on either side show up on both.
   var isBoardMode = (window.location.hash === '#breadboard');
+  var isPreviewMode = (window.location.hash === '#preview');
   var instanceId = 'i' + Math.random().toString(36).slice(2, 10);
   var lastDockId = '';
   var applyingRemote = false, lastSig = '', gotRemoteState = false;
   var popWinRef = null, popWatch = null, bcTimer = null;
+  var previewWinRef = null, previewWatch = null;
   var syncChan = null;
   try { syncChan = new BroadcastChannel('rq-node-workspace'); } catch (err) { syncChan = null; }
   function serializeState(){
     return {
-      nodes: nodes.map(function(n){ return { id:n.id, kind:n.kind, x:n.x, y:n.y, title:n.title, notes:n.notes, status:n.status, storedSeq:n.storedSeq?n.storedSeq.slice():null }; }),
+      nodes: nodes.map(function(n){ return { id:n.id, kind:n.kind, x:n.x, y:n.y, title:n.title, notes:n.notes, status:n.status, detail:n.detail||'', storedSeq:n.storedSeq?n.storedSeq.slice():null }; }),
       edges: edges.map(function(e){ return { from:e.from, to:e.to, toPort:e.toPort||0 }; }),
       groups: groups.map(function(g){ return { id:g.id, title:g.title, memberIds:g.memberIds.slice(), status:g.status||'idle', notes:g.notes||'', learnedOrder:g.learnedOrder?g.learnedOrder.slice():null, sequenceStored:!!g.sequenceStored, rw:g.rw||0, rh:g.rh||0 }; }),
       seq: seq, groupSeq: groupSeq
@@ -886,6 +959,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     if (syncChan){ try { syncChan.postMessage(msg); } catch (err) {} }
     var targets = [];
     if (popWinRef && !popWinRef.closed) targets.push(popWinRef);
+    if (previewWinRef && !previewWinRef.closed) targets.push(previewWinRef);
     if (isBoardMode && window.opener && window.opener !== window) targets.push(window.opener);
     targets.forEach(function(t){ try { t.postMessage(msg, '*'); } catch (err) {} });
   }
@@ -903,7 +977,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     var sig = JSON.stringify(s);
     if (sig === lastSig) return;
     lastSig = sig; gotRemoteState = true; applyingRemote = true;
-    nodes = s.nodes.map(function(n){ return { id:n.id, kind:n.kind, x:n.x, y:n.y, title:n.title, notes:n.notes || '', status:n.status || 'idle', storedSeq:n.storedSeq?n.storedSeq.slice():null }; });
+    nodes = s.nodes.map(function(n){ return { id:n.id, kind:n.kind, x:n.x, y:n.y, title:n.title, notes:n.notes || '', status:n.status || 'idle', detail:n.detail || '', storedSeq:n.storedSeq?n.storedSeq.slice():null }; });
     edges = (s.edges || []).map(function(e){ return { from:e.from, to:e.to, toPort:e.toPort||0 }; });
     groups = (s.groups || []).map(function(g){ return { id:g.id, title:g.title, memberIds:(g.memberIds||[]).filter(function(id){ return s.nodes.some(function(n){return n.id===id}); }), status:g.status || 'idle', notes:g.notes || '', learnedOrder:g.learnedOrder?g.learnedOrder.slice():null, sequenceStored:!!g.sequenceStored, rw:g.rw||0, rh:g.rh||0 }; }).filter(function(g){ return g.memberIds.length>=2; });
     if (typeof s.seq === 'number') seq = s.seq;
@@ -926,6 +1000,10 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
       if (msg.dockId) lastDockId = msg.dockId;
       if (isBoardMode){ putBackFromBoard(true); }
       else { log('Put back','The pop-out window put the board back — returning to this main window. The graph is unchanged.'); try { window.focus(); } catch (err) {} setTimeout(updateDockBtn, 500); setTimeout(updateDockBtn, 1400); }
+    }
+    else if (msg.type === 'rq-preview-close'){
+      if (isPreviewMode){ closePreviewSelf(); }
+      else { log('Preview','The face preview window was closed. The graph and the last run are unchanged.'); try { window.focus(); } catch (err) {} }
     }
   }
   window.addEventListener('message', function(e){ onSyncMsg(e.data); });
@@ -1033,23 +1111,120 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     if (popWatch) clearInterval(popWatch);
     popWatch = setInterval(function(){ if (popWinRef && popWinRef.closed){ popWinRef = null; clearInterval(popWatch); popWatch = null; updateDockBtn(); } }, 800);
   }
+  // FACE PREVIEW — Run opens the graph laid out as the face in its own
+  // pop-out window (#preview), the same way Pop out opens the breadboard.
+  // The preview window runs this same page in preview-only mode and stays
+  // live through the same state link, so it lights up from the SAME run,
+  // with the SAME real numbers (the engine pocket's real health detail
+  // travels in the state as n.detail). Nothing is copied or re-run there.
+  function pvPill(st){ return '<span class="pv-pill pv-pill-'+st+'">'+st+'</span>'; }
+  function pvPocket(n){
+    return '<div class="pv-pocket pvst-'+n.status+'"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+escapeHtml(n.title)+'</b>'+pvPill(n.status)+'</div><div class="pv-kind">'+escapeHtml(KIND[n.kind].label)+'</div>'+(n.detail?'<p class="pv-detail">'+escapeHtml(n.detail)+'</p>':'<p>'+escapeHtml(n.notes||'—')+'</p>')+'</div>';
+  }
+  function renderPreview(){
+    if (!isPreviewMode) return;
+    var stage=document.getElementById('pvStage'); if(!stage) return;
+    var loginNode=null, hudNode=null;
+    nodes.forEach(function(n){ if(/login/i.test(n.title) && !loginNode) loginNode=n; if(/hud/i.test(n.title) && !hudNode) hudNode=n; });
+    if(!loginNode) loginNode=nodes.filter(function(n){ return n.kind==='face' && n!==hudNode; })[0]||null;
+    if(!hudNode){ var faces=nodes.filter(function(n){ return n.kind==='face' && n!==loginNode; }); hudNode=faces[faces.length-1]||null; }
+    // Run-order strip — the light travels along these chips
+    var strip=document.getElementById('pvStrip');
+    if(strip){
+      var t=topoUnits(); var orderIds=(t.order && t.order.length)?t.order:allUnitIds();
+      strip.innerHTML=orderIds.map(function(uid,i){ var st=entityStatus(uid); return '<span class="pv-chip pvst-'+st+'">'+(i+1)+'. '+escapeHtml(entityTitle(uid))+' · '+st+'</span>'; }).join('');
+    }
+    var summary=document.getElementById('pvSummary');
+    if(summary){
+      var anyFail=nodes.some(function(n){return n.status==='fail'})||groups.some(function(g){return g.status==='fail'});
+      var anyRun=nodes.some(function(n){return n.status==='running'})||groups.some(function(g){return g.status==='running'});
+      var allDone=nodes.length>0 && nodes.every(function(n){return n.status==='done' || !edges.some(function(e){return e.from===n.id||e.to===n.id||(groupOfNode(n.id)&&(e.from===groupOfNode(n.id).id||e.to===groupOfNode(n.id).id))})});
+      summary.textContent=anyFail?'A break is lit in red below — that is where the run stopped. The rest of the face stays up.':(anyRun?'Running — watch the light travel: login, then the panels, then the HUD.':(allDone?'Whole graph green — the face is lit end to end. That layout holds together as a face.':'Waiting for Run — press Run in the main window (or Run again above) and the face lights up here, live.'));
+    }
+    if(!nodes.length){ stage.innerHTML='<div class="pv-card"><div class="pv-card-head"><h3>The board is empty</h3></div><p class="pv-note">There is no graph to lay out as a face yet. Add nodes in the main window and run again.</p></div>'; return; }
+    var html='';
+    // 1 — LOGIN SCREEN, from the Login face node
+    var ls=loginNode?loginNode.status:'idle';
+    html+='<div class="pv-card pv-login pvst-'+ls+'"><div class="pv-card-head"><span style="font-family:ui-monospace,monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.8">From the “'+(loginNode?escapeHtml(loginNode.title):'Login face')+'” node</span>'+pvPill(ls)+'</div><div class="brand" style="margin-top:10px">Red Queen</div><div class="sub">“Off with their heads.”</div><div class="pv-pindots" aria-hidden="true"><i class="'+(ls==='running'||ls==='done'?'on':'')+'"></i><i class="'+(ls==='running'||ls==='done'?'on':'')+'"></i><i class="'+(ls==='running'||ls==='done'?'on':'')+'"></i><i class="'+(ls==='done'?'on':'')+'"></i></div><button class="pv-unlock" type="button" disabled>'+(ls==='done'?'Unlocked ✓ — the face is open':(ls==='running'?'Checking on this machine…':(ls==='fail'?'Login is the break — see the log':'Waiting for Run — login has not run yet')))+'</button><p class="pv-note">Pick a person, enter a PIN — on this machine only, no account, no cloud. This screen lights when the login node runs.</p></div>';
+    // 2 — THE GROUPS AS PANELS (Group 1 first), pockets as the panels
+    groups.forEach(function(g){
+      var gs=g.status||'idle';
+      html+='<div class="pv-card pvst-'+gs+'"><div class="pv-card-head"><h3>'+escapeHtml(g.title)+' — the panels</h3>'+pvPill(gs)+'</div><p class="pv-note" style="margin-top:6px">The group holds the data; its pockets are the face’s panels, run in sequence as one step.'+(g.sequenceStored?' Sequence learned · stored ✓.':'')+'</p><div class="pv-panels">'+internalOrder(g).map(function(id){ var pn=nodeById(id); return pn?pvPocket(pn):''; }).join('')+'</div></div>';
+    });
+    var standalone=nodes.filter(function(n){ return n!==loginNode && n!==hudNode && !groupOfNode(n.id); });
+    if(standalone.length){
+      html+='<div class="pv-card"><div class="pv-card-head"><h3>'+(groups.length?'Also on the face':'The panels')+'</h3></div><p class="pv-note" style="margin-top:6px">'+(groups.length?'Pieces not inside a group, shown as their own panels.':'No group yet — every piece is its own panel. Group nodes on the board and they become one framed set of panels here.')+'</p><div class="pv-panels">'+standalone.map(pvPocket).join('')+'</div></div>';
+    }
+    // 3 — HUD FACE, lit when the signal arrives
+    var hs=hudNode?hudNode.status:'idle';
+    var middle=nodes.filter(function(n){ return n!==loginNode && n!==hudNode; });
+    html+='<div class="pv-card pvst-'+hs+'"><div class="pv-card-head"><h3>HUD face</h3>'+pvPill(hs)+'</div><p class="pv-note" style="margin-top:6px">'+(hs==='done'?'The signal arrived — the HUD is lit. This is the screen the person lives in after login.':(hs==='running'?'The signal is arriving — the HUD is lighting up…':(hs==='fail'?'The break is upstream — the HUD never got its signal. The red panel above is where it stopped.':'Waiting for the signal — the HUD lights when the run reaches the “'+(hudNode?escapeHtml(hudNode.title):'HUD face')+'” node.')))+'</p><div class="pv-hud-grid">'+middle.map(function(n){ return '<div class="pv-tile pvst-'+n.status+'"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>'+escapeHtml(n.title)+'</b>'+pvPill(n.status)+'</div>'+(n.detail?'<p class="pv-detail">'+escapeHtml(n.detail)+'</p>':'<p>'+escapeHtml(KIND[n.kind].label)+'</p>')+'</div>'; }).join('')+'</div></div>';
+    stage.innerHTML=html;
+  }
+  function sendPreviewCloseRequest(){
+    var msg={ type:'rq-preview-close', from:instanceId };
+    if (syncChan){ try { syncChan.postMessage(msg); } catch (err) {} }
+    var targets=[];
+    if (previewWinRef && !previewWinRef.closed) targets.push(previewWinRef);
+    if ((isBoardMode || isPreviewMode) && window.opener && window.opener !== window) targets.push(window.opener);
+    targets.forEach(function(t){ try { t.postMessage(msg, '*'); } catch (err) {} });
+  }
+  function closePreviewSelf(){
+    if (!isPreviewMode) return;
+    try { sendState(); } catch (err) {}
+    log('Preview','Closing the face preview — returning to the main window. The graph stays exactly as it is.');
+    try { if (window.opener && !window.opener.closed) window.opener.focus(); } catch (err) {}
+    setTimeout(function(){
+      try { window.close(); } catch (err) {}
+      setTimeout(function(){
+        if (!window.closed){ window.location.hash=''; window.location.href=window.location.href.split('#')[0]; }
+      }, 350);
+    }, 160);
+  }
+  function openPreviewWindow(){
+    if (isPreviewMode) return;
+    if (previewWinRef && !previewWinRef.closed){ try { previewWinRef.focus(); } catch (err) {} sendState(); return; }
+    var w = null;
+    try { w = window.open(window.location.href.split('#')[0] + '#preview', 'rq-face-preview', 'width=1180,height=900,menubar=no,toolbar=no,location=no'); } catch (err) { w = null; }
+    if (!w){ log('Preview','The browser blocked the face preview window, so this run stays in this window — follow it in the log below. Allow pop-ups for this page and Run will open the preview next time.'); return; }
+    previewWinRef = w;
+    log('Preview','Face preview opening in its own window — your graph laid out as the face: login screen on top, the group’s panels in the middle, HUD at the bottom. It lights up live from this same run, with the same real numbers — nothing is re-run over there. Close it from its own Close preview button, or with Close face preview in Run tools here.');
+    [600, 1600, 3200].forEach(function(ms){ setTimeout(function(){ if (previewWinRef && !previewWinRef.closed) sendState(); }, ms); });
+    if (previewWatch) clearInterval(previewWatch);
+    previewWatch = setInterval(function(){ if (previewWinRef && previewWinRef.closed){ previewWinRef = null; clearInterval(previewWatch); previewWatch = null; } }, 800);
+  }
+  function closePreviewWindow(){
+    if (previewWinRef && !previewWinRef.closed){
+      try { previewWinRef.close(); } catch (err) {}
+      previewWinRef = null;
+      if (previewWatch){ clearInterval(previewWatch); previewWatch = null; }
+      log('Preview','Face preview closed from here — you are back in the main window. The graph is still here, unchanged.');
+    } else {
+      // No handle held (e.g. this window was refreshed, or the preview was
+      // opened from the breadboard) — ask any linked preview window to close.
+      try { sendPreviewCloseRequest(); } catch (err) {}
+      log('Preview','Asked any open face preview window to close. If one is still open, its own Close preview button closes it too.');
+    }
+  }
   var popBtnEl=document.getElementById('popBtn');
   if(popBtnEl) popBtnEl.addEventListener('click', openPopout);
   var dockBtnEl=document.getElementById('dockBtn');
   if(dockBtnEl) dockBtnEl.addEventListener('click', closePopout);
   updateDockBtn();
+  var closePreviewBtnEl=document.getElementById('closePreviewBtn');
+  if(closePreviewBtnEl) closePreviewBtnEl.addEventListener('click', closePreviewWindow);
   // STARTER TUTORIAL — its Try-it buttons drive the real controls above
   var tutPopBtn=document.getElementById('tutPopBtn');
   if(tutPopBtn) tutPopBtn.addEventListener('click', function(){ document.getElementById('workspace').scrollIntoView({behavior:'smooth'}); openPopout(); });
   var tutRunBtn=document.getElementById('tutRunBtn');
-  if(tutRunBtn) tutRunBtn.addEventListener('click', function(){ document.getElementById('workspace').scrollIntoView({behavior:'smooth'}); runGraph(); });
+  if(tutRunBtn) tutRunBtn.addEventListener('click', function(){ document.getElementById('workspace').scrollIntoView({behavior:'smooth'}); openPreviewWindow(); runGraph(); });
   // BOARD MODE — this window IS the popped-out breadboard: board only,
   // no tools, and ask the main window for the live graph.
   if (isBoardMode){
     document.body.classList.add('board-mode');
     document.title = 'Node Workspace — Breadboard';
     var bRun = document.getElementById('boardRunBtn');
-    if (bRun) bRun.addEventListener('click', function(){ runGraph(); });
+    if (bRun) bRun.addEventListener('click', function(){ openPreviewWindow(); runGraph(); });
     var bFit = document.getElementById('boardFitBtn');
     if (bFit) bFit.addEventListener('click', function(){ fitView(); });
     var bWipe = document.getElementById('boardWipeBtn');
@@ -1062,6 +1237,22 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     setTimeout(sendStateRequest, 700);
     setTimeout(function(){ if (!gotRemoteState) sendStateRequest(); }, 2200);
     log('Board', (window.opener ? 'Breadboard window — live-linked to the main window. Arrange, wire and run here; the tools stay over there. Tap Put back above to close this window and return to the main window — or use Put back in the main window’s Window tools.' : 'Breadboard window — no main window linked, so this board runs on its own. Arrange, wire and run here. Tap Put back above to return to the main window view.'));
+  }
+  // FACE PREVIEW MODE — this window IS the Run preview: the face only,
+  // live-linked to the main window, asking it for the live graph.
+  if (isPreviewMode){
+    document.body.classList.add('preview-mode');
+    document.title = 'Node Workspace — Face preview';
+    var pvRunBtn = document.getElementById('pvRunBtn');
+    if (pvRunBtn) pvRunBtn.addEventListener('click', function(){ runGraph(); });
+    var pvCloseBtn = document.getElementById('pvCloseBtn');
+    if (pvCloseBtn) pvCloseBtn.addEventListener('click', function(){ sendPreviewCloseRequest(); closePreviewSelf(); });
+    sendStateRequest();
+    setTimeout(sendStateRequest, 700);
+    setTimeout(function(){ if (!gotRemoteState) sendStateRequest(); }, 2200);
+    renderPreview();
+    setInterval(renderPreview, 700);
+    log('Preview', (window.opener ? 'Face preview window — live-linked to the main window. Same run, same real numbers: when Run runs over there, the face lights up here — login, the group’s panels, then the HUD. Run again right here if you like; it is the same graph. Close preview above closes this window.' : 'Face preview window — no main window linked, so this face runs on its own graph. Run again above lights it up. Close preview above returns to the main window view.'));
   }
 
   // PUT IT ON METAL — manifest download from the live graph
@@ -1114,8 +1305,8 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     }
     var hasIn=edges.some(function(e){return e.to===id||(groupOfNode(id)&&e.to===groupOfNode(id).id)}); var upstreamBad=edges.filter(function(e){return e.to===id}).some(function(e){ return entityStatus(e.from)==='fail'; }); var ownGroup=groupOfNode(id); if(ownGroup){ var gIn=edges.filter(function(e){return e.to===ownGroup.id}).some(function(e){ return entityStatus(e.from)==='fail'; }); if(gIn) upstreamBad=true; }
     function demoFinish(){
-      if(upstreamBad){ n.status='fail'; log(n.title,'Skipped — something upstream failed, so this is where the break shows. The orchestrator contains it; the rest of the face stays up.'); }
-      else { n.status='done'; log(n.title, ownGroup?'Done ✓ — pocket ran on the data “'+ownGroup.title+'” holds.':(hasIn?'Done ✓ — received its input and passed.':'Done ✓ — start node, needed nothing upstream.')); }
+      if(upstreamBad){ n.status='fail'; n.detail='Skipped — something upstream failed'; log(n.title,'Skipped — something upstream failed, so this is where the break shows. The orchestrator contains it; the rest of the face stays up.'); }
+      else { n.status='done'; n.detail=ownGroup?('Ran on the data “'+ownGroup.title+'” holds'):(hasIn?'Received its input and passed':'Start node — needed nothing upstream'); log(n.title, ownGroup?'Done ✓ — pocket ran on the data “'+ownGroup.title+'” holds.':(hasIn?'Done ✓ — received its input and passed.':'Done ✓ — start node, needed nothing upstream.')); }
       updateNode(n); done&&done();
     }
     // REAL WORK — the Rust engine pocket asks the real Rust orchestrator
@@ -1154,7 +1345,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
         if(failures!==null) bits.push('failures '+failures);
         if(queue!==null) bits.push('queue depth '+queue);
         if(uptimeTxt!==null) bits.push('uptime '+uptimeTxt);
-        var detail=bits.length?(' — '+bits.join(' · ')):'';
+        var detail=bits.length?(' — '+bits.join(' · ')):''; n.detail=bits.join(' · ');
         if(status==='ok'){ n.status='done'; log(n.title,'Done ✓ — real pass from the orchestrator. Engine health: ok'+detail+'.'); }
         else if(status==='degraded'||status==='engine_failed'||status==='failed'||status==='fail'||status==='error'){ n.status='fail'; log(n.title,'Failed — real result from the orchestrator. Engine health: '+(status||'unknown')+detail+'. This is the break — the switch will find this pocket.'); }
         else if(status){ n.status='fail'; log(n.title,'Failed — the orchestrator answered, but the engine health status was “'+status+'”, not ok'+detail+'. Only a real ok passes this pocket.'); }
@@ -1162,7 +1353,8 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
         updateNode(n); done&&done();
       }).catch(function(err){
         if(orchTimer) clearTimeout(orchTimer);
-        if(err && err._httpStatus){ n.status='fail'; log(n.title,'Failed — the orchestrator at http://127.0.0.1:7790 answered HTTP '+err._httpStatus+' for GET /api/health, so there is no ok to pass this pocket.'); updateNode(n); done&&done(); return; }
+        if(err && err._httpStatus){ n.status='fail'; n.detail='Orchestrator answered HTTP '+err._httpStatus+' — no ok to pass this pocket'; log(n.title,'Failed — the orchestrator at http://127.0.0.1:7790 answered HTTP '+err._httpStatus+' for GET /api/health, so there is no ok to pass this pocket.'); updateNode(n); done&&done(); return; }
+        n.detail='Demo step — orchestrator not reachable at 127.0.0.1:7790';
         log(n.title,'Orchestrator not reachable at http://127.0.0.1:7790 — playing the demo for this pocket, so the page still works with nothing running.');
         setTimeout(demoFinish,90);
       });
@@ -1181,8 +1373,8 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     if(upstreamBad){ order.forEach(function(id){ var n=nodeById(id); if(n){ n.status='fail'; updateNode(n); } }); g.status='fail'; updateGroupFrame(g); broadcastSoon(); log(g.title,'Group skipped — something upstream failed, so every pocket inside is marked failed. The break is upstream of the group.'+(sw?' The switch found the break upstream — no pocket could pass, so nothing was learned or stored.':'')); done&&done(); return; }
     var i=0; function nxt(){ if(i>=order.length){ var bad=order.some(function(id){ var n=nodeById(id); return n&&n.status==='fail'; }); g.status=bad?'fail':'done'; if(!bad&&sw){ var firstStore=!g.sequenceStored; g.learnedOrder=pocketOrder.slice(); g.sequenceStored=true; var dests=edges.filter(function(e){return e.from===g.id}).map(function(e){return entityTitle(e.to)}); updateGroupFrame(g); log(sw.title,'Group all passed — sequence '+(firstStore?'learned and stored':'re-confirmed and stored')+' on “'+g.title+'”: '+pocketOrder.map(function(id,i2){return (i2+1)+'. '+entityTitle(id)}).join(' · ')+'. ALL PASS leaves the group’s out → '+(dests.length?dests.join(', '):'whatever the group is wired to — wire its right dot onward (e.g. to the HUD face) to send it')+'.'); } updateGroupFrame(g); broadcastSoon(); log(g.title, bad?'Group finished with a failure inside — the frame is red, that is your break point.':'Group done ✓ — all '+order.length+' pockets ran in sequence and passed, as one step.'); done&&done(); return; } runStep(order[i++], nxt); } nxt();
   }
-  function runGraph(){ if(!nodes.length){ log('Run','Nothing to run — the board is empty. Add nodes first.'); return; } stepQueue=[]; stepActive=false; stepTotal=0; stepDone=0; refreshStepBtn(); nodes.forEach(function(n){n.status='idle'; updateNode(n);}); groups.forEach(function(g){g.status='idle'; updateGroupFrame(g);}); broadcastSoon(); var t=topoUnits(); if(t.order.length<t.total){ log('Run','There is a loop in the wires — a graph with a cycle can never finish. Break the loop and run again.'); return; } if(!edges.length){ log('Run','No wires yet — Run stopped, and nothing was marked done. Wire at least one path (output dot → input dot), then run again.'); refreshStepBtn(); return; } var r=runnableOrder(t); if(!r.order.length){ log('Run','No wired path yet — Run stopped, and nothing was marked done. The wires on the board do not connect any nodes into a path. Wire at least one path, then run again.'); refreshStepBtn(); return; } if(r.unwired.length){ log('Run','Not wired — staying idle, not done: '+r.unwired.map(function(u){ return describeUnit(u); }).join(', ')+'. Wire '+(r.unwired.length===1?'it':'them')+' in to run '+(r.unwired.length===1?'it':'them')+'.'); } log('Run','Executing '+r.order.length+' step'+(r.order.length===1?'':'s')+' in wire order'+(groups.length?' — each group counts as one step: it holds the data and runs its pockets in sequence':'')+'…'); var runOrder=r.order; var i=0; function next(){ if(i>=runOrder.length){ var fails=nodes.filter(function(n){return n.status==='fail'}).length; var gfails=groups.filter(function(g){return g.status==='fail'}).length; if(fails||gfails){ log('Run','Finished with '+fails+' failed node(s)'+(gfails?' in '+gfails+' group(s)':'')+' — the red ones are your break point.'); } else if(r.unwired.length){ log('Run','Finished — the wired graph is green. '+r.unwired.length+' unwired '+(r.unwired.length===1?'piece stayed':'pieces stayed')+' idle above — not done, just not wired in.'); } else { log('Run','Finished — whole graph green. That layout would hold together as a face.'); } return; } runUnit(runOrder[i++], next); } next(); }
-  document.getElementById('runBtn').addEventListener('click',runGraph);
+  function runGraph(){ if(!nodes.length){ log('Run','Nothing to run — the board is empty. Add nodes first.'); return; } stepQueue=[]; stepActive=false; stepTotal=0; stepDone=0; refreshStepBtn(); nodes.forEach(function(n){n.status='idle'; n.detail=''; updateNode(n);}); groups.forEach(function(g){g.status='idle'; updateGroupFrame(g);}); broadcastSoon(); var t=topoUnits(); if(t.order.length<t.total){ log('Run','There is a loop in the wires — a graph with a cycle can never finish. Break the loop and run again.'); return; } if(!edges.length){ log('Run','No wires yet — Run stopped, and nothing was marked done. Wire at least one path (output dot → input dot), then run again.'); refreshStepBtn(); return; } var r=runnableOrder(t); if(!r.order.length){ log('Run','No wired path yet — Run stopped, and nothing was marked done. The wires on the board do not connect any nodes into a path. Wire at least one path, then run again.'); refreshStepBtn(); return; } if(r.unwired.length){ log('Run','Not wired — staying idle, not done: '+r.unwired.map(function(u){ return describeUnit(u); }).join(', ')+'. Wire '+(r.unwired.length===1?'it':'them')+' in to run '+(r.unwired.length===1?'it':'them')+'.'); } log('Run','Executing '+r.order.length+' step'+(r.order.length===1?'':'s')+' in wire order'+(groups.length?' — each group counts as one step: it holds the data and runs its pockets in sequence':'')+'…'); var runOrder=r.order; var i=0; function next(){ if(i>=runOrder.length){ var fails=nodes.filter(function(n){return n.status==='fail'}).length; var gfails=groups.filter(function(g){return g.status==='fail'}).length; if(fails||gfails){ log('Run','Finished with '+fails+' failed node(s)'+(gfails?' in '+gfails+' group(s)':'')+' — the red ones are your break point.'); } else if(r.unwired.length){ log('Run','Finished — the wired graph is green. '+r.unwired.length+' unwired '+(r.unwired.length===1?'piece stayed':'pieces stayed')+' idle above — not done, just not wired in.'); } else { log('Run','Finished — whole graph green. That layout would hold together as a face.'); } return; } runUnit(runOrder[i++], next); } next(); }
+  document.getElementById('runBtn').addEventListener('click',function(){ openPreviewWindow(); runGraph(); });
   var stepTotal=0, stepDone=0, stepActive=false;
   function describeUnit(uid){ var g=groupById(uid); if(g) return g.title+' — '+g.memberIds.length+' pockets in sequence'+(groupSwitch(g)?' · switch runs them till all pass'+(g.sequenceStored?' · sequence stored':''):''); var n=nodeById(uid); return n?n.title:uid; }
   function refreshStepBtn(){ var btn=document.getElementById('stepBtn'); if(!btn) return; if(stepActive&&stepQueue.length){ btn.textContent='Run by node — '+(stepDone+1)+' of '+stepTotal+': '+describeUnit(stepQueue[0]); return; } if(!nodes.length||!edges.length){ btn.textContent='Run by node'; return; } var t=topoUnits(); if(!t.order.length||t.order.length<t.total){ btn.textContent='Run by node'; return; } var r=runnableOrder(t); if(!r.order.length){ btn.textContent='Run by node'; return; } btn.textContent='Run by node — next: '+describeUnit(r.order[0])+' (1 of '+r.order.length+')'; }
