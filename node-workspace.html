@@ -251,7 +251,9 @@ html.board-mode .board-bar{display:flex;gap:8px;align-items:center;flex-wrap:wra
 .board-bar .bhint{flex-basis:100%;font-size:12px;opacity:.75}
 .board-bar button{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:8px 13px;cursor:pointer;font-weight:600;min-height:38px}
 .board-bar button.run{background:var(--accent);color:#fff;border-color:var(--accent)}
+.board-bar button.dock{background:var(--mint);color:var(--accent-dark);border-color:var(--mint);font-weight:700}
 .board-bar button.danger{background:#fff1f0;color:var(--red);border-color:#f0c9c5}
+.toolbar button.dock-ready{background:var(--mint);color:var(--accent-dark);border-color:var(--accent)}
 .board-bar .sp{margin-left:auto}
 html.board-mode .faq-wrap,html.board-mode .face-grid,html.board-mode .tutorial,html.board-mode .map,html.board-mode footer,html.board-mode .creator,html.board-mode .palette,html.board-mode .toolbar,html.board-mode .foldbar,html.board-mode .inspector,html.board-mode .ws-head,html.board-mode .resize-handle{display:none!important}
 html.board-mode .wrap{max-width:none;padding:10px 12px 20px}
@@ -297,7 +299,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
       <hr class="faq-divider">
       <section class="faq-ws" aria-label="About the Node Workspace">
         <h3>2 — Node Workspace — pop out, zoom, resize</h3>
-        <p>Same live graph, with room from the foldable tool groups above it. <b>Pop out</b> opens the breadboard in its own live window — just nodes and wires, no tools — drag it onto your second monitor. On the board, wipe one section or clear it all and start over in one tap; the tools stay here. <b>Zoom</b> with the Zoom − / Zoom + buttons in Window tools, Ctrl + scroll, or Fit to graph. <b>Resize</b> with the drag strip under the canvas. Drag empty canvas to pan; drag nodes to lay out the system; press Run and each node reports back. New to the board? Section 3 below is the <b>starter tutorial</b> — this is how you connect, this is how you delete, this is how the pop out functions, each with a Try it button.</p>
+        <p>Same live graph, with room from the foldable tool groups above it. <b>Pop out</b> opens the breadboard in its own live window — just nodes and wires, no tools — drag it onto your second monitor. <b>Put back</b> closes that pop-out window and returns to this main window — the button lives in both places: in the pop-out window itself, and in Window tools here. On the board, wipe one section or clear it all and start over in one tap; the tools stay here. <b>Zoom</b> with the Zoom − / Zoom + buttons in Window tools, Ctrl + scroll, or Fit to graph. <b>Resize</b> with the drag strip under the canvas. Drag empty canvas to pan; drag nodes to lay out the system; press Run and each node reports back. New to the board? Section 3 below is the <b>starter tutorial</b> — this is how you connect, this is how you delete, this is how the pop out functions, each with a Try it button.</p>
       </section>
     </div>
   </div>
@@ -336,7 +338,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   <!-- NODE WORKSPACE -->
   <section class="workspace" id="workspace">
     <div class="ws-head"><div><h2>2 — Node Workspace — pop out, zoom, resize</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="pill" id="spacePill">Canvas · 760px tall</span><span class="pill" id="countPill">6 nodes · 6 wires</span><span class="pill" id="orchPill" title="Run asks the real Rust orchestrator on this machine for the engine's health">Orchestrator · 127.0.0.1:7790</span></div></div>
-    <div class="board-bar" id="boardBar"><b>Node Workspace — breadboard</b><span class="bsub">Just the board — tools stay in the main window.</span><button class="run" id="boardRunBtn" type="button">▶ Run graph</button><button id="boardFitBtn" type="button">Fit graph</button><button id="boardGroupBtn" type="button">▣ Group selected</button><button id="boardUngroupBtn" type="button">▢ Ungroup</button><span class="sp"></span><button id="boardWipeBtn" type="button">⌫ Wipe selection</button><button class="danger" id="boardClearBtn" type="button">✕ Clear board</button><span class="bhint">Drag nodes to arrange · Ctrl / Shift + click (or Shift + drag a box) to pick a few nodes, then Group selected · A group holds the data for the unwired pockets inside it — wire into the group and out of it like any node, drag its dark bar to move it as one piece, and on Run it runs its pockets in sequence as one step · Drag a group frame’s bottom-right grip to resize it by hand (double-click it for the snug fit) · A Switch node (add it from the main window) has 8 ins and 1 out — group it with its pockets and it runs the group until the group is all passed; that pass is learned and stored as the group’s sequence, and only then does the out fire an ALL PASS to whatever the group is wired to · Click an output dot, then an input dot, to wire · Drag empty board to pan · Ctrl + scroll to zoom · Click a node to select it, then press Delete · Wipe selection clears the selected node or wire, Clear board wipes the whole board</span></div>
+    <div class="board-bar" id="boardBar"><b>Node Workspace — breadboard</b><span class="bsub">Just the board — tools stay in the main window.</span><button class="run" id="boardRunBtn" type="button">▶ Run graph</button><button id="boardFitBtn" type="button">Fit graph</button><button id="boardGroupBtn" type="button">▣ Group selected</button><button id="boardUngroupBtn" type="button">▢ Ungroup</button><span class="sp"></span><button class="dock" id="boardDockBtn" type="button">↩ Put back — return to main window</button><button id="boardWipeBtn" type="button">⌫ Wipe selection</button><button class="danger" id="boardClearBtn" type="button">✕ Clear board</button><span class="bhint">Put back closes this pop-out window and returns you to the main window — the graph stays exactly as it is (the same Put back button also lives in the main window’s Window tools, so you can close this window from either side) · Drag nodes to arrange · Ctrl / Shift + click (or Shift + drag a box) to pick a few nodes, then Group selected · A group holds the data for the unwired pockets inside it — wire into the group and out of it like any node, drag its dark bar to move it as one piece, and on Run it runs its pockets in sequence as one step · Drag a group frame’s bottom-right grip to resize it by hand (double-click it for the snug fit) · A Switch node (add it from the main window) has 8 ins and 1 out — group it with its pockets and it runs the group until the group is all passed; that pass is learned and stored as the group’s sequence, and only then does the out fire an ALL PASS to whatever the group is wired to · Click an output dot, then an input dot, to wire · Drag empty board to pan · Ctrl + scroll to zoom · Click a node to select it, then press Delete · Wipe selection clears the selected node or wire, Clear board wipes the whole board</span></div>
     <div class="foldbar"><button class="fold-toggle" id="foldRunBtn" type="button" aria-expanded="true" aria-controls="runToolsBody"><span>Run tools</span><span class="fold-sub">Run · Run by node — tap to fold</span><span class="fold-chev" aria-hidden="true">−</span></button></div>
     <div class="toolbar" id="runToolsBody">
       <button class="run" id="runBtn">▶ Run</button>
@@ -348,12 +350,14 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
       <button id="ungroupBtn">▢ Ungroup</button>
       <button id="clearBtn">Clear wires</button>
     </div>
-    <div class="foldbar"><button class="fold-toggle" id="foldWindowBtn" type="button" aria-expanded="true" aria-controls="windowToolsBody"><span>Window tools</span><span class="fold-sub">Zoom − · Zoom + · Fit to graph · Reset status — tap to fold</span><span class="fold-chev" aria-hidden="true">−</span></button></div>
+    <div class="foldbar"><button class="fold-toggle" id="foldWindowBtn" type="button" aria-expanded="true" aria-controls="windowToolsBody"><span>Window tools</span><span class="fold-sub">Zoom − · Zoom + · Fit to graph · Reset status · Pop out · Put back — tap to fold</span><span class="fold-chev" aria-hidden="true">−</span></button></div>
     <div class="toolbar" id="windowToolsBody">
       <button id="zoomOutBtn" aria-label="Zoom out">Zoom −</button>
       <button id="zoomInBtn" aria-label="Zoom in">Zoom +</button>
       <button id="fitBtn">Fit to graph</button>
       <button id="resetBtn">Reset status</button>
+      <button id="popBtn">⧉ Pop out</button>
+      <button id="dockBtn" type="button">↩ Put back</button>
     </div>
 
     <!-- NODE CREATOR -->
@@ -450,7 +454,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
           <li>Tap <b>⧉ Try it — pop the board out now</b> at the bottom of this card.</li>
           <li>A new window opens showing <b>just the board</b> — nodes, wires, Run, Fit, Wipe selection and Clear board. The Creator, palettes and inspector stay in this main window; that split is on purpose.</li>
           <li>The two windows are <b>the same live graph</b>: arrange, wire, delete or Run on either side and it shows up on both. Nothing is copied — it’s one board in two places.</li>
-          <li>Close the pop-out window whenever you like. The graph stays safe here in the main window.</li>
+          <li><b>Put it back when you’re done — the button lives in both places.</b> Tap <b>↩ Put back — return to main window</b> in the pop-out window itself, or tap <b>↩ Put back</b> in <b>Window tools</b> here in the main window. Either one closes the pop-out window and returns you to the main window. The graph stays safe and unchanged here.</li>
         </ol>
         <p class="tut-note">If your browser blocks the new window, the board opens in <b>Focus</b> instead — the workspace fills this screen — and the log tells you. Allow pop-ups for this page and Pop out will open its own window next time.</p>
         <div class="tut-try"><button class="primary" id="tutPopBtn" type="button">⧉ Try it — pop the board out now</button><a href="#workspace">Back to the board ↑</a></div>
@@ -862,6 +866,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   // status made on either side show up on both.
   var isBoardMode = (window.location.hash === '#breadboard');
   var instanceId = 'i' + Math.random().toString(36).slice(2, 10);
+  var lastDockId = '';
   var applyingRemote = false, lastSig = '', gotRemoteState = false;
   var popWinRef = null, popWatch = null, bcTimer = null;
   var syncChan = null;
@@ -916,6 +921,12 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     if (!msg || msg.from === instanceId) return;
     if (msg.type === 'rq-state') applyRemoteState(msg.state);
     else if (msg.type === 'rq-request') sendState();
+    else if (msg.type === 'rq-dock'){
+      if (msg.dockId && msg.dockId === lastDockId) return;
+      if (msg.dockId) lastDockId = msg.dockId;
+      if (isBoardMode){ putBackFromBoard(true); }
+      else { log('Put back','The pop-out window put the board back — returning to this main window. The graph is unchanged.'); try { window.focus(); } catch (err) {} setTimeout(updateDockBtn, 500); setTimeout(updateDockBtn, 1400); }
+    }
   }
   window.addEventListener('message', function(e){ onSyncMsg(e.data); });
   if (syncChan) syncChan.onmessage = function(e){ onSyncMsg(e.data); };
@@ -946,21 +957,87 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   }
   function popFallback(why){
     document.body.classList.add('ws-focus'); var fb2=document.getElementById('focusBtn'); if(fb2) fb2.textContent = '⛶ Exit focus (Esc)';
-    log('Pop out', why + ', so Focus mode is on instead — the workspace fills this screen. Allow pop-ups for this page and Pop out will open the breadboard in its own window.');
+    log('Pop out', why + ', so Focus mode is on instead — the workspace fills this screen. Put back in Window tools brings it back to the normal page. Allow pop-ups for this page and Pop out will open the breadboard in its own window.');
+    updateDockBtn();
+  }
+  function updateDockBtn(){
+    var btn=document.getElementById('dockBtn'); if(!btn) return;
+    var popped=(popWinRef && !popWinRef.closed) || document.body.classList.contains('ws-focus');
+    btn.textContent=popped?'↩ Put back — close pop-out':'↩ Put back';
+    btn.classList.toggle('dock-ready', !!popped);
+    btn.setAttribute('aria-disabled', popped?'false':'true');
+    btn.title=popped?'Close the pop-out window and return to the main window':'The board is not popped out right now — Pop out first, then Put back closes it';
+  }
+  function sendDockRequest(){
+    var msg={ type:'rq-dock', from:instanceId, dockId:instanceId + '-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7) };
+    if (syncChan){ try { syncChan.postMessage(msg); } catch (err) {} }
+    var targets=[];
+    if (popWinRef && !popWinRef.closed) targets.push(popWinRef);
+    if (isBoardMode && window.opener && window.opener !== window) targets.push(window.opener);
+    targets.forEach(function(t){ try { t.postMessage(msg, '*'); } catch (err) {} });
+  }
+  function putBackFromBoard(fromRemote){
+    if (!isBoardMode) return;
+    try { sendState(); } catch (err) {}
+    if (!fromRemote){ try { sendDockRequest(); } catch (err) {} }
+    log('Put back','Putting the board back — closing this pop-out window and returning to the main window. The graph stays exactly as it is.');
+    try { if (window.opener && !window.opener.closed) window.opener.focus(); } catch (err) {}
+    setTimeout(function(){
+      try { window.close(); } catch (err) {}
+      setTimeout(function(){
+        if (!window.closed){
+          // This window was not opened by Pop out (e.g. opened directly),
+          // so the browser will not let the page close it — return to the
+          // main window view in this same window instead.
+          window.location.hash='';
+          window.location.href=window.location.href.split('#')[0];
+        }
+      }, 350);
+    }, 160);
+  }
+  function closePopout(){
+    var hadPop=!!(popWinRef && !popWinRef.closed);
+    var wasFocus=document.body.classList.contains('ws-focus');
+    if (hadPop){
+      try { sendDockRequest(); } catch (err) {}
+      try { popWinRef.close(); } catch (err) {}
+      popWinRef=null;
+      if (popWatch){ clearInterval(popWatch); popWatch=null; }
+      log('Put back','Board put back — the pop-out window is closed and you are back in the main window. The graph is still here, unchanged. You can also put it back from the pop-out window itself, with the Put back button in its board bar.');
+    } else if (wasFocus){
+      document.body.classList.remove('ws-focus');
+      var fb3=document.getElementById('focusBtn'); if(fb3) fb3.textContent='⛶ Focus — fill screen';
+      log('Put back','Board put back — Focus mode off, back to the normal main window. (Focus was standing in for a pop-out window the browser blocked.)');
+    } else {
+      // No window handle held here — the board may still be out via the
+      // live link (e.g. this window was refreshed). Ask any linked
+      // breadboard window to put itself back.
+      try { sendDockRequest(); } catch (err) {}
+      log('Put back','Nothing to put back from here right now — the board is not popped out in a window this page is holding. If a breadboard window is still open, its own Put back button (in its board bar) closes it and returns here.');
+    }
+    updateDockBtn();
+    // The breadboard closes asynchronously when it answers the dock
+    // request — refresh the button state once it has had time to go.
+    setTimeout(updateDockBtn, 500);
+    setTimeout(updateDockBtn, 1400);
   }
   function openPopout(){
-    if (popWinRef && !popWinRef.closed){ try { popWinRef.focus(); } catch (err) {} sendState(); return; }
+    if (popWinRef && !popWinRef.closed){ try { popWinRef.focus(); } catch (err) {} sendState(); updateDockBtn(); return; }
     var w = null;
     try { w = window.open(window.location.href.split('#')[0] + '#breadboard', 'rq-breadboard', 'width=1440,height=920,menubar=no,toolbar=no,location=no'); } catch (err) { w = null; }
     if (!w){ popFallback('The browser blocked the new window'); return; }
     popWinRef = w;
-    log('Pop out','Breadboard opening in its own window — the same page in board-only mode, kept live from here. Drag that window onto your second monitor. Tools stay here; over there it is just the board: arrange, wire, run, wipe a section, or clear it all and start over.');
+    log('Pop out','Breadboard opening in its own window — the same page in board-only mode, kept live from here. Drag that window onto your second monitor. Tools stay here; over there it is just the board: arrange, wire, run, wipe a section, or clear it all and start over. Put it back any time: Put back in Window tools here, or Put back in the pop-out window itself — either closes the pop-out and returns to this main window.');
+    updateDockBtn();
     [600, 1600, 3200].forEach(function(ms){ setTimeout(function(){ if (popWinRef && !popWinRef.closed) sendState(); }, ms); });
     if (popWatch) clearInterval(popWatch);
-    popWatch = setInterval(function(){ if (popWinRef && popWinRef.closed){ popWinRef = null; clearInterval(popWatch); popWatch = null; } }, 800);
+    popWatch = setInterval(function(){ if (popWinRef && popWinRef.closed){ popWinRef = null; clearInterval(popWatch); popWatch = null; updateDockBtn(); } }, 800);
   }
   var popBtnEl=document.getElementById('popBtn');
   if(popBtnEl) popBtnEl.addEventListener('click', openPopout);
+  var dockBtnEl=document.getElementById('dockBtn');
+  if(dockBtnEl) dockBtnEl.addEventListener('click', closePopout);
+  updateDockBtn();
   // STARTER TUTORIAL — its Try-it buttons drive the real controls above
   var tutPopBtn=document.getElementById('tutPopBtn');
   if(tutPopBtn) tutPopBtn.addEventListener('click', function(){ document.getElementById('workspace').scrollIntoView({behavior:'smooth'}); openPopout(); });
@@ -979,10 +1056,12 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     if (bWipe) bWipe.addEventListener('click', function(){ wipeSelection(); });
     var bClear = document.getElementById('boardClearBtn');
     if (bClear) bClear.addEventListener('click', function(){ clearBoard(); });
+    var bDock = document.getElementById('boardDockBtn');
+    if (bDock) bDock.addEventListener('click', function(){ putBackFromBoard(false); });
     sendStateRequest();
     setTimeout(sendStateRequest, 700);
     setTimeout(function(){ if (!gotRemoteState) sendStateRequest(); }, 2200);
-    log('Board', (window.opener ? 'Breadboard window — live-linked to the main window. Arrange, wire and run here; the tools stay over there.' : 'Breadboard window — no main window linked, so this board runs on its own. Arrange, wire and run here.'));
+    log('Board', (window.opener ? 'Breadboard window — live-linked to the main window. Arrange, wire and run here; the tools stay over there. Tap Put back above to close this window and return to the main window — or use Put back in the main window’s Window tools.' : 'Breadboard window — no main window linked, so this board runs on its own. Arrange, wire and run here. Tap Put back above to return to the main window view.'));
   }
 
   // PUT IT ON METAL — manifest download from the live graph
