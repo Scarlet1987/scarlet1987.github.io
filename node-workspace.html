@@ -106,6 +106,23 @@ a{color:var(--accent)}
 .palette{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .palette button{font-weight:500;font-size:13px;background:var(--sage)}
 .palette button::before{content:"＋ "}
+.toolbar{margin-top:8px}
+.palette{margin-top:8px}
+/* COLLAPSIBLE PANELS — toolbar, Node Creator and Quick Add each fold down
+   to one line so the canvas gets the room; tap the line to open again. */
+.foldbar{margin-top:14px}
+.fold-toggle{width:100%;display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 8px 8px 13px;cursor:pointer;font-weight:700;font-size:13.5px;color:var(--ink);text-align:left}
+.fold-toggle:hover{border-color:var(--accent)}
+.fold-toggle:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.fold-toggle .fold-sub{font-weight:500;color:var(--muted);font-size:12.5px}
+.fold-toggle .fold-chev,.fold-chevbtn{flex:0 0 auto;width:32px;height:32px;min-height:32px;border-radius:50%;border:1px solid var(--line);background:var(--sage);color:var(--accent);display:grid;place-items:center;font-size:18px;line-height:1;padding:0}
+.fold-toggle .fold-chev{margin-left:auto}
+.fold-chevbtn{cursor:pointer}
+.fold-chevbtn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.fold-hidden{display:none!important}
+.creator-head{cursor:pointer}
+.creator.folded .creator-head p{display:none}
+.creator.folded .creator-head .pill{display:none}
 .layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px;margin-top:14px}
 .layout.wide{grid-template-columns:minmax(0,1fr)}
 .layout.wide .inspector{display:none}
@@ -184,7 +201,30 @@ body.ws-focus .toolbar{position:relative;z-index:95}
 .node.dragging{z-index:6;box-shadow:0 12px 26px rgba(0,0,0,.18)}
 .node-head{padding:9px 11px;border-radius:12px 12px 0 0;color:#fff;font-weight:700;font-size:13px;display:flex;justify-content:space-between;cursor:grab}
 .node-head:active{cursor:grabbing}
-.kind-face .node-head{background:var(--accent)} .kind-engine .node-head{background:var(--accent-dark)} .kind-orch .node-head{background:#7a5a12} .kind-data .node-head{background:#33566b} .kind-check .node-head{background:#6b3a2a}
+.kind-face .node-head{background:var(--accent)} .kind-engine .node-head{background:var(--accent-dark)} .kind-orch .node-head{background:#7a5a12} .kind-data .node-head{background:#33566b} .kind-check .node-head{background:#6b3a2a} .kind-group .node-head{background:#3f4a3a} .kind-switch .node-head{background:#23424a}
+.node.switch-node{width:196px;min-height:228px;display:flex;flex-direction:column}
+.switch-node .node-body{flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-between;gap:8px;padding:10px 11px 12px 28px}
+.switch-meta{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--ink);line-height:1.5}
+.switch-slots{display:flex;gap:3px;flex-wrap:wrap}
+.switch-slots i{width:16px;height:9px;border-radius:3px;background:var(--line);display:block}
+.switch-slots i.wired{background:#7fa892}
+.switch-slots i.pass{background:var(--accent)}
+.switch-slots i.bad{background:var(--red)}
+.port.in-switch{transform:translateY(-50%)}
+.port-num{position:absolute;left:15px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px;font-weight:700;color:var(--muted);transform:translateY(-50%);pointer-events:none;z-index:2}
+.node.multi{outline:3px dashed var(--accent);outline-offset:3px}
+.node.in-group{box-shadow:0 6px 18px rgba(0,0,0,.10), inset 0 0 0 1px rgba(0,145,79,.25)}
+.group-frame{position:absolute;border:2px solid var(--accent);border-radius:16px;background:rgba(0,145,79,.06);box-shadow:0 4px 18px rgba(6,46,29,.10);z-index:0}
+.group-frame.selected{border-color:var(--accent-dark);box-shadow:0 0 0 3px rgba(0,145,79,.22),0 8px 22px rgba(0,0,0,.12);background:rgba(0,145,79,.09)}
+.group-frame.gst-running{border-color:var(--amber)} .group-frame.gst-done{border-color:var(--accent)} .group-frame.gst-fail{border-color:var(--red);background:rgba(180,35,24,.06)}
+.group-head{position:absolute;top:0;left:0;right:0;height:30px;display:flex;align-items:center;gap:8px;padding:0 10px;background:var(--accent-dark);color:var(--mint);border-radius:14px 14px 0 0;font-size:12.5px;font-weight:700;cursor:grab;user-select:none}
+.group-head:active{cursor:grabbing}
+.group-head .gcount{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;font-weight:500;opacity:.85}
+.group-head .gstatus{margin-left:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+.group-frame .port{top:50%}
+.group-resize{position:absolute;right:1px;bottom:1px;width:26px;height:26px;cursor:nwse-resize;z-index:4;display:grid;place-items:center;color:var(--mint);background:var(--accent-dark);border-radius:8px 0 14px 0;font-size:12px;line-height:1;opacity:.85;user-select:none;touch-action:none}
+.group-resize:hover{opacity:1;background:var(--accent)}
+.marquee{position:absolute;border:1.5px dashed var(--accent);background:rgba(0,145,79,.10);z-index:20;pointer-events:none;border-radius:6px}
 .node-body{padding:9px 11px 11px;font-size:12px;color:var(--muted)}
 .status{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
 .status::before{content:"● "}
@@ -213,7 +253,7 @@ html.board-mode .board-bar{display:flex;gap:8px;align-items:center;flex-wrap:wra
 .board-bar button.run{background:var(--accent);color:#fff;border-color:var(--accent)}
 .board-bar button.danger{background:#fff1f0;color:var(--red);border-color:#f0c9c5}
 .board-bar .sp{margin-left:auto}
-html.board-mode .faq-wrap,html.board-mode .face-grid,html.board-mode .tutorial,html.board-mode .map,html.board-mode footer,html.board-mode .creator,html.board-mode .palette,html.board-mode .toolbar,html.board-mode .inspector,html.board-mode .ws-head,html.board-mode .resize-handle{display:none!important}
+html.board-mode .faq-wrap,html.board-mode .face-grid,html.board-mode .tutorial,html.board-mode .map,html.board-mode footer,html.board-mode .creator,html.board-mode .palette,html.board-mode .toolbar,html.board-mode .foldbar,html.board-mode .inspector,html.board-mode .ws-head,html.board-mode .resize-handle{display:none!important}
 html.board-mode .wrap{max-width:none;padding:10px 12px 20px}
 html.board-mode .workspace{margin-top:0}
 html.board-mode .layout{grid-template-columns:minmax(0,1fr);margin-top:0}
@@ -257,7 +297,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
       <hr class="faq-divider">
       <section class="faq-ws" aria-label="About the Node Workspace">
         <h3>2 — Node Workspace — pop out, zoom, resize</h3>
-        <p>Same live graph, three ways to get room. <b>Pop out</b> opens the breadboard in its own live window — just nodes and wires, no tools — drag it onto your second monitor. On the board, wipe one section or clear it all and start over in one tap; the tools stay here. <b>Zoom</b> with the − / + buttons, Ctrl + scroll, or Fit. <b>Resize</b> with Wide view, Taller canvas, the drag strip under the canvas, or Focus to fill the screen. Drag empty canvas to pan; drag nodes to lay out the system; press Run and each node reports back. New to the board? Section 3 below is the <b>starter tutorial</b> — this is how you connect, this is how you delete, this is how the pop out functions, each with a Try it button.</p>
+        <p>Same live graph, with room from the foldable tool groups above it. <b>Pop out</b> opens the breadboard in its own live window — just nodes and wires, no tools — drag it onto your second monitor. On the board, wipe one section or clear it all and start over in one tap; the tools stay here. <b>Zoom</b> with the Zoom − / Zoom + buttons in Window tools, Ctrl + scroll, or Fit to graph. <b>Resize</b> with the drag strip under the canvas. Drag empty canvas to pan; drag nodes to lay out the system; press Run and each node reports back. New to the board? Section 3 below is the <b>starter tutorial</b> — this is how you connect, this is how you delete, this is how the pop out functions, each with a Try it button.</p>
       </section>
     </div>
   </div>
@@ -295,59 +335,68 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
 
   <!-- NODE WORKSPACE -->
   <section class="workspace" id="workspace">
-    <div class="ws-head"><div><h2>2 — Node Workspace — pop out, zoom, resize</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="pill" id="spacePill">Canvas · 760px tall</span><span class="pill" id="countPill">6 nodes · 6 wires</span></div></div>
-    <div class="board-bar" id="boardBar"><b>Node Workspace — breadboard</b><span class="bsub">Just the board — tools stay in the main window.</span><button class="run" id="boardRunBtn" type="button">▶ Run graph</button><button id="boardFitBtn" type="button">Fit graph</button><span class="sp"></span><button id="boardWipeBtn" type="button">⌫ Wipe selection</button><button class="danger" id="boardClearBtn" type="button">✕ Clear board</button><span class="bhint">Drag nodes to arrange · Click an output dot, then an input dot, to wire · Drag empty board to pan · Ctrl + scroll to zoom · Click a node to select it, then press Delete · Wipe selection clears the selected node or wire, Clear board wipes the whole board</span></div>
-    <div class="toolbar">
-      <button class="run" id="runBtn">▶ Run graph</button>
-      <button id="stepBtn">Step once</button>
-      <button id="resetBtn">Reset status</button>
-      <button id="exampleBtn">Load Red Queen example</button>
+    <div class="ws-head"><div><h2>2 — Node Workspace — pop out, zoom, resize</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="pill" id="spacePill">Canvas · 760px tall</span><span class="pill" id="countPill">6 nodes · 6 wires</span><span class="pill" id="orchPill" title="Run asks the real Rust orchestrator on this machine for the engine's health">Orchestrator · 127.0.0.1:7790</span></div></div>
+    <div class="board-bar" id="boardBar"><b>Node Workspace — breadboard</b><span class="bsub">Just the board — tools stay in the main window.</span><button class="run" id="boardRunBtn" type="button">▶ Run graph</button><button id="boardFitBtn" type="button">Fit graph</button><button id="boardGroupBtn" type="button">▣ Group selected</button><button id="boardUngroupBtn" type="button">▢ Ungroup</button><span class="sp"></span><button id="boardWipeBtn" type="button">⌫ Wipe selection</button><button class="danger" id="boardClearBtn" type="button">✕ Clear board</button><span class="bhint">Drag nodes to arrange · Ctrl / Shift + click (or Shift + drag a box) to pick a few nodes, then Group selected · A group holds the data for the unwired pockets inside it — wire into the group and out of it like any node, drag its dark bar to move it as one piece, and on Run it runs its pockets in sequence as one step · Drag a group frame’s bottom-right grip to resize it by hand (double-click it for the snug fit) · A Switch node (add it from the main window) has 8 ins and 1 out — group it with its pockets and it runs the group until the group is all passed; that pass is learned and stored as the group’s sequence, and only then does the out fire an ALL PASS to whatever the group is wired to · Click an output dot, then an input dot, to wire · Drag empty board to pan · Ctrl + scroll to zoom · Click a node to select it, then press Delete · Wipe selection clears the selected node or wire, Clear board wipes the whole board</span></div>
+    <div class="foldbar"><button class="fold-toggle" id="foldRunBtn" type="button" aria-expanded="true" aria-controls="runToolsBody"><span>Run tools</span><span class="fold-sub">Run · Run by node — tap to fold</span><span class="fold-chev" aria-hidden="true">−</span></button></div>
+    <div class="toolbar" id="runToolsBody">
+      <button class="run" id="runBtn">▶ Run</button>
+      <button id="stepBtn">Run by node</button>
+    </div>
+    <div class="foldbar"><button class="fold-toggle" id="foldGroupBtn" type="button" aria-expanded="true" aria-controls="groupToolsBody"><span>Group tools</span><span class="fold-sub">Group selected · Ungroup · Clear wires — tap to fold</span><span class="fold-chev" aria-hidden="true">−</span></button></div>
+    <div class="toolbar" id="groupToolsBody">
+      <button id="groupBtn">▣ Group selected</button>
+      <button id="ungroupBtn">▢ Ungroup</button>
       <button id="clearBtn">Clear wires</button>
-      <button id="wideBtn">↔ Wide view — hide inspector</button>
-      <button id="tallBtn">↕ Taller canvas</button>
-      <button id="popBtn" class="primary">⧉ Pop out — own window</button>
-      <button id="focusBtn">⛶ Focus — fill screen</button>
-      <!-- Zoom has two UIs on purpose (2026-11-18): this toolbar row and the floating zoombar on the canvas — both stay. -->
-      <button id="zoomOutBtn" aria-label="Zoom out">− Zoom</button>
-      <button id="zoomResetBtn">100%</button>
-      <button id="zoomInBtn" aria-label="Zoom in">+ Zoom</button>
-      <button id="fitBtn">Fit graph</button>
+    </div>
+    <div class="foldbar"><button class="fold-toggle" id="foldWindowBtn" type="button" aria-expanded="true" aria-controls="windowToolsBody"><span>Window tools</span><span class="fold-sub">Zoom − · Zoom + · Fit to graph · Reset status — tap to fold</span><span class="fold-chev" aria-hidden="true">−</span></button></div>
+    <div class="toolbar" id="windowToolsBody">
+      <button id="zoomOutBtn" aria-label="Zoom out">Zoom −</button>
+      <button id="zoomInBtn" aria-label="Zoom in">Zoom +</button>
+      <button id="fitBtn">Fit to graph</button>
+      <button id="resetBtn">Reset status</button>
     </div>
 
     <!-- NODE CREATOR -->
     <div class="creator" id="maker">
-      <div class="creator-head"><div><h3>✦ Node Creator — in the Maker</h3><p>Don’t just pick from the palette. Build your own node: name it, choose what kind of piece it is, say what it does in plain words, then drop it straight onto the canvas ready to wire.</p></div><span class="pill">Maker · Custom nodes</span></div>
+      <div class="creator-head" id="creatorHead"><div><h3>✦ Node Creator — in the Maker</h3><p>Don’t just pick from the palette. Build your own node: name it, choose what kind of piece it is, say what it does in plain words, then drop it straight onto the canvas ready to wire.</p></div><span class="pill">Maker · Custom nodes</span><button class="fold-chevbtn" id="foldCreatorBtn" type="button" aria-expanded="true" aria-controls="creatorBody" aria-label="Fold the Node Creator down to one line">−</button></div>
+      <div id="creatorBody">
       <div class="creator-grid">
         <div><label for="newTitle">Node name</label><input id="newTitle" placeholder="e.g. Voice input, Save to disk, Image panel" value="My new node"></div>
-        <div><label for="newKind">Kind — what layer is it?</label><select id="newKind"><option value="face">Face panel — people see it</option><option value="orch">Orchestrator — routes &amp; holds shape</option><option value="engine">Rust engine — does the work</option><option value="data">Data table — lookup / saved map</option><option value="check">Benchmark / check — proves it works</option></select></div>
+        <div><label for="newKind">Kind — what layer is it?</label><select id="newKind"><option value="face">Face panel — people see it</option><option value="orch">Orchestrator — routes &amp; holds shape</option><option value="engine">Rust engine — does the work</option><option value="data">Data table — lookup / saved map</option><option value="check">Benchmark / check — proves it works</option><option value="switch">Switch — 8 ins, 1 out, all-pass gate</option></select></div>
         <div><label for="newNotes">What it does</label><input id="newNotes" placeholder="Plain words — what goes in, what comes out"></div>
         <button class="create-btn" id="createCustomBtn">+ Create node → canvas</button>
       </div>
       <div class="templates" aria-label="Start from a template">
         <span style="font-size:12px;color:var(--muted);align-self:center;font-weight:700">START FROM:</span>
+        <button data-template="face|Start button|Face panel — the Start button. Tap it and it brings up the installed apps, so you can pick one to open.">⊞ Start button</button>
         <button data-template="face|Mic button|Face panel people tap to speak. Sends audio to the orchestrator.">🎙 Mic button</button>
         <button data-template="engine|Image generator|Rust engine job. Takes a prompt, returns an image on local hardware.">Image generator</button>
         <button data-template="data|Character table|Lookup table: characters, settings, what survives a restart. Compute once, save the map.">Character table</button>
         <button data-template="orch|Failure guard|Watches inner nodes. If one fails, contains it so the face stays up.">Failure guard</button>
         <button data-template="check|VRAM check|First-run check: is there enough VRAM / RAM on this machine? Pass or show the break here.">VRAM / RAM check</button>
         <button data-template="face|Store panel|Face panel for the store. One-time purchase, no rent, works offline after download.">Store panel</button>
+        <button data-template="switch|Switch|Switch — 8 ins, 1 out. Pockets wire into its ins; only when every pocket passes does its one out fire an ALL PASS to whatever comes next — the HUD face, or any output the group is wired to. If a pocket fails, the switch finds it and holds the signal.">⇄ Switch — 8 in · 1 out</button>
+      </div>
       </div>
     </div>
 
-    <div class="palette" aria-label="Quick add a node">
+    <div class="foldbar"><button class="fold-toggle" id="foldQuickBtn" type="button" aria-expanded="true" aria-controls="paletteBody"><span>Quick add</span><span class="fold-sub">One tap drops a node on the canvas — tap to fold</span><span class="fold-chev" aria-hidden="true">−</span></button></div>
+    <div class="palette" id="paletteBody" aria-label="Quick add a node">
       <span style="font-size:12px;align-self:center;color:var(--muted);font-weight:700">QUICK ADD:</span>
-      <button data-add="face">Face panel</button><button data-add="orch">Orchestrator</button><button data-add="engine">Rust engine</button><button data-add="data">Data table</button><button data-add="check">Benchmark / check</button>
+      <button data-add="face">Face panel</button><button data-add="orch">Orchestrator</button><button data-add="engine">Rust engine</button><button data-add="data">Data table</button><button data-add="check">Benchmark / check</button><button data-add="switch">Switch — 8 in · 1 out</button>
     </div>
     <div class="layout">
       <div class="canvas-wrap"><div class="canvas" id="canvas"><div class="world" id="world"><svg id="wires"></svg></div><div class="zoombar" role="group" aria-label="Canvas zoom"><button id="zoomOutBtn2" aria-label="Zoom out">−</button><button class="zpct" id="zoomPctBtn" title="Reset zoom to 100%">100%</button><button id="zoomInBtn2" aria-label="Zoom in">+</button><button id="fitBtn2">Fit</button></div></div><div class="resize-handle" id="resizeHandle" title="Drag to resize the canvas height">⠿ ⠿ ⠿ drag to resize ⠿ ⠿ ⠿</div><div style="padding:9px 12px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)">Drag a node by its coloured bar · Drag empty canvas to pan · Ctrl + scroll to zoom · Click a wire to select it, then press Delete · Drag the strip above to make the canvas taller or shorter</div></div>
       <aside class="inspector" id="inspector">
         <h3 id="inspTitle">Nothing selected</h3><p id="inspDesc">Click any node to see what it is, what it needs, and whether it passed on the last run.</p>
         <label for="inspName">Name</label><input id="inspName" placeholder="Select a node first">
-        <label for="inspKind">Kind</label><select id="inspKind"><option value="face">Face panel</option><option value="orch">Orchestrator</option><option value="engine">Rust engine</option><option value="data">Data table</option><option value="check">Benchmark / check</option></select>
+        <label for="inspKind">Kind</label><select id="inspKind"><option value="face">Face panel</option><option value="orch">Orchestrator</option><option value="engine">Rust engine</option><option value="data">Data table</option><option value="check">Benchmark / check</option><option value="switch">Switch — 8 ins, 1 out, all-pass gate</option><option value="group">Group — holds the data, runs its pockets in sequence</option></select>
         <label for="inspNotes">What it does</label><textarea id="inspNotes" placeholder="Plain words — what this piece does in the system"></textarea>
         <label>Status</label><div id="inspStatus" class="status st-idle" style="margin-top:6px">idle</div>
         <div class="row"><button id="dupBtn">Duplicate</button><button id="delBtn" class="danger">Delete node</button></div>
-        <p class="hint" id="wireHint">Wiring: click an output dot (right side) — it glows — then click an input dot (left side) on the next node.</p>
+        <div class="row"><button id="inspGroupBtn" type="button">▣ Group picked nodes</button><button id="inspUngroupBtn" type="button">▢ Ungroup</button></div>
+        <p class="hint" id="groupHint">Groups: Ctrl / Shift + click nodes (or Shift + drag a box on empty board) to pick a few, then Group selected. The group holds the data — the nodes inside are data pockets, unwired to each other, and the group runs them in sequence as one step. The group is a node itself: wire into its left dot and out of its right dot. Ungroup any time — the pockets stay where they are. Put a Switch in the group and the switch runs the group until it is all passed — that pass is learned and stored as the group’s sequence, and only then does the group’s out fire. Resize a group by hand: drag the grip in the frame’s bottom-right corner — the pockets stay put, only the frame grows; double-click the grip to snap back to the snug fit.</p>
+        <p class="hint" id="wireHint">Wiring: click an output dot (right side) — it glows — then click an input dot (left side) on the next node. Groups have the same dots on their frame. A Switch has 8 numbered input dots down its left side — wire up to 8 pockets into them, one per dot — and one output dot on its right.</p>
       </aside>
     </div>
     <div class="log" id="log"><div><b>Ready.</b> Example graph loaded — Face → Orchestrator → Engine, with the session table and benchmark hanging off the orchestrator, the way Red Queen is actually built.</div></div>
@@ -389,7 +438,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
           <li><b>Every wire:</b> <b>Clear wires</b> in the toolbar removes all the wiring and keeps the nodes, ready to rewire.</li>
           <li><b>In the pop-out window:</b> <b>Wipe selection</b> clears just the selected node or wire; <b>Clear board</b> wipes the whole board in one tap.</li>
         </ul>
-        <p class="tut-note">Deleted something by mistake? Reload the example with <b>Load Red Queen example</b> in the toolbar to get the starter graph back.</p>
+        <p class="tut-note">Deleted something by mistake? Reload the page to get the starter graph back.</p>
         <div class="tut-try"><a class="primary" href="#workspace">Try it — go to the board ↑</a></div>
       </article>
 
@@ -398,7 +447,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
         <h3>This is how the pop out functions</h3>
         <p>Pop out gives the board <b>its own window</b>, so you can drag it onto a second monitor and keep the tools in front of you here.</p>
         <ol>
-          <li>Tap <b>⧉ Pop out — own window</b> in the toolbar above the board.</li>
+          <li>Tap <b>⧉ Try it — pop the board out now</b> at the bottom of this card.</li>
           <li>A new window opens showing <b>just the board</b> — nodes, wires, Run, Fit, Wipe selection and Clear board. The Creator, palettes and inspector stay in this main window; that split is on purpose.</li>
           <li>The two windows are <b>the same live graph</b>: arrange, wire, delete or Run on either side and it shows up on both. Nothing is copied — it’s one board in two places.</li>
           <li>Close the pop-out window whenever you like. The graph stays safe here in the main window.</li>
@@ -413,7 +462,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
         <p>Two ways, both above the board:</p>
         <ul>
           <li><b>Quick add:</b> tap a button in the QUICK ADD row — Face panel, Orchestrator, Rust engine, Data table, Benchmark / check — and the node lands on the board, already selected.</li>
-          <li><b>Node Creator (the Maker):</b> name your own node, pick what kind of piece it is, say in plain words what it does, then <b>+ Create node → canvas</b>. Templates like Mic button and Failure guard fill the form in for you.</li>
+          <li><b>Node Creator (the Maker):</b> name your own node, pick what kind of piece it is, say in plain words what it does, then <b>+ Create node → canvas</b>. Templates like Start button, Mic button and Failure guard fill the form in for you.</li>
         </ul>
         <p class="tut-note">Drag a new node by its coloured top bar to move it, then wire it in — output dot to input dot.</p>
         <div class="tut-try"><a class="primary" href="#maker">Try it — open the Maker ↑</a></div>
@@ -424,12 +473,47 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
         <h3>This is how you run it</h3>
         <p><b>▶ Run graph</b> walks the wires in order and each node reports back underneath its name:</p>
         <ul>
+          <li><b>Rust engine does real work.</b> When a Rust engine pocket runs, it asks the real Rust orchestrator on this machine — <b>GET http://127.0.0.1:7790/api/health</b> — for the engine’s real health. A real <b>ok</b> passes the pocket; <b>degraded</b> or <b>engine_failed</b> fails it, and the log shows the real pid, restarts, failures, queue depth and uptime that came back. If the orchestrator isn’t reachable, the log says so plainly and that pocket plays the demo instead, so the board still works with nothing running. The other pockets still run as demo steps for now.</li>
           <li><b>IDLE</b> — not run yet. <b>RUNNING</b> — its turn. <b>DONE</b> — passed.</li>
           <li><b>FAIL</b> — that’s the break. A node whose input failed is skipped and marked, and the log under the board says where it stopped — the rest of the face stays up.</li>
-          <li><b>Step once</b> runs one node per tap, if you want to watch it slowly. <b>Reset status</b> puts every node back to idle.</li>
+          <li><b>Run by node</b> runs one node at a time — one step per tap, if you want to watch it slowly — and the button <b>names the next node before you tap it</b>, like “Run by node — 2 of 3: Group 1 — 4 pockets in sequence”. A group is one step: one tap runs all its pockets. The first tap resets the board to idle before step 1, and the log says so when it happens. <b>Reset status</b> (in Window tools) puts every node back to idle.</li>
+          <li><b>Not wired — stays idle.</b> Run only walks the wires. If there are <b>no wires at all</b>, Run stops right there and <b>nothing turns done</b>. If only some nodes are unwired, those <b>stay idle</b> and the log <b>names them as not wired</b> — wire them in and run again.</li>
         </ul>
         <p class="tut-note">If the log says there’s a loop in the wires, a wire circles back on itself — delete one wire in the circle and run again.</p>
         <div class="tut-try"><button class="primary" id="tutRunBtn" type="button">▶ Try it — run the graph now</button></div>
+      </article>
+
+      <article class="tut-card" id="tut-group">
+        <span class="tut-kicker">Grouping · like draw.io</span>
+        <h3>This is how you group nodes</h3>
+        <p>Pick a few nodes and put a frame around them — the frame <b>moves as one piece</b>, and the group itself works <b>like a node</b>. The nodes inside are <b>data pockets</b>: they are <b>not wired to each other</b>. The <b>group holds the data</b>, and the group tells the program to <b>run the pockets in sequence</b>.</p>
+        <ol>
+          <li><b>Pick:</b> hold <b>Ctrl</b> (or <b>Shift</b>) and click each node you want — picked nodes get a dashed green outline. Or hold <b>Shift</b> and drag a box on empty board around them.</li>
+          <li><b>Group:</b> tap <b>▣ Group selected</b> in the toolbar. A framed group appears around them with its own name bar. Any wires <b>between</b> the picked nodes come off — pockets inside a group are unwired by design, because the group holds their data.</li>
+          <li><b>Move it:</b> drag the group’s dark name bar — or drag any node inside it — and the whole group moves together.</li>
+          <li><b>Resize it:</b> drag the <b>grip in the frame’s bottom-right corner</b> to resize the group by hand — give it more room without moving a single pocket; only the frame grows. The frame never shrinks smaller than its pockets. <b>Double-click the grip</b> to snap back to the snug fit.</li>
+          <li><b>Wire it:</b> the frame has the same dots as a node — an <b>input dot on its left</b> and an <b>output dot on its right</b>. Wire into the group and out of the group just like any other node. There are <b>no wires between the pockets inside</b> — the group holds their data, so they don’t need any, and the board won’t let you draw one.</li>
+          <li><b>Run it:</b> press <b>▶ Run graph</b>. When the group’s turn comes, the group runs its pockets <b>in sequence, as one step</b> — in the order they were picked into the group, listed numbered in the inspector when the group is selected. The frame shows RUNNING, then DONE or FAIL, and the log names the group and each pocket as it runs. If the group holds a <b>Switch</b>, the switch <b>runs the group until it is all passed</b>, and that pass is <b>learned and stored</b> as the group’s sequence — only then does the group’s out fire — see the switch card below.</li>
+          <li><b>Step it:</b> <b>Run by node</b> counts a group as one step too, but the button <b>says so before it happens</b> — “Run by node — 2 of 3: Group 1 — 4 pockets in sequence” — so one tap running the whole set is never a surprise.</li>
+          <li><b>Ungroup:</b> click the group’s frame to select it, then tap <b>▢ Ungroup</b>. The frame goes away and <b>the pockets stay exactly where they are</b> — there are no inside wires to keep, because pockets were unwired. Wires that went to the group itself are removed — rewire to the nodes directly if you still need them.</li>
+        </ol>
+        <p class="tut-note">A node can only be in one group at a time — grouping a node that’s already grouped moves it into the new group. Deleting a node inside a group just takes that node out; if only one node is left, the frame lets go on its own.</p>
+        <div class="tut-try"><a class="primary" href="#workspace">Try it — go to the board ↑</a></div>
+      </article>
+
+      <article class="tut-card" id="tut-switch">
+        <span class="tut-kicker">The gate inside the group</span>
+        <h3>This is how the switch works</h3>
+        <p>The hard spot in a group is the sequence — the pockets hold code, but nothing says when the group is <b>done</b>. That job belongs to one <b>Switch node</b>, placed <b>inside the group</b> with its pockets. The switch is just there to <b>run the group until the group is all passed</b>.</p>
+        <ul>
+          <li><b>8 ins, 1 out.</b> The switch has <b>eight numbered input dots</b> down its left side and <b>one output dot</b> on its right. Outside a group, wire up to 8 pockets into its ins, one per dot. Inside a group the pockets are unwired, so the switch doesn’t need their wires — it takes each pocket’s result as it runs them in sequence.</li>
+          <li><b>It runs the group.</b> On Run, the switch runs its pockets <b>in sequence, one after the next</b>, collecting each result on its ins — and it keeps the group running until <b>every pocket has passed</b>. It is the driver and the gate, not another pocket in line.</li>
+          <li><b>A pass is learned and stored.</b> When the whole group passes, that pass <b>means the sequence</b>: the order the pockets just ran in is <b>learned and stored</b> on the group — the frame and the inspector say “sequence learned · stored”, and the next run follows the stored sequence. Only then does the switch fire its one out: an <b>ALL PASS</b>.</li>
+          <li><b>Fail → the switch finds the pocket.</b> If a pocket doesn’t pass, the switch holds the signal, names the pocket that failed in the log, and the out does <b>not</b> fire — and <b>no sequence is stored</b>, because there was no pass to learn from.</li>
+          <li><b>The out goes where the group goes.</b> The ALL PASS leaves through the group’s output dot to <b>whatever the group is wired to</b> — the HUD face output, or any other output the group is connected to. The switch never picks the destination; the group’s wire does.</li>
+        </ul>
+        <p class="tut-note">Add a switch from QUICK ADD or the Maker template, then pick it together with its pockets and tap <b>▣ Group selected</b>. A group can hold up to 8 pockets on one switch — that’s what the 8 ins are for.</p>
+        <div class="tut-try"><a class="primary" href="#workspace">Try it — go to the board ↑</a></div>
       </article>
 
       <article class="tut-card" id="tut-move">
@@ -439,7 +523,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
           <li><b>Move a node:</b> drag it by its coloured top bar.</li>
           <li><b>Move around the board:</b> drag empty board to pan.</li>
           <li><b>Zoom:</b> the − / + buttons, <b>Ctrl + scroll</b>, or <b>Fit graph</b> to see everything at once.</li>
-          <li><b>More room:</b> <b>Wide view</b> hides the inspector, <b>Taller canvas</b> grows the board downward, the drag strip under the board resizes it by hand, and <b>Focus</b> fills the whole screen (Esc to come back).</li>
+          <li><b>More room:</b> the drag strip under the board resizes it by hand, and the foldable tool groups above the board fold down to one line each to give the canvas room.</li>
           <li><b>See a node’s details:</b> click it — the inspector on the right shows its name, kind, what it does, and its last run status, all editable.</li>
         </ul>
         <div class="tut-try"><a class="primary" href="#workspace">Try it — go to the board ↑</a></div>
@@ -479,6 +563,28 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
       if(faqChevron) faqChevron.textContent=willOpen?'−':'+';
     });
   }
+  // COLLAPSIBLE PANELS — the toolbar, the Node Creator and the Quick Add row
+  // each fold down to one line so the canvas gets the room; tap again to open.
+  function wireFold(btn, body, root){
+    if(!btn || !body) return null;
+    var chev=btn.querySelector('.fold-chev')||btn;
+    function toggle(){
+      var willOpen=body.classList.contains('fold-hidden');
+      body.classList.toggle('fold-hidden', !willOpen);
+      btn.setAttribute('aria-expanded', willOpen?'true':'false');
+      chev.textContent=willOpen?'−':'+';
+      if(root) root.classList.toggle('folded', !willOpen);
+    }
+    btn.addEventListener('click', toggle);
+    return toggle;
+  }
+  wireFold(document.getElementById('foldRunBtn'), document.getElementById('runToolsBody'), null);
+  wireFold(document.getElementById('foldGroupBtn'), document.getElementById('groupToolsBody'), null);
+  wireFold(document.getElementById('foldWindowBtn'), document.getElementById('windowToolsBody'), null);
+  wireFold(document.getElementById('foldQuickBtn'), document.getElementById('paletteBody'), null);
+  var creatorToggle=wireFold(document.getElementById('foldCreatorBtn'), document.getElementById('creatorBody'), document.getElementById('maker'));
+  var creatorHead=document.getElementById('creatorHead');
+  if(creatorHead && creatorToggle) creatorHead.addEventListener('click', function(e){ if(e.target.id!=='foldCreatorBtn') creatorToggle(); });
   // LOGIN
   var selectedUser='Elaina';
   document.querySelectorAll('.user').forEach(function(b){ b.addEventListener('click',function(){ document.querySelectorAll('.user').forEach(function(x){x.setAttribute('aria-pressed','false')}); b.setAttribute('aria-pressed','true'); selectedUser=b.dataset.user; document.getElementById('pinName').textContent=selectedUser; }); });
@@ -493,67 +599,188 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   // NODES
   var canvas=document.getElementById('canvas'), svg=document.getElementById('wires'), logEl=document.getElementById('log'), world=document.getElementById('world');
   var nodes=[], edges=[], seq=0, selectedId=null, selectedEdge=null, armed=null, stepQueue=[];
+  var groups=[], groupSeq=0, selectedGroupId=null, multiSel=[];
   var WORLD_W=3600, WORLD_H=2400, zoom=1, panX=0, panY=0;
   function applyTransform(){ world.style.transform='translate('+panX+'px,'+panY+'px) scale('+zoom+')'; var pct=Math.round(zoom*100)+'%'; ['zoomPctBtn','zoomResetBtn'].forEach(function(id){ var b=document.getElementById(id); if(b) b.textContent=pct; }); }
   function toWorld(cx,cy){ var r=canvas.getBoundingClientRect(); return { x:(cx-r.left-panX)/zoom, y:(cy-r.top-panY)/zoom }; }
   function zoomAt(cx,cy,factor){ var r=canvas.getBoundingClientRect(); var px=cx-r.left, py=cy-r.top; var wx=(px-panX)/zoom, wy=(py-panY)/zoom; zoom=Math.max(.2,Math.min(2.5,zoom*factor)); panX=px-wx*zoom; panY=py-wy*zoom; applyTransform(); }
   function zoomCenter(factor){ var r=canvas.getBoundingClientRect(); zoomAt(r.left+r.width/2, r.top+r.height/2, factor); }
-  function fitView(){ if(!nodes.length) return; var minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9; nodes.forEach(function(n){ minX=Math.min(minX,n.x); minY=Math.min(minY,n.y); maxX=Math.max(maxX,n.x+176); maxY=Math.max(maxY,n.y+100); }); var cw=canvas.clientWidth, ch=canvas.clientHeight; zoom=Math.max(.2,Math.min(1.6,Math.min(cw/(maxX-minX+90), ch/(maxY-minY+90)))); panX=(cw-(maxX-minX)*zoom)/2-minX*zoom; panY=(ch-(maxY-minY)*zoom)/2-minY*zoom; applyTransform(); }
-  var KIND={face:{label:'Face panel',cls:'kind-face'},orch:{label:'Orchestrator',cls:'kind-orch'},engine:{label:'Rust engine',cls:'kind-engine'},data:{label:'Data table',cls:'kind-data'},check:{label:'Benchmark / check',cls:'kind-check'}};
+  function fitView(){ if(!nodes.length) return; var minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9; nodes.forEach(function(n){ minX=Math.min(minX,n.x); minY=Math.min(minY,n.y); maxX=Math.max(maxX,n.x+nodeW(n)); maxY=Math.max(maxY,n.y+nodeH(n)+4); }); var cw=canvas.clientWidth, ch=canvas.clientHeight; zoom=Math.max(.2,Math.min(1.6,Math.min(cw/(maxX-minX+90), ch/(maxY-minY+90)))); panX=(cw-(maxX-minX)*zoom)/2-minX*zoom; panY=(ch-(maxY-minY)*zoom)/2-minY*zoom; applyTransform(); }
+  var KIND={face:{label:'Face panel',cls:'kind-face'},orch:{label:'Orchestrator',cls:'kind-orch'},engine:{label:'Rust engine',cls:'kind-engine'},data:{label:'Data table',cls:'kind-data'},check:{label:'Benchmark / check',cls:'kind-check'},group:{label:'Group',cls:'kind-group'},switch:{label:'Switch — 8 in · 1 out',cls:'kind-switch'}};
+  var SWITCH_INS=8;
+  function isSwitch(n){ return n && n.kind==='switch'; }
+  function nodeW(n){ return isSwitch(n)?196:176; }
+  function nodeH(n){ return isSwitch(n)?228:96; }
+  function switchInY(n,idx){ return n.y+52+idx*21; }
+  function switchInputs(n){ if(groupOfNode(n.id)){ var g=groupOfNode(n.id); return g.memberIds.filter(function(id){ return id!==n.id && nodeById(id); }); } return edges.filter(function(e){ return e.to===n.id; }).map(function(e){ return e.from; }).filter(function(id){ return nodeById(id); }); }
+  function switchWiredCount(n){ return edges.filter(function(e){ return e.to===n.id; }).length; }
   function log(who,msg){ var d=document.createElement('div'); d.innerHTML='<b>'+escapeHtml(who)+'.</b> '+escapeHtml(msg); logEl.prepend(d); while(logEl.children.length>200) logEl.removeChild(logEl.lastChild); }
   function makeNode(kind,x,y,title,notes){ seq++; return {id:'n'+seq,kind:kind,x:x,y:y,title:title||KIND[kind].label,notes:notes||'',status:'idle'}; }
-  function loadExample(){ var narrow = canvas.clientWidth>0 && canvas.clientWidth<640; if(narrow){ nodes=[ makeNode('face',16,20,'Login face','The HTML login people tap. Pick user, enter PIN.'), makeNode('orch',170,120,'Orchestrator','Rust. Holds the shape, routes face ↔ engine, contains failures.'), makeNode('engine',16,230,'Rust engine','Does the work on local hardware. No internet.'), makeNode('data',170,320,'Session table','Lookup table: who is logged in, what survives a restart. Compute once, save the map.'), makeNode('check',16,380,'Benchmark','First-run check. If this fails, you see it here — not after install.'), makeNode('face',170,440,'HUD face','The panels the person lives in after login.') ]; } else { nodes=[ makeNode('face',24,40,'Login face','The HTML login people tap. Pick user, enter PIN.'), makeNode('orch',268,150,'Orchestrator','Rust. Holds the shape, routes face ↔ engine, contains failures.'), makeNode('engine',512,40,'Rust engine','Does the work on local hardware. No internet.'), makeNode('data',512,250,'Session table','Lookup table: who is logged in, what survives a restart. Compute once, save the map.'), makeNode('check',268,330,'Benchmark','First-run check. If this fails, you see it here — not after install.'), makeNode('face',740,150,'HUD face','The panels the person lives in after login.') ]; } edges=[{from:nodes[0].id,to:nodes[1].id},{from:nodes[1].id,to:nodes[2].id},{from:nodes[1].id,to:nodes[3].id},{from:nodes[4].id,to:nodes[1].id},{from:nodes[2].id,to:nodes[5].id},{from:nodes[3].id,to:nodes[5].id}]; selectedId=null; armed=null; render(); }
+  function loadExample(){ var narrow = canvas.clientWidth>0 && canvas.clientWidth<640; if(narrow){ nodes=[ makeNode('face',16,20,'Login face','The HTML login people tap. Pick user, enter PIN.'), makeNode('orch',170,120,'Orchestrator','Rust. Holds the shape, routes face ↔ engine, contains failures.'), makeNode('engine',16,230,'Rust engine','Does the work on local hardware. No internet.'), makeNode('data',170,320,'Session table','Lookup table: who is logged in, what survives a restart. Compute once, save the map.'), makeNode('check',16,380,'Benchmark','First-run check. If this fails, you see it here — not after install.'), makeNode('face',170,440,'HUD face','The panels the person lives in after login.') ]; } else { nodes=[ makeNode('face',24,40,'Login face','The HTML login people tap. Pick user, enter PIN.'), makeNode('orch',268,150,'Orchestrator','Rust. Holds the shape, routes face ↔ engine, contains failures.'), makeNode('engine',512,40,'Rust engine','Does the work on local hardware. No internet.'), makeNode('data',512,250,'Session table','Lookup table: who is logged in, what survives a restart. Compute once, save the map.'), makeNode('check',268,330,'Benchmark','First-run check. If this fails, you see it here — not after install.'), makeNode('face',740,150,'HUD face','The panels the person lives in after login.') ]; } edges=[{from:nodes[0].id,to:nodes[1].id},{from:nodes[1].id,to:nodes[2].id},{from:nodes[1].id,to:nodes[3].id},{from:nodes[4].id,to:nodes[1].id},{from:nodes[2].id,to:nodes[5].id},{from:nodes[3].id,to:nodes[5].id}]; groups=[]; selectedGroupId=null; multiSel=[]; selectedId=null; armed=null; render(); }
   function nodeById(id){ return nodes.find(function(n){return n.id===id}); }
+  function groupById(id){ return groups.find(function(g){return g.id===id}); }
+  function groupOfNode(id){ return groups.find(function(g){return g.memberIds.indexOf(id)!==-1})||null; }
+  function entityById(id){ return nodeById(id)||groupById(id); }
+  function entityTitle(id){ var e=entityById(id); return e?e.title:id; }
+  function groupBox(g){ var ms=g.memberIds.map(nodeById).filter(Boolean); if(!ms.length) return null; var minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9; ms.forEach(function(n){ minX=Math.min(minX,n.x); minY=Math.min(minY,n.y); maxX=Math.max(maxX,n.x+nodeW(n)); maxY=Math.max(maxY,n.y+nodeH(n)); }); return {x:minX-16,y:minY-38,w:(maxX-minX)+32+(g.rw||0),h:(maxY-minY)+54+(g.rh||0)}; }
+  function portPos(id,isOut,portIdx){ var n=nodeById(id); if(n){ if(isOut) return {x:n.x+nodeW(n),y:isSwitch(n)?n.y+114:n.y+42}; if(isSwitch(n)) return {x:n.x,y:switchInY(n,portIdx||0)}; return {x:n.x,y:n.y+42}; } var g=groupById(id); if(g){ var b=groupBox(g); if(b) return isOut?{x:b.x+b.w,y:b.y+b.h/2}:{x:b.x,y:b.y+b.h/2}; } return null; }
+  function detachFromGroups(id,keepLog){ groups.slice().forEach(function(g){ var i=g.memberIds.indexOf(id); if(i!==-1){ g.memberIds.splice(i,1); if(g.memberIds.length<2){ groups=groups.filter(function(x){return x.id!==g.id}); edges=edges.filter(function(e){return e.from!==g.id&&e.to!==g.id}); if(selectedGroupId===g.id) selectedGroupId=null; } } }); }
+  function switchSlotState(n,idx){
+    var grp=groupOfNode(n.id);
+    if(grp){ var pockets=grp.memberIds.filter(function(id){ return id!==n.id && nodeById(id); }); var pid=pockets[idx]; if(!pid) return ''; var pn=nodeById(pid); return pn.status==='done'?'pass':(pn.status==='fail'?'bad':'wired'); }
+    var e=edges.find(function(x){ return x.to===n.id && (x.toPort||0)===idx; });
+    if(!e) return '';
+    var sn=nodeById(e.from); if(!sn) return 'wired';
+    return sn.status==='done'?'pass':(sn.status==='fail'?'bad':'wired');
+  }
+  function switchMetaText(n){
+    var grp=groupOfNode(n.id);
+    var base=grp?('gate of “'+grp.title+'” · '+(grp.memberIds.length-1)+' pockets · runs last'):('ins wired: '+switchWiredCount(n)+' / '+SWITCH_INS);
+    if(n.storedSeq && n.storedSeq.length) base+=' · sequence stored ✓';
+    return base;
+  }
   function buildNodeEl(n){
-    var el=document.createElement('div'); el.className='node '+KIND[n.kind].cls+(n.id===selectedId?' selected':''); el.style.left=n.x+'px'; el.style.top=n.y+'px'; el.dataset.id=n.id;
-    el.innerHTML='<div class="port in" data-port="in" title="Input"></div><div class="node-head"><span class="node-title">'+escapeHtml(n.title)+'</span><span>⠿</span></div><div class="node-body"><span class="kind-label">'+KIND[n.kind].label+'</span><br><span class="status st-'+n.status+'">'+n.status+'</span></div><div class="port out" data-port="out" title="Output"></div>';
-    n._el=el; n._titleEl=el.querySelector('.node-title'); n._kindEl=el.querySelector('.kind-label'); n._statusEl=el.querySelector('.status');
-    el.addEventListener('pointerdown',function(ev){ if(ev.target.classList.contains('port')) return; selectNode(n.id); startDrag(ev,el,n); });
-    el.querySelectorAll('.port').forEach(function(p){ p.addEventListener('click',function(ev){ ev.stopPropagation(); handlePort(n.id,p.dataset.port,p); }); });
+    var grp=groupOfNode(n.id);
+    var el=document.createElement('div'); el.className='node '+KIND[n.kind].cls+(isSwitch(n)?' switch-node':'')+(n.id===selectedId?' selected':'')+(multiSel.indexOf(n.id)!==-1&&multiSel.length>1?' multi':'')+(grp?' in-group':''); el.style.left=n.x+'px'; el.style.top=n.y+'px'; el.dataset.id=n.id; el.style.zIndex=2;
+    if(isSwitch(n)){
+      var ports='', nums='', slots='';
+      for(var si=0;si<SWITCH_INS;si++){ ports+='<div class="port in in-switch" data-port="in" data-idx="'+si+'" title="Switch input '+(si+1)+' of 8" style="top:'+(52+si*21)+'px"></div>'; nums+='<span class="port-num" style="top:'+(52+si*21)+'px">'+(si+1)+'</span>'; slots+='<i data-slot="'+si+'"></i>'; }
+      el.innerHTML=ports+'<div class="node-head"><span class="node-title">'+escapeHtml(n.title)+'</span><span>⠿</span></div><div class="node-body">'+nums+'<div class="switch-kind"><span class="kind-label">'+KIND[n.kind].label+(grp?' · gate in “'+escapeHtml(grp.title)+'”':'')+'</span><br><span class="status st-'+n.status+'">'+n.status+'</span></div><div class="switch-meta"></div><div class="switch-slots">'+slots+'</div></div><div class="port out" data-port="out" title="Switch output — fires only on ALL PASS" style="top:114px"></div>';
+    } else {
+      el.innerHTML='<div class="port in" data-port="in" title="Input"></div><div class="node-head"><span class="node-title">'+escapeHtml(n.title)+'</span><span>⠿</span></div><div class="node-body"><span class="kind-label">'+KIND[n.kind].label+(grp?' · pocket in “'+escapeHtml(grp.title)+'”':'')+'</span><br><span class="status st-'+n.status+'">'+n.status+'</span></div><div class="port out" data-port="out" title="Output"></div>';
+    }
+    n._el=el; n._titleEl=el.querySelector('.node-title'); n._kindEl=el.querySelector('.kind-label'); n._statusEl=el.querySelector('.status'); n._metaEl=el.querySelector('.switch-meta'); n._slotsEl=el.querySelector('.switch-slots');
+    if(isSwitch(n)) refreshSwitchFace(n);
+    el.addEventListener('pointerdown',function(ev){ if(ev.target.classList.contains('port')) return; if(ev.ctrlKey||ev.metaKey||ev.shiftKey){ toggleMulti(n.id); ev.preventDefault(); return; } selectNode(n.id); startDrag(ev,el,n); });
+    el.querySelectorAll('.port').forEach(function(p){ p.addEventListener('click',function(ev){ ev.stopPropagation(); handlePort(n.id,p.dataset.port,p, p.dataset.idx!==undefined?parseInt(p.dataset.idx,10):undefined); }); });
     return el;
   }
-  function render(){
-    world.querySelectorAll('.node').forEach(function(e){e.remove()});
-    nodes.forEach(function(n){ world.appendChild(buildNodeEl(n)); });
-    drawWires(); syncInspector(); broadcastSoon();
-    var cp=document.getElementById('countPill'); if(cp) cp.textContent=nodes.length+' nodes · '+edges.length+' wires';
+  function refreshSwitchFace(n){
+    if(!isSwitch(n)) return;
+    if(n._metaEl) n._metaEl.textContent=switchMetaText(n);
+    if(n._slotsEl){ var kids=n._slotsEl.children; for(var i=0;i<kids.length;i++){ kids[i].className=switchSlotState(n,i); } }
   }
+  function buildGroupEl(g){
+    var b=groupBox(g); if(!b) return null;
+    var el=document.createElement('div'); el.className='group-frame gst-'+(g.status||'idle')+(g.id===selectedGroupId?' selected':''); el.style.left=b.x+'px'; el.style.top=b.y+'px'; el.style.width=b.w+'px'; el.style.height=b.h+'px'; el.dataset.gid=g.id;
+    el.innerHTML='<div class="group-head"><span class="gtitle">'+escapeHtml(g.title)+'</span><span class="gcount">'+g.memberIds.length+' pockets · holds the data · one step'+(g.sequenceStored?' · sequence learned · stored ✓':'')+'</span><span class="gstatus">'+(g.status||'idle')+'</span></div><div class="port in" data-port="in" title="Group input — wire into the group"></div><div class="port out" data-port="out" title="Group output — wire out of the group"></div><div class="group-resize" title="Drag to resize the group frame by hand · double-click for the snug fit back">⠿</div>';
+    g._el=el; g._statusEl=el.querySelector('.gstatus');
+    el.querySelector('.group-resize').addEventListener('pointerdown',function(ev){ ev.stopPropagation(); selectGroup(g.id); startGroupResize(ev,g); });
+    el.querySelector('.group-resize').addEventListener('dblclick',function(ev){ ev.stopPropagation(); g.rw=0; g.rh=0; updateGroupFrame(g); drawWires(); broadcastSoon(); log('Group','“'+g.title+'” frame snapped back to the snug fit around its pockets.'); });
+    el.querySelector('.group-head').addEventListener('pointerdown',function(ev){ selectGroup(g.id); startGroupDrag(ev,g); });
+    el.addEventListener('pointerdown',function(ev){ if(ev.target.classList.contains('port')) return; if(ev.target===el){ selectGroup(g.id); } });
+    el.querySelectorAll('.port').forEach(function(p){ p.addEventListener('click',function(ev){ ev.stopPropagation(); handlePort(g.id,p.dataset.port,p); }); });
+    return el;
+  }
+  function refreshCounts(){ var cp=document.getElementById('countPill'); if(cp) cp.textContent=nodes.length+' nodes · '+edges.length+' wires'+(groups.length?' · '+groups.length+' group'+(groups.length===1?'':'s'):''); }
+  function render(){
+    if(typeof stepActive!=='undefined' && stepActive){ stepQueue=[]; stepActive=false; stepTotal=0; stepDone=0; }
+    if(typeof refreshStepBtn==='function') refreshStepBtn();
+    world.querySelectorAll('.node').forEach(function(e){e.remove()});
+    world.querySelectorAll('.group-frame').forEach(function(e){e.remove()});
+    groups.forEach(function(g){ var ge=buildGroupEl(g); if(ge) world.appendChild(ge); });
+    nodes.forEach(function(n){ world.appendChild(buildNodeEl(n)); });
+    drawWires(); syncInspector(); broadcastSoon(); refreshCounts();
+  }
+  function updateGroupFrame(g){ if(!g||!g._el) return; var b=groupBox(g); if(!b) return; g._el.style.left=b.x+'px'; g._el.style.top=b.y+'px'; g._el.style.width=b.w+'px'; g._el.style.height=b.h+'px'; g._el.className='group-frame gst-'+(g.status||'idle')+(g.id===selectedGroupId?' selected':''); if(g._statusEl) g._statusEl.textContent=g.status||'idle'; var t=g._el.querySelector('.gtitle'); if(t) t.textContent=g.title; var c=g._el.querySelector('.gcount'); if(c) c.textContent=g.memberIds.length+' pockets · holds the data · one step'+(g.sequenceStored?' · sequence learned · stored ✓':''); g.memberIds.forEach(function(id){ var mn=nodeById(id); if(mn && isSwitch(mn)) refreshSwitchFace(mn); }); }
   function updateNode(n){
     if(!n._el) return;
-    n._el.className='node '+KIND[n.kind].cls+(n.id===selectedId?' selected':'');
-    n._titleEl.textContent=n.title; n._kindEl.textContent=KIND[n.kind].label;
+    var grp=groupOfNode(n.id);
+    n._el.className='node '+KIND[n.kind].cls+(isSwitch(n)?' switch-node':'')+(n.id===selectedId?' selected':'')+(multiSel.indexOf(n.id)!==-1&&multiSel.length>1?' multi':'')+(grp?' in-group':'');
+    n._titleEl.textContent=n.title; n._kindEl.textContent=KIND[n.kind].label+(isSwitch(n)?(grp?' · gate in “'+grp.title+'”':''):(grp?' · pocket in “'+grp.title+'”':''));
     n._statusEl.textContent=n.status; n._statusEl.className='status st-'+n.status;
+    if(isSwitch(n)) refreshSwitchFace(n);
+    if(grp) grp.memberIds.forEach(function(id){ var mn=nodeById(id); if(mn && isSwitch(mn) && mn!==n) refreshSwitchFace(mn); });
     if(selectedId===n.id){ var st=document.getElementById('inspStatus'); st.textContent=n.status; st.className='status st-'+n.status; }
+    if(grp) updateGroupFrame(grp);
     broadcastSoon();
   }
   function updateSelection(){
-    nodes.forEach(function(n){ if(n._el) n._el.classList.toggle('selected', n.id===selectedId); });
+    nodes.forEach(function(n){ if(n._el){ n._el.classList.toggle('selected', n.id===selectedId); n._el.classList.toggle('multi', multiSel.indexOf(n.id)!==-1&&multiSel.length>1); } });
+    groups.forEach(function(g){ if(g._el) g._el.classList.toggle('selected', g.id===selectedGroupId); });
     drawWires(); syncInspector();
   }
   function escapeHtml(s){ return s.replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]}); }
   function drawWires(){
-    var cp2=document.getElementById('countPill'); if(cp2) cp2.textContent=nodes.length+' nodes · '+edges.length+' wires';
+    refreshCounts();
     svg.setAttribute('viewBox','0 0 '+WORLD_W+' '+WORLD_H); svg.innerHTML='';
-    edges.forEach(function(e,i){ var a=nodeById(e.from),b=nodeById(e.to); if(!a||!b) return; var x1=a.x+176,y1=a.y+42,x2=b.x,y2=b.y+42,c=Math.max(40,Math.abs(x2-x1)/2); var path=document.createElementNS('http://www.w3.org/2000/svg','path'); path.setAttribute('d','M'+x1+' '+y1+' C '+(x1+c)+' '+y1+', '+(x2-c)+' '+y2+', '+x2+' '+y2); path.setAttribute('fill','none'); path.setAttribute('stroke', selectedEdge===i?'#b42318':'#00914f'); path.setAttribute('stroke-width', selectedEdge===i?'3.5':'2.5'); path.style.pointerEvents='stroke'; path.addEventListener('click',function(ev){ ev.stopPropagation(); selectedEdge=i; selectedId=null; updateSelection(); log('Wire','Selected wire '+nodeById(e.from).title+' → '+nodeById(e.to).title+'. Press Delete to remove it.'); }); svg.appendChild(path); });
+    edges.forEach(function(e,i){ var p1=portPos(e.from,true),p2=portPos(e.to,false,e.toPort||0); if(!p1||!p2) return; var x1=p1.x,y1=p1.y,x2=p2.x,y2=p2.y,c=Math.max(40,Math.abs(x2-x1)/2); var isGroupWire=!!(groupById(e.from)||groupById(e.to)); var path=document.createElementNS('http://www.w3.org/2000/svg','path'); path.setAttribute('d','M'+x1+' '+y1+' C '+(x1+c)+' '+y1+', '+(x2-c)+' '+y2+', '+x2+' '+y2); path.setAttribute('fill','none'); path.setAttribute('stroke', selectedEdge===i?'#b42318':(isGroupWire?'#062e1d':'#00914f')); path.setAttribute('stroke-width', selectedEdge===i?'3.5':(isGroupWire?'3.5':'2.5')); path.style.pointerEvents='stroke'; path.addEventListener('click',function(ev){ ev.stopPropagation(); selectedEdge=i; selectedId=null; selectedGroupId=null; updateSelection(); log('Wire','Selected wire '+entityTitle(e.from)+' → '+entityTitle(e.to)+'. Press Delete to remove it.'); }); svg.appendChild(path); });
     broadcastSoon();
   }
   function startDrag(ev,el,n){
-    var start=toWorld(ev.clientX,ev.clientY); var offX=start.x-n.x, offY=start.y-n.y;
+    var grp=groupOfNode(n.id);
+    var movers=grp?grp.memberIds.map(nodeById).filter(Boolean):[n];
+    var start=toWorld(ev.clientX,ev.clientY);
+    var starts=movers.map(function(m){ return {m:m,x:m.x,y:m.y}; });
     var pending=null, rafId=0; el.classList.add('dragging');
-    function apply(){ rafId=0; if(!pending) return; var e=pending; pending=null; var p=toWorld(e.clientX,e.clientY); n.x=Math.max(4,Math.min(WORLD_W-180, p.x-offX)); n.y=Math.max(4,Math.min(WORLD_H-100, p.y-offY)); el.style.left=n.x+'px'; el.style.top=n.y+'px'; drawWires(); }
+    function apply(){ rafId=0; if(!pending) return; var e=pending; pending=null; var p=toWorld(e.clientX,e.clientY); var dx=p.x-start.x, dy=p.y-start.y; starts.forEach(function(s){ s.m.x=Math.max(20,Math.min(WORLD_W-180, s.x+dx)); s.m.y=Math.max(44,Math.min(WORLD_H-100, s.y+dy)); if(s.m._el){ s.m._el.style.left=s.m.x+'px'; s.m._el.style.top=s.m.y+'px'; } }); if(grp) updateGroupFrame(grp); drawWires(); }
     function mv(e){ pending=e; if(!rafId) rafId=requestAnimationFrame(apply); }
-    function up(){ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); window.removeEventListener('pointercancel',up); window.removeEventListener('blur',up); if(rafId){ cancelAnimationFrame(rafId); rafId=0; } if(pending) apply(); el.classList.remove('dragging'); }
+    function up(){ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); window.removeEventListener('pointercancel',up); window.removeEventListener('blur',up); if(rafId){ cancelAnimationFrame(rafId); rafId=0; } if(pending) apply(); el.classList.remove('dragging'); broadcastSoon(); }
     window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up); window.addEventListener('blur',up);
   }
-  function handlePort(id,dir,el){
-    if(armed && !nodeById(armed.from)){ armed=null; return; }
-    if(dir==='out'){ armed={from:id}; document.querySelectorAll('.port').forEach(function(p){p.classList.remove('armed')}); el.classList.add('armed'); document.getElementById('wireHint').textContent='Output armed from “'+nodeById(id).title+'”. Now click an input dot on the next node.'; return; }
-    if(dir==='in' && armed){ if(armed.from===id){ log('Wire','A node cannot wire to itself.'); return; } if(edges.some(function(e){return e.from===armed.from&&e.to===id})){ log('Wire','That wire already exists.'); } else { edges.push({from:armed.from,to:id}); log('Wire', nodeById(armed.from).title+' → '+nodeById(id).title+' connected.'); } armed=null; document.querySelectorAll('.port').forEach(function(p){p.classList.remove('armed')}); drawWires(); }
+  function startGroupDrag(ev,g){
+    var movers=g.memberIds.map(nodeById).filter(Boolean); if(!movers.length) return;
+    var start=toWorld(ev.clientX,ev.clientY);
+    var starts=movers.map(function(m){ return {m:m,x:m.x,y:m.y}; });
+    var pending=null, rafId=0;
+    function apply(){ rafId=0; if(!pending) return; var e=pending; pending=null; var p=toWorld(e.clientX,e.clientY); var dx=p.x-start.x, dy=p.y-start.y; starts.forEach(function(s){ s.m.x=Math.max(20,Math.min(WORLD_W-180, s.x+dx)); s.m.y=Math.max(44,Math.min(WORLD_H-100, s.y+dy)); if(s.m._el){ s.m._el.style.left=s.m.x+'px'; s.m._el.style.top=s.m.y+'px'; } }); updateGroupFrame(g); drawWires(); }
+    function mv(e){ pending=e; if(!rafId) rafId=requestAnimationFrame(apply); }
+    function up(){ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); window.removeEventListener('pointercancel',up); window.removeEventListener('blur',up); if(rafId){ cancelAnimationFrame(rafId); rafId=0; } if(pending) apply(); broadcastSoon(); }
+    window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up); window.addEventListener('blur',up);
   }
-  function selectNode(id){ selectedId=id; selectedEdge=null; updateSelection(); }
+  function startGroupResize(ev,g){
+    var start=toWorld(ev.clientX,ev.clientY);
+    var startRW=g.rw||0, startRH=g.rh||0;
+    var pending=null, rafId=0;
+    function apply(){ rafId=0; if(!pending) return; var e=pending; pending=null; var p=toWorld(e.clientX,e.clientY); g.rw=Math.max(0,Math.min(1800,Math.round(startRW+(p.x-start.x)))); g.rh=Math.max(0,Math.min(1400,Math.round(startRH+(p.y-start.y)))); updateGroupFrame(g); drawWires(); }
+    function mv(e){ pending=e; if(!rafId) rafId=requestAnimationFrame(apply); }
+    function up(){ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); window.removeEventListener('pointercancel',up); window.removeEventListener('blur',up); if(rafId){ cancelAnimationFrame(rafId); rafId=0; } if(pending) apply(); broadcastSoon(); log('Group','“'+g.title+'” frame resized by hand — extra room '+(g.rw||0)+' × '+(g.rh||0)+'px beyond the snug fit. The pockets did not move. Double-click the corner grip to snap back to snug.'); }
+    window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up); window.addEventListener('blur',up);
+  }
+  function handlePort(id,dir,el,portIdx){
+    if(armed && !entityById(armed.from)){ armed=null; document.querySelectorAll('.port').forEach(function(p){p.classList.remove('armed')}); }
+    if(dir==='out'){ armed={from:id}; document.querySelectorAll('.port').forEach(function(p){p.classList.remove('armed')}); el.classList.add('armed'); document.getElementById('wireHint').textContent='Output armed from “'+entityTitle(id)+'”. Now click an input dot on the next node or group.'+(isSwitch(nodeById(id))?' This is the switch’s one out — it only carries the signal when every pocket has passed (ALL PASS).':''); return; }
+    if(dir==='in' && armed){ if(armed.from===id){ log('Wire','A node cannot wire to itself.'); return; } var ga=groupById(armed.from), gb=groupById(id); if(ga&&gb&&ga.id===gb.id){ log('Wire','That wire stays inside one group — pockets inside a group are unwired; the group holds the data and runs them in sequence.'); return; } var na=groupOfNode(armed.from), nb=groupOfNode(id); if(na&&nb&&na.id===nb.id){ log('Wire','No wires inside a group — “'+entityTitle(armed.from)+'” and “'+entityTitle(id)+'” are both pockets in “'+na.title+'”, and the group holds their data. Wire into the group frame instead; its switch runs the pockets in sequence.'); return; } if((na&&gb&&na.id===gb.id)||(ga&&nb&&ga.id===nb.id)){ log('Wire','That wire goes between a group and one of its own pockets — the group already holds that pocket. Wire the group to other nodes or groups instead.'); return; } var targetNode=nodeById(id); var slot=(targetNode&&isSwitch(targetNode))?(portIdx||0):0; if(targetNode&&isSwitch(targetNode)&&edges.some(function(e){return e.to===id&&(e.toPort||0)===slot})){ log('Wire','Switch in '+(slot+1)+' is already taken — each of the 8 ins holds one pocket. Click a free numbered in on the switch.'); return; } if(edges.some(function(e){return e.from===armed.from&&e.to===id&&((e.toPort||0)===slot||!(targetNode&&isSwitch(targetNode)))})){ log('Wire','That wire already exists.'); } else { edges.push({from:armed.from,to:id,toPort:slot}); if(targetNode&&isSwitch(targetNode)){ refreshSwitchFace(targetNode); log('Wire', entityTitle(armed.from)+' → '+targetNode.title+' in '+(slot+1)+' of 8 connected. The switch passes the signal on only when all its pockets pass — then its one out fires ALL PASS.'); } else { log('Wire', entityTitle(armed.from)+' → '+entityTitle(id)+' connected.'+((ga||gb)?' Group wire — the group holds its pockets’ data and runs them in sequence as one step.':'')); } } armed=null; document.querySelectorAll('.port').forEach(function(p){p.classList.remove('armed')}); drawWires(); }
+  }
+  function selectNode(id){ selectedId=id; selectedGroupId=null; selectedEdge=null; if(multiSel.indexOf(id)===-1) multiSel=[id]; updateSelection(); }
+  function selectGroup(id){ selectedGroupId=id; selectedId=null; selectedEdge=null; multiSel=[]; updateSelection(); }
+  function toggleMulti(id){ var i=multiSel.indexOf(id); if(i===-1) multiSel.push(id); else multiSel.splice(i,1); selectedId=id; selectedGroupId=null; selectedEdge=null; updateSelection(); var picked=multiSel.filter(function(x){return nodeById(x)}); log('Pick', picked.length? picked.length+' node'+(picked.length===1?'':'s')+' picked: '+picked.map(function(x){return nodeById(x).title}).join(', ')+'. Tap Group selected to frame '+(picked.length===1?'it — pick at least one more first.':'them.') : 'Nothing picked.'); }
+  function groupSelected(){
+    var ids=multiSel.filter(function(id){ return nodeById(id); });
+    if(selectedId && ids.indexOf(selectedId)===-1 && nodeById(selectedId)) ids.push(selectedId);
+    if(ids.length<2){ log('Group','Pick at least two nodes first — Ctrl / Shift + click them, or Shift + drag a box around them — then Group selected.'); return; }
+    ids.slice().forEach(function(id){ detachFromGroups(id); });
+    var internalWires=edges.filter(function(e){ return ids.indexOf(e.from)!==-1&&ids.indexOf(e.to)!==-1; });
+    if(internalWires.length) edges=edges.filter(function(e){ return !(ids.indexOf(e.from)!==-1&&ids.indexOf(e.to)!==-1); });
+    groupSeq++; var g={id:'g'+groupSeq,title:'Group '+(groups.length+1),memberIds:ids.slice(),status:'idle',notes:'Group — holds the data. Its nodes are data pockets, unwired inside; the group runs them in sequence as one step.'};
+    groups.push(g); multiSel=[]; selectedId=null; selectedGroupId=g.id; selectedEdge=null;
+    render();
+    var hasSwitch=ids.some(function(id){ var n=nodeById(id); return n&&isSwitch(n); });
+    log('Group','Grouped '+ids.length+' nodes into “'+g.title+'” — frame on, moves as one piece. The group holds the data; the pockets inside are unwired'+(internalWires.length?' — '+internalWires.length+' wire'+(internalWires.length===1?'':'s')+' between them came off':'')+'. Wire into its left dot and out of its right dot; on Run the group runs its pockets in sequence, as one step.'+(hasSwitch?' This group has a switch: the switch runs the pockets until the group is all passed, and that pass is learned and stored as the group’s sequence — only then does the group’s out fire.':''));
+  }
+  function ungroupSelected(){
+    var g=selectedGroupId?groupById(selectedGroupId):null;
+    if(!g && selectedId) g=groupOfNode(selectedId);
+    if(!g && groups.length===1) g=groups[0];
+    if(!g){ log('Ungroup','No group selected. Click a group frame first — or the Ungroup button lets go of the only group when there is just one.'); return; }
+    var kept=g.memberIds.map(function(id){return entityTitle(id)}).join(', ');
+    var gw=edges.filter(function(e){return e.from===g.id||e.to===g.id}).length;
+    edges=edges.filter(function(e){return e.from!==g.id&&e.to!==g.id});
+    groups=groups.filter(function(x){return x.id!==g.id});
+    if(selectedGroupId===g.id) selectedGroupId=null;
+    render();
+    log('Ungroup','“'+g.title+'” let go — its pockets ('+kept+') stayed exactly where they are. There were no wires between them to keep — the group held their data, not wires.'+(gw?' Its '+gw+' group wire'+(gw===1?'':'s')+' came off with the frame — rewire to the nodes directly if you still need them.':''));
+  }
   canvas.addEventListener('pointerdown',function(e){
     if(e.target===canvas||e.target===world||e.target===svg){
-      selectedId=null; selectedEdge=null; updateSelection();
+      if(e.shiftKey){
+        var startW=toWorld(e.clientX,e.clientY); var mq=document.createElement('div'); mq.className='marquee'; world.appendChild(mq);
+        function mvq(ev){ var p=toWorld(ev.clientX,ev.clientY); var x=Math.min(startW.x,p.x), y=Math.min(startW.y,p.y), w=Math.abs(p.x-startW.x), h=Math.abs(p.y-startW.y); mq.style.left=x+'px'; mq.style.top=y+'px'; mq.style.width=w+'px'; mq.style.height=h+'px'; mq._box={x:x,y:y,w:w,h:h}; }
+        function upq(){ window.removeEventListener('pointermove',mvq); window.removeEventListener('pointerup',upq); window.removeEventListener('pointercancel',upq); var b=mq._box; mq.remove(); if(b&&b.w>8&&b.h>8){ multiSel=nodes.filter(function(n){ return n.x+nodeW(n)>b.x&&n.x<b.x+b.w&&n.y+nodeH(n)>b.y&&n.y<b.y+b.h; }).map(function(n){return n.id}); selectedGroupId=null; selectedEdge=null; selectedId=multiSel.length?multiSel[multiSel.length-1]:null; updateSelection(); log('Pick', multiSel.length? multiSel.length+' node'+(multiSel.length===1?'':'s')+' picked with the box. Tap Group selected to frame them.' : 'The box caught nothing — drag it around the nodes you want.'); } }
+        window.addEventListener('pointermove',mvq); window.addEventListener('pointerup',upq); window.addEventListener('pointercancel',upq);
+        return;
+      }
+      selectedId=null; selectedGroupId=null; selectedEdge=null; multiSel=[]; updateSelection();
       var sx=e.clientX-panX, sy=e.clientY-panY; world.classList.add('panning');
       function mv(ev){ panX=ev.clientX-sx; panY=ev.clientY-sy; applyTransform(); }
       function up(){ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); window.removeEventListener('pointercancel',up); world.classList.remove('panning'); }
@@ -562,35 +789,44 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   });
   canvas.addEventListener('wheel',function(e){ if(e.ctrlKey||e.metaKey){ e.preventDefault(); zoomAt(e.clientX,e.clientY, e.deltaY<0?1.12:0.89); } },{passive:false});
   function syncInspector(){
-    var n=nodeById(selectedId); var t=document.getElementById('inspTitle'),d=document.getElementById('inspDesc');
-    if(selectedEdge!==null && edges[selectedEdge]){ t.textContent='Wire selected'; d.textContent=nodeById(edges[selectedEdge].from).title+' → '+nodeById(edges[selectedEdge].to).title+'. Press Delete to remove this wire.'; return; }
-    if(!n){ t.textContent='Nothing selected'; d.textContent='Click any node to see what it is, what it needs, and whether it passed on the last run.'; return; }
-    t.textContent=n.title; d.textContent=KIND[n.kind].label+' · status from the last run is shown below. Edit the name or notes and it updates on the canvas.';
+    var t=document.getElementById('inspTitle'),d=document.getElementById('inspDesc');
+    if(selectedEdge!==null && edges[selectedEdge]){ t.textContent='Wire selected'; d.textContent=entityTitle(edges[selectedEdge].from)+' → '+entityTitle(edges[selectedEdge].to)+'. Press Delete to remove this wire.'; return; }
+    var g=selectedGroupId?groupById(selectedGroupId):null;
+    if(g){ t.textContent=g.title; var gHasSwitch=g.memberIds.some(function(id){ var n=nodeById(id); return n&&isSwitch(n); }); d.textContent='Group · holds the data for its '+g.memberIds.length+' pockets, which run in sequence as one step: '+internalOrder(g).map(function(id,i){return (i+1)+'. '+entityTitle(id)}).join(' · ')+'. The pockets are unwired to each other — the group holds their data. Drag its dark bar to move it as one piece; wire into its left dot, out of its right dot. Resize it by hand with the grip in the frame’s bottom-right corner (double-click the grip for the snug fit back). Ungroup any time — the pockets stay where they are.'+(gHasSwitch?(g.sequenceStored&&g.learnedOrder?' Its switch got an ALL PASS, so this sequence is learned and stored: '+g.learnedOrder.map(function(id,i){return (i+1)+'. '+entityTitle(id)}).join(' · ')+'. The next run follows the stored sequence.':' Its switch runs the pockets until the group is all passed; that first full pass is learned and stored here as the group’s sequence.'):'' ); document.getElementById('inspName').value=g.title; document.getElementById('inspKind').value='group'; document.getElementById('inspNotes').value=g.notes||''; var stg=document.getElementById('inspStatus'); stg.textContent=g.status||'idle'; stg.className='status st-'+(g.status||'idle'); return; }
+    if(multiSel.length>1){ t.textContent=multiSel.length+' nodes picked'; d.textContent=multiSel.map(function(id){return entityTitle(id)}).join(', ')+' — tap Group selected (or Group picked nodes below) to frame them as one group.'; var stm=document.getElementById('inspStatus'); stm.textContent='picked'; stm.className='status st-idle'; return; }
+    var n=nodeById(selectedId);
+    if(!n){ t.textContent='Nothing selected'; d.textContent='Click any node to see what it is, what it needs, and whether it passed on the last run. Ctrl / Shift + click a few nodes to pick them for a group.'; return; }
+    var ng=groupOfNode(n.id);
+    t.textContent=n.title; d.textContent=KIND[n.kind].label+(isSwitch(n)?(ng?' · the gate of group “'+ng.title+'” — it runs the group’s pockets in sequence until the group is all passed; a full pass is learned and stored as the group’s sequence, and only then does its out fire an ALL PASS to whatever the group is wired to (the HUD face, or any output).':' · 8 numbered ins on its left, 1 out on its right. Wire up to 8 pockets into its ins; it passes the signal only when every pocket passes — an ALL PASS out to whatever its out is wired to. If a pocket fails, the switch finds it and holds the signal.'):(ng?' · a data pocket in group “'+ng.title+'” — the group holds its data, and drag moves the whole group':''))+' · status from the last run is shown below. Edit the name or notes and it updates on the canvas.'+(isSwitch(n)&&n.storedSeq&&n.storedSeq.length?' Stored sequence: '+n.storedSeq.map(function(id,i){return (i+1)+'. '+entityTitle(id)}).join(' · ')+'.':'');
     document.getElementById('inspName').value=n.title; document.getElementById('inspKind').value=n.kind; document.getElementById('inspNotes').value=n.notes;
     var st=document.getElementById('inspStatus'); st.textContent=n.status; st.className='status st-'+n.status;
   }
-  document.getElementById('inspName').addEventListener('input',function(e){ var n=nodeById(selectedId); if(n){ n.title=e.target.value||KIND[n.kind].label; if(n._titleEl) n._titleEl.textContent=n.title; document.getElementById('inspTitle').textContent=n.title; broadcastSoon(); } });
-  document.getElementById('inspNotes').addEventListener('input',function(e){ var n=nodeById(selectedId); if(n) n.notes=e.target.value; });
-  document.getElementById('inspKind').addEventListener('change',function(e){ var n=nodeById(selectedId); if(n){ n.kind=e.target.value; updateNode(n); } });
-  function refreshCounts(){ var cp=document.getElementById('countPill'); if(cp) cp.textContent=nodes.length+' nodes · '+edges.length+' wires'; }
-  document.querySelectorAll('[data-add]').forEach(function(b){ b.addEventListener('click',function(){ var n=makeNode(b.dataset.add, 30+Math.random()*260, 30+Math.random()*260); nodes.push(n); selectedId=n.id; render(); refreshCounts(); log('Add','Added “'+n.title+'”. Drag it into place, then wire it in.'); }); });
+  document.getElementById('inspName').addEventListener('input',function(e){ var g=selectedGroupId?groupById(selectedGroupId):null; if(g){ g.title=e.target.value||'Group'; updateGroupFrame(g); document.getElementById('inspTitle').textContent=g.title; broadcastSoon(); return; } var n=nodeById(selectedId); if(n){ n.title=e.target.value||KIND[n.kind].label; if(n._titleEl) n._titleEl.textContent=n.title; document.getElementById('inspTitle').textContent=n.title; var ng2=groupOfNode(n.id); if(ng2) updateGroupFrame(ng2); broadcastSoon(); } });
+  document.getElementById('inspNotes').addEventListener('input',function(e){ var g=selectedGroupId?groupById(selectedGroupId):null; if(g){ g.notes=e.target.value; return; } var n=nodeById(selectedId); if(n) n.notes=e.target.value; });
+  document.getElementById('inspKind').addEventListener('change',function(e){ if(selectedGroupId) return; var n=nodeById(selectedId); if(n){ n.kind=e.target.value; updateNode(n); } });
+  document.querySelectorAll('[data-add]').forEach(function(b){ b.addEventListener('click',function(){ var n=makeNode(b.dataset.add, 30+Math.random()*260, 30+Math.random()*260); nodes.push(n); selectedId=n.id; selectedGroupId=null; multiSel=[n.id]; render(); refreshCounts(); log('Add','Added “'+n.title+'”. Drag it into place, then wire it in.'); }); });
+  ['groupBtn','inspGroupBtn','boardGroupBtn'].forEach(function(id){ var gb=document.getElementById(id); if(gb) gb.addEventListener('click',function(){ groupSelected(); }); });
+  ['ungroupBtn','inspUngroupBtn','boardUngroupBtn'].forEach(function(id){ var ub=document.getElementById(id); if(ub) ub.addEventListener('click',function(){ ungroupSelected(); }); });
   // NODE CREATOR
   function addCustom(title,kind,notes){
     var t=(title||'').trim()||KIND[kind].label;
     var n=makeNode(kind, 40+Math.random()*220, 40+Math.random()*220, t, (notes||'').trim());
-    nodes.push(n); selectedId=n.id; render(); refreshCounts();
+    nodes.push(n); selectedId=n.id; selectedGroupId=null; multiSel=[n.id]; render(); refreshCounts();
     log('Creator','Created “'+t+'” ('+KIND[kind].label+') and dropped it on the canvas. Drag it into place, wire out → in, then Run.');
     var c=document.getElementById('canvas'); if(c) c.scrollIntoView({behavior:'smooth',block:'center'});
   }
   var createBtn=document.getElementById('createCustomBtn');
   if(createBtn) createBtn.addEventListener('click',function(){ addCustom(document.getElementById('newTitle').value, document.getElementById('newKind').value, document.getElementById('newNotes').value); });
   document.querySelectorAll('[data-template]').forEach(function(b){ b.addEventListener('click',function(){ var p=b.dataset.template.split('|'); document.getElementById('newKind').value=p[0]; document.getElementById('newTitle').value=p[1]; document.getElementById('newNotes').value=p[2]; addCustom(p[1],p[0],p[2]); }); });
-  // MORE SPACE
+  // MORE SPACE — Wide view / Taller canvas were dropped from the toolbar
+  // (2026-11-18 trim); keep the handlers null-safe if the buttons return.
   var layoutEl=document.querySelector('.layout');
-  document.getElementById('wideBtn').addEventListener('click',function(){ var wide=layoutEl.classList.toggle('wide'); this.textContent=wide?'↔ Show inspector again':'↔ Wide view — hide inspector'; drawWires(); log('Space', wide?'Wide view on — inspector hidden, canvas gets the full width.':'Inspector back.'); });
-  document.getElementById('tallBtn').addEventListener('click',function(){ var tall=canvas.classList.toggle('tall'); canvas.style.height=''; this.textContent=tall?'↕ Shorter canvas':'↕ Taller canvas'; var sp=document.getElementById('spacePill'); if(sp) sp.textContent='Canvas · '+(tall?'980':'760')+'px tall'; drawWires(); log('Space', tall?'Taller canvas on — 980px to spread out downwards.':'Back to 760px canvas.'); });
-  // ZOOM CONTROLS — two UIs for one job, both intentional (noted 2026-11-18):
-  // the toolbar row and the floating zoombar on the canvas. Keep both.
+  var wideBtnEl=document.getElementById('wideBtn');
+  if(wideBtnEl) wideBtnEl.addEventListener('click',function(){ var wide=layoutEl.classList.toggle('wide'); this.textContent=wide?'↔ Show inspector again':'↔ Wide view — hide inspector'; drawWires(); log('Space', wide?'Wide view on — inspector hidden, canvas gets the full width.':'Inspector back.'); });
+  var tallBtnEl=document.getElementById('tallBtn');
+  if(tallBtnEl) tallBtnEl.addEventListener('click',function(){ var tall=canvas.classList.toggle('tall'); canvas.style.height=''; this.textContent=tall?'↕ Shorter canvas':'↕ Taller canvas'; var sp=document.getElementById('spacePill'); if(sp) sp.textContent='Canvas · '+(tall?'980':'760')+'px tall'; drawWires(); log('Space', tall?'Taller canvas on — 980px to spread out downwards.':'Back to 760px canvas.'); });
+  // ZOOM CONTROLS — Window tools in the toolbar and the floating zoombar
+  // on the canvas both drive the same zoom.
   function bindZoom(idIn,idOut,idPct,idFit){
     var bi=document.getElementById(idIn), bo=document.getElementById(idOut), bp=document.getElementById(idPct), bf=document.getElementById(idFit);
     if(bi) bi.addEventListener('click',function(){ zoomCenter(1.25); });
@@ -598,7 +834,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     if(bp) bp.addEventListener('click',function(){ zoom=1; panX=0; panY=0; applyTransform(); log('Zoom','Back to 100%, graph back at the top-left.'); });
     if(bf) bf.addEventListener('click',function(){ fitView(); log('Zoom','Fit — the whole graph on screen at '+Math.round(zoom*100)+'%.'); });
   }
-  bindZoom('zoomInBtn','zoomOutBtn','zoomResetBtn','fitBtn');
+  bindZoom('zoomInBtn','zoomOutBtn',null,'fitBtn');
   bindZoom('zoomInBtn2','zoomOutBtn2','zoomPctBtn','fitBtn2');
   // RESIZE — drag strip under the canvas
   var rh=document.getElementById('resizeHandle');
@@ -608,9 +844,10 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     function up(){ window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); window.removeEventListener('pointercancel',up); log('Space','Canvas resized to '+canvas.offsetHeight+'px tall.'); }
     window.addEventListener('pointermove',mv); window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up);
   });
-  // FOCUS — workspace fills the screen
-  document.getElementById('focusBtn').addEventListener('click',function(){ var on=document.body.classList.toggle('ws-focus'); this.textContent=on?'⛶ Exit focus (Esc)':'⛶ Focus — fill screen'; drawWires(); log('Space', on?'Focus on — the workspace fills the screen. Esc brings the page back.':'Focus off.'); });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && document.body.classList.contains('ws-focus')){ document.body.classList.remove('ws-focus'); document.getElementById('focusBtn').textContent='⛶ Focus — fill screen'; drawWires(); } });
+  // FOCUS — dropped from the toolbar in the trim; handler stays null-safe.
+  var focusBtnEl=document.getElementById('focusBtn');
+  if(focusBtnEl) focusBtnEl.addEventListener('click',function(){ var on=document.body.classList.toggle('ws-focus'); this.textContent=on?'⛶ Exit focus (Esc)':'⛶ Focus — fill screen'; drawWires(); log('Space', on?'Focus on — the workspace fills the screen. Esc brings the page back.':'Focus off.'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && document.body.classList.contains('ws-focus')){ document.body.classList.remove('ws-focus'); var fb=document.getElementById('focusBtn'); if(fb) fb.textContent='⛶ Focus — fill screen'; drawWires(); } });
   // POP OUT — the breadboard in its own window. The old build opened a
   // blank window and painted a second, hand-styled copy of the board into
   // it from here (document.write + cross-window DOM calls). In the app
@@ -631,9 +868,10 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   try { syncChan = new BroadcastChannel('rq-node-workspace'); } catch (err) { syncChan = null; }
   function serializeState(){
     return {
-      nodes: nodes.map(function(n){ return { id:n.id, kind:n.kind, x:n.x, y:n.y, title:n.title, notes:n.notes, status:n.status }; }),
-      edges: edges.map(function(e){ return { from:e.from, to:e.to }; }),
-      seq: seq
+      nodes: nodes.map(function(n){ return { id:n.id, kind:n.kind, x:n.x, y:n.y, title:n.title, notes:n.notes, status:n.status, storedSeq:n.storedSeq?n.storedSeq.slice():null }; }),
+      edges: edges.map(function(e){ return { from:e.from, to:e.to, toPort:e.toPort||0 }; }),
+      groups: groups.map(function(g){ return { id:g.id, title:g.title, memberIds:g.memberIds.slice(), status:g.status||'idle', notes:g.notes||'', learnedOrder:g.learnedOrder?g.learnedOrder.slice():null, sequenceStored:!!g.sequenceStored, rw:g.rw||0, rh:g.rh||0 }; }),
+      seq: seq, groupSeq: groupSeq
     };
   }
   function sendState(){
@@ -660,11 +898,16 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     var sig = JSON.stringify(s);
     if (sig === lastSig) return;
     lastSig = sig; gotRemoteState = true; applyingRemote = true;
-    nodes = s.nodes.map(function(n){ return { id:n.id, kind:n.kind, x:n.x, y:n.y, title:n.title, notes:n.notes || '', status:n.status || 'idle' }; });
-    edges = (s.edges || []).map(function(e){ return { from:e.from, to:e.to }; });
+    nodes = s.nodes.map(function(n){ return { id:n.id, kind:n.kind, x:n.x, y:n.y, title:n.title, notes:n.notes || '', status:n.status || 'idle', storedSeq:n.storedSeq?n.storedSeq.slice():null }; });
+    edges = (s.edges || []).map(function(e){ return { from:e.from, to:e.to, toPort:e.toPort||0 }; });
+    groups = (s.groups || []).map(function(g){ return { id:g.id, title:g.title, memberIds:(g.memberIds||[]).filter(function(id){ return s.nodes.some(function(n){return n.id===id}); }), status:g.status || 'idle', notes:g.notes || '', learnedOrder:g.learnedOrder?g.learnedOrder.slice():null, sequenceStored:!!g.sequenceStored, rw:g.rw||0, rh:g.rh||0 }; }).filter(function(g){ return g.memberIds.length>=2; });
     if (typeof s.seq === 'number') seq = s.seq;
+    if (typeof s.groupSeq === 'number') groupSeq = s.groupSeq;
     nodes.forEach(function(n){ var m = /^n(\d+)$/.exec(n.id); if (m) seq = Math.max(seq, parseInt(m[1], 10)); });
+    groups.forEach(function(g){ var m2 = /^g(\d+)$/.exec(g.id); if (m2) groupSeq = Math.max(groupSeq, parseInt(m2[1], 10)); });
     if (selectedId && !nodeById(selectedId)) selectedId = null;
+    if (selectedGroupId && !groupById(selectedGroupId)) selectedGroupId = null;
+    multiSel = multiSel.filter(function(id){ return nodeById(id); });
     selectedEdge = null; armed = null; stepQueue = [];
     render();
     applyingRemote = false;
@@ -678,28 +921,31 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   if (syncChan) syncChan.onmessage = function(e){ onSyncMsg(e.data); };
   function clearBoard(){
     if (!nodes.length){ log('Clear','The board is already empty.'); return; }
-    var n = nodes.length, wcount = edges.length;
-    nodes = []; edges = []; selectedId = null; selectedEdge = null; armed = null; stepQueue = [];
+    var n = nodes.length, wcount = edges.length, gcount = groups.length;
+    nodes = []; edges = []; groups = []; selectedId = null; selectedGroupId = null; multiSel = []; selectedEdge = null; armed = null; stepQueue = [];
     render();
-    log('Clear','Board wiped — ' + n + ' nodes and ' + wcount + ' wires gone, one tap. The tools in the main window (Creator, inspector, palettes) are untouched. Load the example or create nodes to start again.');
+    log('Clear','Board wiped — ' + n + ' nodes, ' + wcount + ' wires' + (gcount ? ' and ' + gcount + ' group' + (gcount===1?'':'s') : '') + ' gone, one tap. The tools in the main window (Creator, inspector, palettes) are untouched. Load the example or create nodes to start again.');
   }
   function wipeSelection(){
     if (selectedEdge !== null && edges[selectedEdge]){
       var e = edges[selectedEdge]; edges.splice(selectedEdge, 1); selectedEdge = null;
-      render(); log('Wipe','Wire ' + nodeById(e.from).title + ' → ' + nodeById(e.to).title + ' removed — that piece only.'); return;
+      render(); log('Wipe','Wire ' + entityTitle(e.from) + ' → ' + entityTitle(e.to) + ' removed — that piece only.'); return;
     }
+    if (selectedGroupId && groupById(selectedGroupId)){ ungroupSelected(); return; }
     if (selectedId && nodeById(selectedId)){
       var t = nodeById(selectedId).title, id = selectedId;
       var wc = edges.filter(function(x){ return x.from === id || x.to === id; }).length;
+      detachFromGroups(id);
       edges = edges.filter(function(x){ return x.from !== id && x.to !== id; });
       nodes = nodes.filter(function(n){ return n.id !== id; });
+      multiSel = multiSel.filter(function(x){ return x !== id; });
       selectedId = null; if (armed && armed.from === id) armed = null;
       render(); log('Wipe','Cleared “' + t + '” and its ' + wc + ' wire' + (wc === 1 ? '' : 's') + ' from the board — that section only. The rest of the layout stayed put.'); return;
     }
-    log('Wipe','Nothing selected on the board. Click a node (or a wire) to select it first — then wipe clears just that piece.');
+    log('Wipe','Nothing selected on the board. Click a node, a group frame, or a wire to select it first — then wipe clears just that piece (a selected group is ungrouped, its pockets stay).');
   }
   function popFallback(why){
-    document.body.classList.add('ws-focus'); document.getElementById('focusBtn').textContent = '⛶ Exit focus (Esc)';
+    document.body.classList.add('ws-focus'); var fb2=document.getElementById('focusBtn'); if(fb2) fb2.textContent = '⛶ Exit focus (Esc)';
     log('Pop out', why + ', so Focus mode is on instead — the workspace fills this screen. Allow pop-ups for this page and Pop out will open the breadboard in its own window.');
   }
   function openPopout(){
@@ -713,7 +959,8 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
     if (popWatch) clearInterval(popWatch);
     popWatch = setInterval(function(){ if (popWinRef && popWinRef.closed){ popWinRef = null; clearInterval(popWatch); popWatch = null; } }, 800);
   }
-  document.getElementById('popBtn').addEventListener('click', openPopout);
+  var popBtnEl=document.getElementById('popBtn');
+  if(popBtnEl) popBtnEl.addEventListener('click', openPopout);
   // STARTER TUTORIAL — its Try-it buttons drive the real controls above
   var tutPopBtn=document.getElementById('tutPopBtn');
   if(tutPopBtn) tutPopBtn.addEventListener('click', function(){ document.getElementById('workspace').scrollIntoView({behavior:'smooth'}); openPopout(); });
@@ -742,27 +989,144 @@ footer{margin-top:28px;color:var(--muted);font-size:13px;border-top:1px solid va
   document.getElementById('manifestBtn').addEventListener('click',function(){
     var order=topo();
     var lines=['# Red Queen — Build Manifest','Generated from the Node Workspace graph in this page.','', '## The sandwich','- BOTTOM: Tiny Core Linux','- MIDDLE: Rust orchestrator + Rust engine','- TOP: HTML face (this face, word for word, line for line)','- Runs offline, local HTTP face <-> orchestrator <-> engine','', '## Nodes in run order ('+nodes.length+')'];
-    order.forEach(function(id,i){ var n=nodeById(id); lines.push((i+1)+'. ['+KIND[n.kind].label+'] '+n.title+' — '+(n.notes||'No notes')+' (status: '+n.status+')'); });
+    order.forEach(function(id,i){ var n=nodeById(id); if(!n) return; var ng=groupOfNode(id); lines.push((i+1)+'. ['+KIND[n.kind].label+'] '+n.title+(ng?' (pocket in group: '+ng.title+' — the group holds its data)':'')+' — '+(n.notes||'No notes')+' (status: '+n.status+')'+(isSwitch(n)?' — SWITCH: '+switchInputs(n).length+' pockets on its ins; fires ALL PASS only when every pocket passes; a full pass is learned and stored as the sequence'+(n.storedSeq&&n.storedSeq.length?' (stored: '+n.storedSeq.map(function(sid){return entityTitle(sid)}).join(' -> ')+')':' (no stored sequence yet)') :'')); });
     var unordered=nodes.filter(function(n){return order.indexOf(n.id)===-1});
     unordered.forEach(function(n){ lines.push('- ['+KIND[n.kind].label+'] '+n.title+' — '+(n.notes||'No notes')+' (not in run order — check wires / loop)'); });
+    if(groups.length){ lines.push('','## Groups ('+groups.length+') — the group holds the data; its pockets are unwired and run in sequence as one step'); groups.forEach(function(g){ var gsw=groupSwitch(g); lines.push('- '+g.title+' (status: '+(g.status||'idle')+')'+(gsw?' — switch: '+gsw.title+' runs this group until it is all passed':'')+' — pockets in sequence:'); internalOrder(g).forEach(function(id,i){ lines.push('  '+(i+1)+'. '+entityTitle(id)); }); if(gsw){ lines.push(g.sequenceStored&&g.learnedOrder?('  - Sequence learned and stored (switch ALL PASS): '+g.learnedOrder.map(function(id){return entityTitle(id)}).join(' -> ')):'  - No stored sequence yet — the group stores one the first time its switch gets an ALL PASS.'); } }); }
     lines.push('','## Wires ('+edges.length+')');
-    edges.forEach(function(e){ lines.push('- '+nodeById(e.from).title+' -> '+nodeById(e.to).title); });
+    edges.forEach(function(e){ lines.push('- '+entityTitle(e.from)+' -> '+entityTitle(e.to)); });
     lines.push('','## Put it on metal — order','0. Back up (skipping locks the wipe door)','1. Run graph green in the Maker','2. Build Tiny Core sandwich from this manifest','3. Write image to USB, boot-test live (install bar, not demo bar)','4. First-run benchmark on target hardware','5. Choose: keep USB / install to metal / wipe Windows (backup only)','', 'User first, AI second. Offline by default.');
     var blob=new Blob([lines.join('\n')],{type:'text/markdown'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='red-queen-build-manifest.md'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){URL.revokeObjectURL(a.href)},2000);
-    log('Metal','Build manifest downloaded — '+nodes.length+' nodes, '+edges.length+' wires, in run order. That file is the recipe for the USB / metal build.');
+    log('Metal','Build manifest downloaded — '+nodes.length+' nodes, '+edges.length+' wires'+(groups.length?', '+groups.length+' group(s), each holding its pockets’ data and running them in sequence as one step':'')+', in run order. That file is the recipe for the USB / metal build.');
   });
   document.getElementById('metalRunBtn').addEventListener('click',function(){ document.getElementById('workspace').scrollIntoView({behavior:'smooth'}); document.getElementById('runBtn').click(); });
-  document.getElementById('delBtn').addEventListener('click',function(){ if(!selectedId) return; edges=edges.filter(function(e){return e.from!==selectedId&&e.to!==selectedId}); nodes=nodes.filter(function(n){return n.id!==selectedId}); selectedId=null; armed=null; render(); log('Delete','Node removed, and its wires went with it.'); });
-  document.getElementById('dupBtn').addEventListener('click',function(){ var n=nodeById(selectedId); if(!n) return; var c=makeNode(n.kind, Math.min(n.x+28,WORLD_W-180), Math.min(n.y+28,WORLD_H-100), n.title+' copy', n.notes); nodes.push(c); selectedId=c.id; render(); });
-  document.addEventListener('keydown',function(e){ if((e.key==='Delete'||e.key==='Backspace') && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){ if(selectedEdge!==null){ edges.splice(selectedEdge,1); selectedEdge=null; updateSelection(); log('Wire','Wire deleted.'); } else if(selectedId){ var delId=selectedId; edges=edges.filter(function(x){return x.from!==delId&&x.to!==delId}); nodes=nodes.filter(function(n){return n.id!==delId}); selectedId=null; if(armed&&armed.from===delId) armed=null; render(); log('Delete','Node removed, and its wires went with it.'); } } });
-  document.getElementById('clearBtn').addEventListener('click',function(){ edges=[]; selectedEdge=null; updateSelection(); log('Clear','All wires removed. Nodes stayed — rewire and run again.'); });
-  document.getElementById('resetBtn').addEventListener('click',function(){ nodes.forEach(function(n){n.status='idle'; updateNode(n);}); stepQueue=[]; log('Reset','Every node back to idle.'); });
-  document.getElementById('exampleBtn').addEventListener('click',function(){ loadExample(); log('Example','Red Queen example reloaded.'); });
-  function topo(){ var indeg={}, order=[], q=[]; nodes.forEach(function(n){indeg[n.id]=0}); edges.forEach(function(e){indeg[e.to]++}); nodes.forEach(function(n){ if(indeg[n.id]===0) q.push(n.id); }); while(q.length){ var id=q.shift(); order.push(id); edges.filter(function(e){return e.from===id}).forEach(function(e){ indeg[e.to]--; if(indeg[e.to]===0) q.push(e.to); }); } return order; }
-  function runStep(id, done){ var n=nodeById(id); if(!n){ done&&done(); return; } var hasIn=edges.some(function(e){return e.to===id}); var upstreamBad=edges.filter(function(e){return e.to===id}).some(function(e){ return nodeById(e.from).status==='fail'; }); n.status='running'; updateNode(n); log(n.title,'Running…'); setTimeout(function(){ if(upstreamBad){ n.status='fail'; log(n.title,'Skipped — something upstream failed, so this is where the break shows. The orchestrator contains it; the rest of the face stays up.'); } else { n.status='done'; log(n.title, hasIn?'Done ✓ — received its input and passed.':'Done ✓ — start node, needed nothing upstream.'); } updateNode(n); done&&done(); },90); }
-  function runGraph(){ if(!nodes.length){ log('Run','Nothing to run — the board is empty. Add nodes first.'); return; } nodes.forEach(function(n){n.status='idle'; updateNode(n);}); var order=topo(); if(order.length<nodes.length){ log('Run','There is a loop in the wires — a graph with a cycle can never finish. Break the loop and run again.'); return; } if(!edges.length){ log('Run','No wires yet. Wire at least one path, then run.'); } log('Run','Executing '+order.length+' nodes in wire order…'); var i=0; function next(){ if(i>=order.length){ var fails=nodes.filter(function(n){return n.status==='fail'}).length; log('Run', fails? 'Finished with '+fails+' failed node(s) — the red ones are your break point.' : 'Finished — whole graph green. That layout would hold together as a face.'); return; } runStep(order[i++], next); } next(); }
+  document.getElementById('delBtn').addEventListener('click',function(){ if(selectedGroupId && groupById(selectedGroupId)){ ungroupSelected(); return; } if(!selectedId) return; var delId2=selectedId; detachFromGroups(delId2); edges=edges.filter(function(e){return e.from!==delId2&&e.to!==delId2}); nodes=nodes.filter(function(n){return n.id!==delId2}); multiSel=multiSel.filter(function(x){return x!==delId2}); selectedId=null; armed=null; render(); log('Delete','Node removed, and its wires went with it.'); });
+  document.getElementById('dupBtn').addEventListener('click',function(){ var n=nodeById(selectedId); if(!n) return; var c=makeNode(n.kind, Math.min(n.x+28,WORLD_W-180), Math.min(n.y+28,WORLD_H-100), n.title+' copy', n.notes); nodes.push(c); selectedId=c.id; selectedGroupId=null; multiSel=[c.id]; render(); });
+  document.addEventListener('keydown',function(e){ if((e.key==='Delete'||e.key==='Backspace') && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){ if(selectedEdge!==null){ edges.splice(selectedEdge,1); selectedEdge=null; updateSelection(); log('Wire','Wire deleted.'); } else if(selectedGroupId && groupById(selectedGroupId)){ ungroupSelected(); } else if(selectedId){ var delId=selectedId; detachFromGroups(delId); edges=edges.filter(function(x){return x.from!==delId&&x.to!==delId}); nodes=nodes.filter(function(n){return n.id!==delId}); multiSel=multiSel.filter(function(x){return x!==delId}); selectedId=null; if(armed&&armed.from===delId) armed=null; render(); log('Delete','Node removed, and its wires went with it.'); } } });
+  document.getElementById('clearBtn').addEventListener('click',function(){ edges=[]; selectedEdge=null; updateSelection(); log('Clear','All wires removed. Nodes and groups stayed — rewire and run again.'); });
+  document.getElementById('resetBtn').addEventListener('click',function(){ nodes.forEach(function(n){n.status='idle'; updateNode(n);}); groups.forEach(function(g){g.status='idle'; updateGroupFrame(g);}); stepQueue=[]; stepActive=false; stepTotal=0; stepDone=0; refreshStepBtn(); broadcastSoon(); log('Reset','Every node and group back to idle.'); });
+  var exampleBtnEl=document.getElementById('exampleBtn');
+  if(exampleBtnEl) exampleBtnEl.addEventListener('click',function(){ loadExample(); log('Example','Red Queen example reloaded.'); });
+  function unitOf(id){ var g=groupById(id); if(g) return g.id; var ng=groupOfNode(id); return ng?ng.id:id; }
+  function internalOrder(g){ var all=g.memberIds.filter(function(id){ return nodeById(id); }); var pockets=all.filter(function(id){ var n=nodeById(id); return !(n&&isSwitch(n)); }); var switches=all.filter(function(id){ var n=nodeById(id); return n&&isSwitch(n); }); if(g.learnedOrder && g.learnedOrder.length){ var ordered=g.learnedOrder.filter(function(id){ return pockets.indexOf(id)!==-1; }); pockets.forEach(function(id){ if(ordered.indexOf(id)===-1) ordered.push(id); }); pockets=ordered; } return pockets.concat(switches); }
+  function groupSwitch(g){ var ids=g.memberIds.filter(function(id){ var n=nodeById(id); return n&&isSwitch(n); }); return ids.length?nodeById(ids[0]):null; }
+  function topoUnits(){ var units=[]; groups.forEach(function(g){units.push(g.id)}); nodes.forEach(function(n){ if(!groupOfNode(n.id)) units.push(n.id); }); var indeg={}, order=[], q=[]; units.forEach(function(u){indeg[u]=0}); var seen={}; edges.forEach(function(e){ var fu=unitOf(e.from), tu=unitOf(e.to); if(fu===tu) return; var k=fu+'>'+tu; if(seen[k]) return; seen[k]=1; if(indeg[tu]!==undefined&&indeg[fu]!==undefined) indeg[tu]++; }); units.forEach(function(u){ if(indeg[u]===0) q.push(u); }); while(q.length){ var id=q.shift(); order.push(id); edges.forEach(function(e){ var fu=unitOf(e.from), tu=unitOf(e.to); if(fu!==id||fu===tu) return; if(indeg[tu]===undefined) return; indeg[tu]--; if(indeg[tu]===0) q.push(tu); }); } return {order:order,total:units.length}; }
+  function topo(){ var t=topoUnits(); if(t.order.length<t.total) return []; var flat=[]; t.order.forEach(function(u){ var g=groupById(u); if(g) internalOrder(g).forEach(function(id){flat.push(id)}); else flat.push(u); }); return flat; }
+  function allUnitIds(){ var units=[]; groups.forEach(function(g){units.push(g.id)}); nodes.forEach(function(n){ if(!groupOfNode(n.id)) units.push(n.id); }); return units; }
+  function unwiredUnitIds(){ var wired={}; edges.forEach(function(e){ var fu=unitOf(e.from), tu=unitOf(e.to); if(fu===tu) return; if(entityById(fu)) wired[fu]=true; if(entityById(tu)) wired[tu]=true; }); return allUnitIds().filter(function(u){ return !wired[u]; }); }
+  function runnableOrder(t){ var unwired=unwiredUnitIds(); var order=t.order.filter(function(u){ return unwired.indexOf(u)===-1; }); return {order:order, unwired:unwired}; }
+  function entityStatus(id){ var n=nodeById(id); if(n) return n.status; var g=groupById(id); if(g) return g.status||'idle'; var ng=groupOfNode(id); return ng?(ng.status||'idle'):'idle'; }
+  function runStep(id, done){ var n=nodeById(id); if(!n){ done&&done(); return; }
+    if(isSwitch(n)){
+      var swGroup=groupOfNode(id);
+      var inputs=switchInputs(n);
+      n.status='running'; updateNode(n);
+      log(n.title, swGroup?('Switch running — collecting the pockets of “'+swGroup.title+'” as they pass in sequence ('+inputs.length+' pocket'+(inputs.length===1?'':'s')+' on its ins).'):('Switch running — collecting its pockets ('+inputs.length+' of '+SWITCH_INS+' ins wired).'));
+      setTimeout(function(){
+        if(!inputs.length){ n.status='fail'; log(n.title,'Switch found no pockets — nothing is wired into its 8 ins, and it is not grouped with any pockets. There is no pass to send, so the signal is held and nothing is stored.'); }
+        else { var failing=inputs.filter(function(srcId){ return entityStatus(srcId)==='fail'; }); var notPassed=inputs.filter(function(srcId){ return entityStatus(srcId)!=='done' && entityStatus(srcId)!=='fail'; });
+          if(failing.length){ n.status='fail'; log(n.title,'Switch found the pocket that did not pass: '+failing.map(function(srcId){return '“'+entityTitle(srcId)+'”'}).join(', ')+' — the signal is held, the out does not fire, and no sequence is stored. Fix that pocket and run again; the switch keeps running the group until it is all passed.'); }
+          else if(notPassed.length){ n.status='fail'; log(n.title,'Switch is still waiting on: '+notPassed.map(function(srcId){return '“'+entityTitle(srcId)+'”'}).join(', ')+' — they have not passed yet, so the signal is held and nothing is stored.'); }
+          else { n.status='done'; n.storedSeq=inputs.slice(); var dests; if(swGroup){ dests=edges.filter(function(e){return e.from===swGroup.id}).map(function(e){return entityTitle(e.to)}); } else { dests=edges.filter(function(e){return e.from===n.id}).map(function(e){return entityTitle(e.to)}); } log(n.title,'ALL PASS ✓ — every pocket passed: '+inputs.map(function(srcId,i){return (i+1)+'. '+entityTitle(srcId)}).join(' · ')+'. That pass is learned and stored as the sequence. The one out fires → '+(dests.length?dests.join(', '):(swGroup?'whatever “'+swGroup.title+'” is wired to — wire the group’s right dot onward (e.g. to the HUD face) to send it':'whatever its out is wired to — wire the out onward (e.g. to the HUD face) to send it'))+'.'); }
+        }
+        updateNode(n); if(swGroup) updateGroupFrame(swGroup); broadcastSoon(); done&&done();
+      },90);
+      return;
+    }
+    var hasIn=edges.some(function(e){return e.to===id||(groupOfNode(id)&&e.to===groupOfNode(id).id)}); var upstreamBad=edges.filter(function(e){return e.to===id}).some(function(e){ return entityStatus(e.from)==='fail'; }); var ownGroup=groupOfNode(id); if(ownGroup){ var gIn=edges.filter(function(e){return e.to===ownGroup.id}).some(function(e){ return entityStatus(e.from)==='fail'; }); if(gIn) upstreamBad=true; }
+    function demoFinish(){
+      if(upstreamBad){ n.status='fail'; log(n.title,'Skipped — something upstream failed, so this is where the break shows. The orchestrator contains it; the rest of the face stays up.'); }
+      else { n.status='done'; log(n.title, ownGroup?'Done ✓ — pocket ran on the data “'+ownGroup.title+'” holds.':(hasIn?'Done ✓ — received its input and passed.':'Done ✓ — start node, needed nothing upstream.')); }
+      updateNode(n); done&&done();
+    }
+    // REAL WORK — the Rust engine pocket asks the real Rust orchestrator
+    // on this machine for the engine's real health. A real ok is a real
+    // pass; a real degraded / engine_failed is a real fail (and the
+    // switch finds the pocket, as it already does). If the orchestrator
+    // is not reachable, say so plainly in the log and play the demo for
+    // this pocket, so the page still works with nothing running.
+    if(n.kind==='engine' && !upstreamBad){
+      n.status='running'; updateNode(n);
+      log(n.title,'Running — asking the orchestrator for the engine’s real health (GET http://127.0.0.1:7790/api/health)…');
+      var orchCtrl=(typeof AbortController!=='undefined')?new AbortController():null;
+      var orchTimer=orchCtrl?setTimeout(function(){ try{ orchCtrl.abort(); }catch(e){} },2500):null;
+      var fetchOpts={ method:'GET', headers:{ 'Accept':'application/json' } };
+      if(orchCtrl) fetchOpts.signal=orchCtrl.signal;
+      fetch('http://127.0.0.1:7790/api/health', fetchOpts).then(function(resp){
+        if(orchTimer) clearTimeout(orchTimer);
+        if(!resp.ok){ var herr=new Error('HTTP '+resp.status); herr._httpStatus=resp.status; throw herr; }
+        return resp.json();
+      }).then(function(data){
+        var eng=(data && (data.engine||data.engine_health))||data||{};
+        var rawStatus=eng.status||data.status||data.health||'';
+        var status=String(rawStatus).toLowerCase();
+        function pick(){ for(var i=0;i<arguments.length;i++){ if(arguments[i]!==undefined&&arguments[i]!==null&&arguments[i]!=='') return arguments[i]; } return null; }
+        var pid=pick(eng.pid, eng.engine_pid, data.engine_pid, data.pid);
+        var restarts=pick(eng.restarts, eng.restart_count, data.restarts, data.restart_count);
+        var failures=pick(eng.failures, eng.failure_count, eng.failed, data.failures, data.failure_count);
+        var queue=pick(eng.queue_depth, eng.queueDepth, eng.queue, data.queue_depth, data.queueDepth, data.queue);
+        var uptimeRaw=pick(eng.uptime, eng.uptime_seconds, eng.uptime_secs, data.uptime, data.uptime_seconds, data.uptime_secs);
+        var uptimeTxt=null;
+        if(uptimeRaw!==null){ var un=Number(uptimeRaw); if(!isNaN(un)){ var us=Math.floor(un); uptimeTxt=us>=3600?(Math.floor(us/3600)+'h '+Math.floor((us%3600)/60)+'m'):(us>=60?(Math.floor(us/60)+'m '+(us%60)+'s'):(us+'s')); } else uptimeTxt=String(uptimeRaw); }
+        var bits=[];
+        if(status) bits.push('status '+status);
+        if(pid!==null) bits.push('pid '+pid);
+        if(restarts!==null) bits.push('restarts '+restarts);
+        if(failures!==null) bits.push('failures '+failures);
+        if(queue!==null) bits.push('queue depth '+queue);
+        if(uptimeTxt!==null) bits.push('uptime '+uptimeTxt);
+        var detail=bits.length?(' — '+bits.join(' · ')):'';
+        if(status==='ok'){ n.status='done'; log(n.title,'Done ✓ — real pass from the orchestrator. Engine health: ok'+detail+'.'); }
+        else if(status==='degraded'||status==='engine_failed'||status==='failed'||status==='fail'||status==='error'){ n.status='fail'; log(n.title,'Failed — real result from the orchestrator. Engine health: '+(status||'unknown')+detail+'. This is the break — the switch will find this pocket.'); }
+        else if(status){ n.status='fail'; log(n.title,'Failed — the orchestrator answered, but the engine health status was “'+status+'”, not ok'+detail+'. Only a real ok passes this pocket.'); }
+        else { n.status='fail'; log(n.title,'Failed — the orchestrator answered, but its health reply carried no status to read'+detail+'. Only a real ok passes this pocket.'); }
+        updateNode(n); done&&done();
+      }).catch(function(err){
+        if(orchTimer) clearTimeout(orchTimer);
+        if(err && err._httpStatus){ n.status='fail'; log(n.title,'Failed — the orchestrator at http://127.0.0.1:7790 answered HTTP '+err._httpStatus+' for GET /api/health, so there is no ok to pass this pocket.'); updateNode(n); done&&done(); return; }
+        log(n.title,'Orchestrator not reachable at http://127.0.0.1:7790 — playing the demo for this pocket, so the page still works with nothing running.');
+        setTimeout(demoFinish,90);
+      });
+      return;
+    }
+    n.status='running'; updateNode(n); log(n.title,'Running…'); setTimeout(demoFinish,90); }
+  function runUnit(uid, done){
+    var g=groupById(uid);
+    if(!g){ runStep(uid, done); return; }
+    var upstreamBad=edges.filter(function(e){return e.to===g.id}).some(function(e){ return entityStatus(e.from)==='fail'; });
+    var order=internalOrder(g);
+    var sw=groupSwitch(g);
+    var pocketOrder=order.filter(function(id){ return id!==(sw&&sw.id); });
+    g.status='running'; updateGroupFrame(g); broadcastSoon();
+    log(g.title,'Group step starting — the group holds the data and runs its '+order.length+' pockets in sequence (no wires between them): '+order.map(function(id,i){return (i+1)+'. '+entityTitle(id)}).join(' · ')+'.'+(sw?' The switch (“'+sw.title+'”) drives this run: it runs the pockets in sequence until the group is all passed — a full pass is learned and stored as the group’s sequence.'+(g.sequenceStored?' Running the stored sequence.':''):''));
+    if(upstreamBad){ order.forEach(function(id){ var n=nodeById(id); if(n){ n.status='fail'; updateNode(n); } }); g.status='fail'; updateGroupFrame(g); broadcastSoon(); log(g.title,'Group skipped — something upstream failed, so every pocket inside is marked failed. The break is upstream of the group.'+(sw?' The switch found the break upstream — no pocket could pass, so nothing was learned or stored.':'')); done&&done(); return; }
+    var i=0; function nxt(){ if(i>=order.length){ var bad=order.some(function(id){ var n=nodeById(id); return n&&n.status==='fail'; }); g.status=bad?'fail':'done'; if(!bad&&sw){ var firstStore=!g.sequenceStored; g.learnedOrder=pocketOrder.slice(); g.sequenceStored=true; var dests=edges.filter(function(e){return e.from===g.id}).map(function(e){return entityTitle(e.to)}); updateGroupFrame(g); log(sw.title,'Group all passed — sequence '+(firstStore?'learned and stored':'re-confirmed and stored')+' on “'+g.title+'”: '+pocketOrder.map(function(id,i2){return (i2+1)+'. '+entityTitle(id)}).join(' · ')+'. ALL PASS leaves the group’s out → '+(dests.length?dests.join(', '):'whatever the group is wired to — wire its right dot onward (e.g. to the HUD face) to send it')+'.'); } updateGroupFrame(g); broadcastSoon(); log(g.title, bad?'Group finished with a failure inside — the frame is red, that is your break point.':'Group done ✓ — all '+order.length+' pockets ran in sequence and passed, as one step.'); done&&done(); return; } runStep(order[i++], nxt); } nxt();
+  }
+  function runGraph(){ if(!nodes.length){ log('Run','Nothing to run — the board is empty. Add nodes first.'); return; } stepQueue=[]; stepActive=false; stepTotal=0; stepDone=0; refreshStepBtn(); nodes.forEach(function(n){n.status='idle'; updateNode(n);}); groups.forEach(function(g){g.status='idle'; updateGroupFrame(g);}); broadcastSoon(); var t=topoUnits(); if(t.order.length<t.total){ log('Run','There is a loop in the wires — a graph with a cycle can never finish. Break the loop and run again.'); return; } if(!edges.length){ log('Run','No wires yet — Run stopped, and nothing was marked done. Wire at least one path (output dot → input dot), then run again.'); refreshStepBtn(); return; } var r=runnableOrder(t); if(!r.order.length){ log('Run','No wired path yet — Run stopped, and nothing was marked done. The wires on the board do not connect any nodes into a path. Wire at least one path, then run again.'); refreshStepBtn(); return; } if(r.unwired.length){ log('Run','Not wired — staying idle, not done: '+r.unwired.map(function(u){ return describeUnit(u); }).join(', ')+'. Wire '+(r.unwired.length===1?'it':'them')+' in to run '+(r.unwired.length===1?'it':'them')+'.'); } log('Run','Executing '+r.order.length+' step'+(r.order.length===1?'':'s')+' in wire order'+(groups.length?' — each group counts as one step: it holds the data and runs its pockets in sequence':'')+'…'); var runOrder=r.order; var i=0; function next(){ if(i>=runOrder.length){ var fails=nodes.filter(function(n){return n.status==='fail'}).length; var gfails=groups.filter(function(g){return g.status==='fail'}).length; if(fails||gfails){ log('Run','Finished with '+fails+' failed node(s)'+(gfails?' in '+gfails+' group(s)':'')+' — the red ones are your break point.'); } else if(r.unwired.length){ log('Run','Finished — the wired graph is green. '+r.unwired.length+' unwired '+(r.unwired.length===1?'piece stayed':'pieces stayed')+' idle above — not done, just not wired in.'); } else { log('Run','Finished — whole graph green. That layout would hold together as a face.'); } return; } runUnit(runOrder[i++], next); } next(); }
   document.getElementById('runBtn').addEventListener('click',runGraph);
-  document.getElementById('stepBtn').addEventListener('click',function(){ if(!stepQueue.length){ stepQueue=topo(); if(stepQueue.length<nodes.length){ log('Run','There is a loop in the wires — a graph with a cycle can never finish. Break the loop and run again.'); } nodes.forEach(function(n){n.status='idle'; updateNode(n);}); log('Step','Stepping through '+stepQueue.length+' nodes, one tap at a time.'); } var id=stepQueue.shift(); if(id) runStep(id,function(){ if(!stepQueue.length) log('Step','Done stepping.'); }); });
+  var stepTotal=0, stepDone=0, stepActive=false;
+  function describeUnit(uid){ var g=groupById(uid); if(g) return g.title+' — '+g.memberIds.length+' pockets in sequence'+(groupSwitch(g)?' · switch runs them till all pass'+(g.sequenceStored?' · sequence stored':''):''); var n=nodeById(uid); return n?n.title:uid; }
+  function refreshStepBtn(){ var btn=document.getElementById('stepBtn'); if(!btn) return; if(stepActive&&stepQueue.length){ btn.textContent='Run by node — '+(stepDone+1)+' of '+stepTotal+': '+describeUnit(stepQueue[0]); return; } if(!nodes.length||!edges.length){ btn.textContent='Run by node'; return; } var t=topoUnits(); if(!t.order.length||t.order.length<t.total){ btn.textContent='Run by node'; return; } var r=runnableOrder(t); if(!r.order.length){ btn.textContent='Run by node'; return; } btn.textContent='Run by node — next: '+describeUnit(r.order[0])+' (1 of '+r.order.length+')'; }
+  document.getElementById('stepBtn').addEventListener('click',function(){
+    if(!stepActive){
+      if(!nodes.length){ log('Run by node','Nothing to run — the board is empty. Add nodes first.'); return; }
+      if(!edges.length){ log('Run by node','No wires yet — stopped, and nothing was marked done. Wire at least one path, then run by node again.'); return; }
+      var t=topoUnits();
+      if(t.order.length<t.total){ log('Run by node','There is a loop in the wires — a graph with a cycle can never finish. Break the loop and try again.'); return; }
+      if(!t.order.length){ log('Run by node','Nothing to run.'); return; }
+      var r=runnableOrder(t);
+      if(!r.order.length){ log('Run by node','No wired path yet — stopped, and nothing was marked done. Wire at least one path, then try again.'); return; }
+      stepQueue=r.order.slice(); stepTotal=r.order.length; stepDone=0; stepActive=true;
+      nodes.forEach(function(n){n.status='idle'; updateNode(n);}); groups.forEach(function(g){g.status='idle'; updateGroupFrame(g);}); broadcastSoon();
+      if(r.unwired.length){ log('Run by node','Not wired — staying idle, not done, and not counted as a step: '+r.unwired.map(function(u){ return describeUnit(u); }).join(', ')+'.'); }
+      log('Run by node','Running one node at a time — the board goes back to idle first (that reset is not a step; nothing has run yet). '+stepTotal+' step(s), one tap each. A group is one tap: it holds the data and runs all its pockets in sequence in that one tap. The button names the next node before you tap it.');
+    }
+    var uid=stepQueue.shift(); if(!uid){ stepActive=false; refreshStepBtn(); return; }
+    stepDone++;
+    log('Run by node','Node '+stepDone+' of '+stepTotal+' — '+describeUnit(uid)+'.');
+    runUnit(uid,function(){ if(!stepQueue.length){ stepActive=false; log('Run by node','Done — all '+stepTotal+' step(s) ran, one node at a time. Tap Run by node to start over; the button names the first node.'); } refreshStepBtn(); });
+    refreshStepBtn();
+  });
   window.addEventListener('resize', drawWires);
   loadExample();
 })();
